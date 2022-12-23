@@ -8,7 +8,7 @@
 {{-- Bootstrap --}}
 
 <link rel="stylesheet" href="{{ mix('plugins/bootstrap/css/bootstrap.min.css') }}">
-<script src="{{ mix('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ mix('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 {{-- Font Awesome 6 --}}
 
