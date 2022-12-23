@@ -1,3 +1,6 @@
+{{-- Montserrat Font --}}
+<link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet">
+
 {{-- JQuery --}}
 <script src="{{ mix('plugins/jquery/jquery-3.6.1.min.js') }}"></script>
 
@@ -14,3 +17,6 @@
 {{-- IzyToast --}}
 <link rel="stylesheet" href="{{ mix('plugins/iziToast-master/dist/css/iziToast.min.css') }}">
 <script src="{{ mix('plugins/iziToast-master/dist/js/iziToast.min.js') }}"></script>
+
+{{-- Css --}}
+<link rel="stylesheet" href="{{ asset("css/global.css") }}">

@@ -16,7 +16,7 @@
     <div class="bg bg2"></div>
     <div class="bg bg3"></div>
     <div class="login-card">
-        <h1 class="login-header mb-4">Bem Vindo!</h1>
+        <h1 class="login-header" id="greeting">Bem Vindo!</h1>
         <div class="inner-addon left-addon">
             <label for="email" class="lbls mb-2">Email:</label><br>
             <i class="fa-regular fa-user"></i>

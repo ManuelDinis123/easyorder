@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
-{    
-
-    // TODO: Verify if email is valid, show toast if values are wrong
+{        
 
     /**
      * Get the Email and Password and verify them

@@ -8,13 +8,15 @@ function login_action() {
             email: $("#email").val(),
             password: $("#password").val()
         }
-    }).done((res) => {
+    }).done((res) => {        
         if (res.status == "success") {
-            window.location.replace("/home");
+            window.location.replace(res.isProfessional ? "/professional" : "/home");
         } else {
             iziToast.error({
                 title: res.status,
-                message: res.message
+                message: res.message,
+                color: "red",
+                icon: "fa-solid fa-circle-xmark"
             });
         }
     });
