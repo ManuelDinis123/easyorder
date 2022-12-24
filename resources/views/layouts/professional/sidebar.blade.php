@@ -53,7 +53,8 @@
                             <i class="fa-sharp fa-solid fa-toolbox nav_icon"></i>
                             <span class="nav_name dropdown-toggle">Administração</span>
                         </a>
-                        <ul class="dropdown-menu n-dropdown" aria-labelledby="dropdownMenuLink">
+                        <ul class="dropdown-menu n-dropdown animate slideIn" id="dpmenu"
+                            aria-labelledby="dropdownMenuLink">
                             <li><a class="dropdown-item activate {{ $file == 'edit_users' ? 'li_on' : '' }}"
                                     href="/professional/admin/users"><i class="fa-solid fa-users-gear"></i>
                                     Utilizadores</a></li>
@@ -76,33 +77,7 @@
     <div class="height-100 bg-light">
         @yield('content')
     </div>
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function(event) {
-            const showNavbar = (toggleId, navId, bodyId, headerId) => {
-                const toggle = document.getElementById(toggleId),
-                    nav = document.getElementById(navId),
-                    bodypd = document.getElementById(bodyId),
-                    headerpd = document.getElementById(headerId);
-
-                // Validate that all variables exist
-                if (toggle && nav && bodypd && headerpd) {
-                    toggle.addEventListener("click", () => {
-                        // show navbar
-                        nav.classList.toggle("show");
-                        // change icon
-                        toggle.classList.toggle("fa-xmark");
-                        // add padding to body
-                        bodypd.classList.toggle("body-pd");
-                        // add padding to header
-                        headerpd.classList.toggle("body-pd");
-                    });
-                }
-            };
-
-            showNavbar("header-toggle", "nav-bar", "body-pd", "header");
-
-        });
-    </script>
+    <script src="{{ asset("js/sidebar.js") }}"></script>
 </body>
 
 </html>
