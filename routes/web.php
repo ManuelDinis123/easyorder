@@ -31,6 +31,9 @@ Route::get('/professional', [DashboardController::class, 'index']);
 
 // Food Menu for the professional user accounts
 Route::get('/professional/ementa', [MenuController::class, 'index']);
+Route::post('/professional/getmenu', [MenuController::class, 'get'])->name("getmenu");
+Route::post('/professional/createmenuitem', [MenuController::class, 'create'])->name("createmenuitem");
+
 
 // Orders for the professional user accounts
 Route::get('/professional/encomendas', [OrdersController::class, 'index']);

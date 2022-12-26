@@ -33,7 +33,8 @@
 
         <span id="forgot_pssw"><a href="#">Esqueceu-se da password?</a></span>
         <button id="login_btn" class="mt-3">Login</button>
-        <span id="register"><a href="#" class="mt-2">Criar nova conta</a></span>
+        <span id="register"><a href="#" class="mt-2">Criar nova conta</a></span>    
+
         <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     </div>
 </body>

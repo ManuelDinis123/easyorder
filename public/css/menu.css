@@ -1,0 +1,155 @@
+.centered {
+    margin: 0 auto;
+    /* Center the element horizontally */
+    width: 849px;
+    height: 747px;
+    box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, 0.25);
+    border-radius: 72px;
+}
+
+.c-h {
+    color: #1C46B2;
+}
+
+.c-contents {
+    padding-top: 25px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.icons {
+    float: right;
+    font-size: 30px;
+    margin-top: 2px;
+    cursor: pointer;
+    color: green;
+}
+
+.separation-line {
+    display: flex;
+    color: #1C46B2;
+    opacity: 100;
+}
+
+.modal{
+    width: 100% !important;
+}
+
+
+.dataTables_paginate {
+    /* display: none; */
+}
+
+.paging_simple_numbers {
+    /* display: none */
+    font-weight: 500;
+}
+
+.current {    
+    font-weight: 800;    
+}
+
+input{
+    padding-left: 10px !important;
+}
+
+.text-icon {
+    vertical-align: middle;
+}
+
+#tag_more {
+    margin-top: 8px !important;
+}
+
+#addModal {
+    width: fit-content;
+}
+
+.tagify__dropdown {
+    top: 455 !important;    
+}
+
+.customLook{
+    --tag-bg                  : #1C46B2;
+    --tag-hover               : #CE0078;
+    --tag-text-color          : #FFF;
+    --tags-border-color       : silver;
+    --tag-border-radius       : 25px;
+    --tag-text-color--edit    : #111;
+    --tag-remove-bg           : var(--tag-hover);
+    --tag-pad                 : .6em 1em;
+    --tag-inset-shadow-size   : 1.35em;
+    --tag-remove-btn-bg--hover: black;
+  
+    display: inline-block;
+    min-width: 0;
+    border: none;
+  }
+  
+  .customLook .tagify__tag{
+    margin-top: 0;
+  }
+  
+  /* Do not show the "remove tag" (x) button when only a single tag remains */
+  .customLook .tagify__tag:only-of-type .tagify__tag__removeBtn{
+    display: none;
+  }
+  
+  .customLook .tagify__tag__removeBtn{
+    opacity: 0;
+    transform: translateX(-6px) scale(.5);
+    margin-left: -3ch;
+    transition: .12s;
+  }
+  
+  .customLook .tagify__tag:hover .tagify__tag__removeBtn{
+    transform: none;
+    opacity: 1;
+    margin-left: -1ch;
+  }
+  
+  .customLook + button{
+    color: #0052BF;
+    font: bold 1.4em/1.65 Arial;
+    border: 0;
+    background: none;
+    box-shadow: 0 0 0 2px inset currentColor;
+    border-radius: 50%;
+    width: 1.65em;
+    height: 1.65em;
+    cursor: pointer;
+    outline: none;
+    transition: .1s ease-out;
+    margin: 0 0 0 5px;
+    vertical-align: top;
+  }
+  
+  .customLook + button:hover{
+    box-shadow: 0 0 0 5px inset currentColor;
+  }
+  
+  .customLook .tagify__input{
+    display: none;
+  }
+
+
+
+
+
+/* Remove datatable buttons */
+.dataTables_length {
+    display: none;
+}
+
+.dataTables_filter {
+    display: none;
+}
+
+.dataTables_info {
+    display: none;
+}
+
+
+table.dataTable thead th {
+    border-bottom: none;
+}

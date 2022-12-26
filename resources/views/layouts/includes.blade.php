@@ -12,11 +12,23 @@
 
 {{-- Font Awesome 6 --}}
 
-<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
+    type="text/css" />
 
 {{-- IzyToast --}}
 <link rel="stylesheet" href="{{ mix('plugins/iziToast-master/dist/css/iziToast.min.css') }}">
 <script src="{{ mix('plugins/iziToast-master/dist/js/iziToast.min.js') }}"></script>
 
-{{-- Css --}}
-<link rel="stylesheet" href="{{ asset("css/global.css") }}">
+
+{{-- Datatables --}}
+<link rel="stylesheet" href="{{ mix('plugins/datatables/datatables.min.css') }}">
+<script src="{{ mix('plugins/datatables/datatables.min.js') }}"></script>
+
+{{-- Tagify --}}
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+
+{{-- Global Files --}}
+<link rel="stylesheet" href="{{ asset('css/global.css') }}">
+<script src="{{ asset('js/global.js') }}"></script>

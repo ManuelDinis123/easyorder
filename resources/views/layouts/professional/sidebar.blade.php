@@ -74,6 +74,9 @@
             </a>
         </nav>
     </div>
+
+    <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+    
     <div class="height-100 bg-light">
         @yield('content')
     </div>
