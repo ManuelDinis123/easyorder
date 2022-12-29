@@ -164,7 +164,7 @@ class MenuController extends Controller
         $ingredients = Ingredients::where("menu_item_id", $id->id)->delete();
 
         // Delete the item
-        $item = MenuItems::where("id", $id->id)->delete();
+        $item = MenuItems::where("id", $id->id)->delete();        
 
         if (!$item) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao apagar o item", "erro" => $item], 200);
 

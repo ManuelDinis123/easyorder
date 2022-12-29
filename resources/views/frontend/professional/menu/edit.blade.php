@@ -19,29 +19,17 @@
     }
 </style>
 
+
 {{-- Delete ingredients modal --}}
-<div class="modal fade" id="confirmModal" aria-labelledby="confirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-3">
-                        <i class="fa-solid fa-triangle-exclamation warn-icon"></i>
-                    </div>
-                    <div class="col-9">
-                        <h5 class="modal-title" id="confirmModalLabel">Quer mesmo apagar este ingrediente?</h5>
-                        <span class="text-muted">Isto não pode ser revertido</span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-danger" onclick="remove_ing()">Confirmar</button>
-            </div>
-            <input type="hidden" id="ingredient_id">
-        </div>
-    </div>
-</div>
+@component('components.delete',
+    ['modal_id' => 'confirmModal', 'function_name' => 'remove_ing', 'hidden' => 'ingredient_id'])
+    @slot('title')
+        Quer mesmo apagar este ingrediente?
+    @endslot
+    @slot('span')
+        Isto não pode ser revertido
+    @endslot
+@endcomponent
 
 {{-- Edit Ingredients modal --}}
 <div class="modal fade" id="editModal" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -431,9 +419,9 @@
                     width: "30%",
                     render: function(data, type, row, meta) {
                         return '<div  style="display: flex; align-items: center">\
-                            <i onClick="editModal(\'' + row.ingredient + '\', ' + row.quantity + ', ' + row.id + ')" class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i>\
-                            <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\
-                            </div>';
+                                <i onClick="editModal(\'' + row.ingredient + '\', ' + row.quantity + ', ' + row.id + ')" class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i>\
+                                <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\
+                                </div>';
                     }
                 },
             ]
