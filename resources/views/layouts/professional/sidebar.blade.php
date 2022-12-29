@@ -41,7 +41,7 @@
                         <span class="nav_name">Encomendas</span>
                     </a>
                     <a href="/professional/ementa" class="nav_link {{ $file == 'menu' ? 'active' : '' }}">
-                        <i class="fa-solid fa-burger-cheese nav_icon"></i>
+                        <i class="fa-solid fa-burger-cheese"></i>
                         <span class="nav_name">Ementa</span>
                     </a>
                     <a href="/professional/stats" class="nav_link {{ $file == 'stats' ? 'active' : '' }}">
@@ -77,7 +77,7 @@
 
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     
-    <div class="height-100 bg-light">
+    <div class="height-100 bg-light pt-3">
         @yield('content')
     </div>
     <script src="{{ asset("js/sidebar.js") }}"></script>

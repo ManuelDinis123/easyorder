@@ -31,8 +31,16 @@ Route::get('/professional', [DashboardController::class, 'index']);
 
 // Food Menu for the professional user accounts
 Route::get('/professional/ementa', [MenuController::class, 'index']);
+Route::get('/professional/ementa/{id}', [MenuController::class, 'edit']);
 Route::post('/professional/getmenu', [MenuController::class, 'get'])->name("getmenu");
 Route::post('/professional/createmenuitem', [MenuController::class, 'create'])->name("createmenuitem");
+Route::post('/professional/updatemenuitem', [MenuController::class, 'update'])->name("updatemenuitem");
+Route::post('/professional/deletemenuitem', [MenuController::class, 'remove'])->name("deletemenuitem");
+Route::post('/professional/gettags', [MenuController::class, 'get_tags'])->name("gettags");
+Route::post('/professional/getingredients', [MenuController::class, 'fetch_ingredients'])->name("getingredients");
+Route::post('/professional/addingredients', [MenuController::class, 'add_ingredients'])->name("addingredients");
+Route::post('/professional/updateingredients', [MenuController::class, 'update_ingredients'])->name("updateingredients");
+Route::post('/professional/deleteingredient', [MenuController::class, 'delete_ingredients'])->name("deleteingredient");
 
 
 // Orders for the professional user accounts

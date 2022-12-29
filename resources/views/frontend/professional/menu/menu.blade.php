@@ -21,6 +21,9 @@
                 <label class="mt-3">Descrição:</label>
                 <textarea type="text" id="description" class="form-control" placeholder="Descrição sobre o item"></textarea>
 
+                <label class="mt-1">Imagem:</label>
+                <input type="text" id="imageurl" class="form-control" placeholder="https://imageurl.jpg">
+
                 <label class="mt-3">Etiquetas:</label><br />
                 <span class="text-muted" style="font-size: 15px">(optional)</span><br />
                 <input id="tags" class='customLook'>
@@ -34,6 +37,30 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="confirmModal" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-3">
+                        <i class="fa-solid fa-triangle-exclamation warn-icon"></i>
+                    </div>
+                    <div class="col-9">
+                        <h5 class="modal-title" id="confirmModalLabel">Tem a certeza que quer remover este item?</h5>
+                        <span class="text-muted">Isto não pode ser revertido</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-danger" onclick="remove()">Confirmar</button>
+            </div>
+            <input type="hidden" id="item_id">
+        </div>
+    </div>
+</div>
+
 @extends('layouts.professional.sidebar', ['file' => 'menu'])
 
 <link rel="stylesheet" href="{{ asset('css/menu.css') }}">

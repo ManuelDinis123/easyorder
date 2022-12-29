@@ -1,41 +1,113 @@
-// TODO: Action Functionality
-
-
-// TODO: these are placeholder values, they have to be from the database
-let tags_suggestions = ["Carne", "FastFood", "Vegetais"];
-
-var input = document.querySelector('.customLook'),
-    tagify = new Tagify(input, {
-        whitelist: tags_suggestions,
-        pattern: /^[^ -]*$/,
-        callbacks: {
-            "invalid": onInvalidTag
-        },
-        dropdown: {
-            position: 'text',
-            enabled: 1 // show suggestions dropdown after 1 typed character
-        }
-    });
-
-$("#tag_more").on("click", onAddButtonClick)
-
-function onAddButtonClick() {
-    tagify.addEmptyTag()
+// Clears modal
+function clearModal() {
+    $("#title").val("");
+    $("#price").val("");
+    $("#description").val("");
+    $("#cost").val("");
+    $("#tags").val("");
 }
 
-function onInvalidTag(e) {
-    iziToast.error({
-        title: "Erro",
-        message: "Etiquetas não devem ter espaços ou -",
-        color: "red",
-        icon: "fa-sharp fa-solid fa-triangle-exclamation"
-    });
+// saves the item data to Database
+function saveData() {
+    // The required data from the form
+    var form_data = {
+        name: $("#title").val(),
+        price: $("#price").val(),
+        cost: $("#cost").val(),
+        description: $("#description").val(),
+    }
+
+    // If object has any empty value show an Error
+    if (objectIsEmpty(form_data)) {
+        iziToast.error({
+            title: "Erro",
+            message: "Preencha todos os campos",
+            color: "red",
+            icon: "fa-sharp fa-solid fa-triangle-exclamation"
+        });
+        return;
+    }
+
+    $.ajax({
+        method: "post",
+        url: "createmenuitem",
+        data: Object.assign(form_data, { tags: $("#tags").val(), imageurl: $("#imageurl").val(), "_token": $('#token').val() })
+    }).done((res) => {
+        iziToast.success({
+            title: res.title,
+            message: res.message,
+            color: "green",
+            icon: "fa-solid fa-check"
+        });
+        clearModal();
+        $("#addModal").modal('toggle');
+        $("#menu").DataTable().ajax.reload(null, false);
+    }).fail((err) => {
+        iziToast.error({
+            title: "Erro",
+            message: "Ocorreu um erro ao guardar",
+            color: "red",
+            icon: "fa-sharp fa-solid fa-triangle-exclamation"
+        });
+    })
+}
+
+// delete item from DB
+function remove() {
+    $("#confirmModal").modal('toggle');
+    $.ajax({
+        method: "post",
+        url: "deletemenuitem",
+        data: {
+            "_token": $('#token').val(),
+            "id": $("#item_id").val()
+        }
+    }).done((res) => {
+        if (res.title == "Sucesso") {
+            iziToast.success({
+                title: res.title,
+                message: res.message,
+                color: "green",
+                icon: "fa-solid fa-check"
+            });
+        } else {
+            iziToast.error({
+                title: res.title,
+                message: res.message,
+                color: "red",
+                icon: "fa-sharp fa-solid fa-triangle-exclamation"
+            });
+        }
+
+        $("#menu").DataTable().ajax.reload(null, false);
+
+    }).fail((err) => {
+        iziToast.error({
+            title: "Erro",
+            message: "Ocorreu um erro a remover o item",
+            color: "red",
+            icon: "fa-sharp fa-solid fa-triangle-exclamation"
+        });
+    })
+}
+
+// Opens the confirmation modal
+function confirmationModal(id) {
+    $("#confirmModal").modal('toggle');
+
+    $("#item_id").val(id);
 }
 
 $(document).ready(() => {
 
+
+    $("#save").on('click', () => {
+        saveData();
+    });
+
     // Initialize the datatable
     $("#menu").dataTable({
+
         "ordering": false,
 
         "language": {
@@ -57,49 +129,59 @@ $(document).ready(() => {
         columns: [
             { data: "title" },
             { data: "price" },
-            { data: "actions" },
+            {
+                data: null,
+                render: function (data, type, row, meta) {
+                    return '<span>\
+                    <a href="/professional/ementa/'+row.id+'"><i class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i></a>\
+                    <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\
+                    </span>';
+                }
+            },
         ]
     });
 
-    $("#save").on('click', () => {
-        // The required data from the form
-        var form_data = {
-            name: $("#title").val(),
-            price: $("#price").val(),
-            cost: $("#cost").val(),
-            description: $("#description").val(),            
-        }
+    let tags_suggestions = [];
 
-        // If object has any empty value show an Error
-        if (objectIsEmpty(form_data)) {
-            iziToast.error({
-                title: "Erro",
-                message: "Preencha todos os campos",
-                color: "red",
-                icon: "fa-sharp fa-solid fa-triangle-exclamation"
-            });
-            return;
+    // Get the tags from the db
+    $.ajax({
+        method: 'post',
+        url: 'gettags',
+        data: {
+            "_token": $('#token').val()
         }
-
-        $.ajax({
-            method: "post",
-            url: "createmenuitem",
-            data: Object.assign(form_data, {tags: $("#tags").val(), "_token": $('#token').val()})
-        }).done((res) => {
-            iziToast.success({
-                title: res.title,
-                message: res.message,
-                color: "green",
-                icon: "fa-solid fa-check"
-            });
-        }).fail((err)=>{
-            iziToast.error({
-                title: "Erro",
-                message: "Ocorreu um erro ao guardar",
-                color: "red",
-                icon: "fa-sharp fa-solid fa-triangle-exclamation"
-            });
+    }).done((tags) => {
+        $.each(tags, (key, tag) => {
+            tags_suggestions.push(tag.tag);
         })
+        // Initialize tagify
+        var input = document.querySelector('.customLook'),
+            tagify = new Tagify(input, {
+                whitelist: tags_suggestions,
+                pattern: /^[^ -]*$/,
+                callbacks: {
+                    "invalid": onInvalidTag
+                },
+                dropdown: {
+                    position: 'text',
+                    enabled: 1 // show suggestions dropdown after 1 typed character
+                }
+            });
+        $("#tag_more").on("click", onAddButtonClick)
+
+        function onAddButtonClick() {
+            tagify.addEmptyTag()
+        }
+
+        function onInvalidTag(e) {            
+            iziToast.error({
+                title: "Erro",
+                message: "Etiquetas não devem ter espaços ou -",
+                color: "red",
+                icon: "fa-sharp fa-solid fa-triangle-exclamation"
+            });
+        }
     });
+
 
 });
