@@ -3,12 +3,13 @@ function clearModal() {
     $("#title").val("");
     $("#price").val("");
     $("#description").val("");
+    $("#imageurl").val("");
     $("#cost").val("");
     $("#tags").val("");
 }
 
 // saves the item data to Database
-function saveData() {
+function saveData(enter = false) {
     // The required data from the form
     var form_data = {
         name: $("#title").val(),
@@ -33,6 +34,11 @@ function saveData() {
         url: "createmenuitem",
         data: Object.assign(form_data, { tags: $("#tags").val(), imageurl: $("#imageurl").val(), "_token": $('#token').val() })
     }).done((res) => {
+        if(enter){
+            window.location.replace("/professional/ementa/" + res.id);
+            return;
+        }
+
         iziToast.success({
             title: res.title,
             message: res.message,
@@ -72,6 +78,10 @@ $(document).ready(() => {
     $("#save").on('click', () => {
         saveData();
     });
+
+    $("#save_enter").on('click', () => {
+        saveData(true);
+    })
 
     // Initialize the datatable
     $("#menu").dataTable({

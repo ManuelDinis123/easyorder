@@ -18,7 +18,7 @@ function objectIsEmpty(values) {
  * Does all the logic to remove something from DB with ajax
  * 
  */
-function removeDB(url, idToDelete) {
+function removeDB(url, idToDelete, hasToast = true) {
     $.ajax({
         method: "post",
         url: url,
@@ -27,6 +27,8 @@ function removeDB(url, idToDelete) {
             "id": idToDelete
         }
     }).done((res) => {
+        if (!hasToast) return;
+
         if (res.title == "Sucesso") {
             iziToast.success({
                 title: res.title,
@@ -43,6 +45,9 @@ function removeDB(url, idToDelete) {
             });
         }
     }).fail((err) => {
+
+        if (!hasToast) return;
+
         iziToast.error({
             title: "Erro",
             message: "Ocorreu um erro a remover o item",

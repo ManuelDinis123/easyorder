@@ -21,7 +21,8 @@
                 <label class="mt-3">Descrição:</label>
                 <textarea type="text" id="description" class="form-control" placeholder="Descrição sobre o item"></textarea>
 
-                <label class="mt-1">Imagem:</label>
+                <label class="mt-1">Imagem:</label><br />
+                <span class="text-muted" style="font-size: 15px">(optional)</span>
                 <input type="text" id="imageurl" class="form-control" placeholder="https://imageurl.jpg">
 
                 <label class="mt-3">Etiquetas:</label><br />
@@ -32,7 +33,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-success" id="save">Guardar</button>
-                <button type="button" class="btn btn-primary">Guardar e abrir</button>
+                <button type="button" class="btn btn-primary" id="save_enter">Guardar e abrir</button>
             </div>
         </div>
     </div>

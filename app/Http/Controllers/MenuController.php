@@ -121,7 +121,7 @@ class MenuController extends Controller
         }
 
 
-        return response()->json(["title" => "Sucesso", "message" => "Item adicionado com sucesso!"], 200);
+        return response()->json(["title" => "Sucesso", "message" => "Item adicionado com sucesso!", "id" => $menu_item->id], 200);
     }
 
     /**

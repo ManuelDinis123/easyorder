@@ -31,6 +31,17 @@
     @endslot
 @endcomponent
 
+
+{{-- Delete item modal --}}
+@component('components.delete', ['modal_id' => 'itemDelModal', 'function_name' => 'remove_itm', 'hidden' => 'item_id'])
+    @slot('title')
+        Tem a certeza que quer remover este item?
+    @endslot
+    @slot('span')
+        Isto não pode ser revertido
+    @endslot
+@endcomponent
+
 {{-- Edit Ingredients modal --}}
 <div class="modal fade" id="editModal" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -65,7 +76,7 @@
             <span class="btn not-selected" id="ing">Ingredientes</span>
         </div>
         <div class="col-9">
-            <i class="fa-solid fa-delete-right del"></i>
+            <i class="fa-solid fa-delete-right del" data-bs-toggle="modal" data-bs-target="#itemDelModal"></i>
         </div>
     </div>
     <hr>
@@ -197,6 +208,12 @@
         $("#confirmModal").modal('toggle');
         removeDB("/professional/deleteingredient", $("#ingredient_id").val());
         $("#ing_table").DataTable().ajax.reload(null, false);
+    }
+
+    // Delete item from DB
+    function remove_itm() {
+        removeDB("/professional/deletemenuitem", <?= $id ?>, false);
+        window.location.replace("/professional/ementa");
     }
 
     // inserts ingredients on the DB
