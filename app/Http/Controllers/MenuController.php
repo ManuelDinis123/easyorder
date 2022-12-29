@@ -117,7 +117,7 @@ class MenuController extends Controller
         if (!$menu_item) return response()->json(["title" => "Erro", "message" => "Ocorreu um Erro"], 200);
 
         if ($data->tags) {
-            $this->addTags($data->tags, $menu_item->id);
+            $this->addTags($data->tags, $menu_item->id, true);
         }
 
 
@@ -142,8 +142,36 @@ class MenuController extends Controller
 
         if (!$update && !$newdata->tags) return response()->json(["title" => "Erro", "message" => "Erro ao editar o item"], 200);
 
-        if ($newdata->tags) {
-            $this->addTags($newdata->tags, $newdata->id);
+        Log::info($newdata);
+
+        if ($newdata->tags || $newdata->tags_in_db) {
+
+            // Get tags in item from DB
+            $tagsinitemid = ItemTags::where("menu_item_id", $newdata->id)->get();
+            $tagsinitemid = $this->obj_to_arr($tagsinitemid, "tag_id");
+            $tags =  MenuTags::whereIn("id", $tagsinitemid)->get();
+
+            // Compare tags in DB to the tags of the item to see if anything has changed.
+            $tags = $this->obj_to_arr($tags, "tag");
+            $tags_formdb =  $this->obj_to_arr(json_decode($newdata->tags_in_db), "value");
+            $tag_diff = array_diff($tags_formdb, $tags);
+            $newtags = $this->obj_to_arr(json_decode($newdata->tags), "value");
+
+            // Merge all of the tags that need to be added
+            $tags_to_add = array_merge($tag_diff, $newtags);
+
+            $this->addTags($tags_to_add, $newdata->id, false);
+
+            // Check if any need to be removed
+            $to_remove = array_diff($tags, $tags_formdb);
+
+            if ($to_remove) {
+                $getid = MenuTags::whereIn("tag", $to_remove)
+                    ->where("id_restaurant", 1) // ! PLACEHOLDER VALUE
+                    ->get()->first();
+
+                ItemTags::where("tag_id", $getid->id)->delete();
+            }
         }
 
         return response()->json(["title" => "Sucesso", "message" => "Item editado com sucesso!"], 200);
@@ -164,7 +192,7 @@ class MenuController extends Controller
         $ingredients = Ingredients::where("menu_item_id", $id->id)->delete();
 
         // Delete the item
-        $item = MenuItems::where("id", $id->id)->delete();        
+        $item = MenuItems::where("id", $id->id)->delete();
 
         if (!$item) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao apagar o item", "erro" => $item], 200);
 
@@ -192,19 +220,19 @@ class MenuController extends Controller
      * @return Boolean
      */
     function add_ingredients(Request $data)
-    {   
+    {
         $ingredients = Ingredients::create([
             "ingredient" => $data->ingredient,
             "menu_item_id" => $data->id,
             "quantity" => $data->quantity
         ]);
 
-        if(!$ingredients) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao inserir o ingredient"], 200);
+        if (!$ingredients) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao inserir o ingredient"], 200);
 
         return response()->json(["title" => "Sucesso", "message" => "Ingrediente inserido com sucesso"], 200);
     }
 
-    
+
     /**
      * Update ingredients
      * 
@@ -212,14 +240,14 @@ class MenuController extends Controller
      * @return Boolean
      */
     function update_ingredients(Request $data)
-    {   
+    {
         $ingredients = Ingredients::whereId($data->ingid)->update([
             "ingredient" => $data->ingredient,
             "menu_item_id" => $data->id,
             "quantity" => $data->quantity
         ]);
 
-        if(!$ingredients) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao editar o ingredient"], 200);
+        if (!$ingredients) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao editar o ingredient"], 200);
 
         return response()->json(["title" => "Sucesso", "message" => "Ingrediente atualizado com sucesso"], 200);
     }
@@ -248,8 +276,10 @@ class MenuController extends Controller
     function obj_to_arr($obj, $key)
     {
         $arr = [];
-        foreach ($obj as $k => $item) {
-            array_push($arr, $item->$key);
+        if ($obj) {
+            foreach ($obj as $k => $item) {
+                array_push($arr, $item->$key);
+            }
         }
         return $arr;
     }
@@ -259,13 +289,13 @@ class MenuController extends Controller
      * 
      * @return Boolean
      */
-    function addTags($inputTags, $itemId)
+    function addTags($inputTags, $itemId, $needsConvert = true)
     {
-        $alltags = $this->obj_to_arr(json_decode($inputTags), "value");
+        if ($needsConvert) $inputTags = $this->obj_to_arr(json_decode($inputTags), "value");
         $dbTags = $this->obj_to_arr(MenuTags::where("id_restaurant", 1)->get(), "tag"); // ! 1 is a PLACEHOLDER VALUE
 
         // Get the tags that aren't already in the db
-        $newTags = array_diff($alltags, $dbTags);
+        $newTags = array_diff(array_map('strtolower', $inputTags), array_map('strtolower', $dbTags)); // Put the values in lower-case so that ABC and abc are equal
 
         foreach ($newTags as $tag) {
             $insertTag = MenuTags::create([
@@ -276,7 +306,7 @@ class MenuController extends Controller
             if (!$insertTag) return response()->json(["title" => "Erro", "message" => "Ocorreu um Erro"], 200);
         }
 
-        foreach ($alltags as $tag) {
+        foreach ($inputTags as $tag) {
             $getid = MenuTags::where("tag", $tag)->get()->first();
 
             $connect_tags = ItemTags::create([

@@ -34,7 +34,7 @@ function saveData(enter = false) {
         url: "createmenuitem",
         data: Object.assign(form_data, { tags: $("#tags").val(), imageurl: $("#imageurl").val(), "_token": $('#token').val() })
     }).done((res) => {
-        if(enter){
+        if (enter) {
             window.location.replace("/professional/ementa/" + res.id);
             return;
         }
@@ -75,6 +75,10 @@ function confirmationModal(id) {
 $(document).ready(() => {
 
 
+    $("#addModal").on('hide.bs.modal', function () {
+        clearModal();
+    });
+
     $("#save").on('click', () => {
         saveData();
     });
@@ -111,7 +115,7 @@ $(document).ready(() => {
                 data: null,
                 render: function (data, type, row, meta) {
                     return '<span>\
-                    <a href="/professional/ementa/'+row.id+'"><i class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i></a>\
+                    <a href="/professional/ementa/'+ row.id + '"><i class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i></a>\
                     <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\
                     </span>';
                 }
@@ -151,7 +155,7 @@ $(document).ready(() => {
             tagify.addEmptyTag()
         }
 
-        function onInvalidTag(e) {            
+        function onInvalidTag(e) {
             iziToast.error({
                 title: "Erro",
                 message: "Etiquetas não devem ter espaços ou -",

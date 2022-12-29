@@ -47,7 +47,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <h3>Editar Ingrediente:</h3>
+                <h3>Editar Acompanhamento:</h3>
                 <hr>
                 <div class="row">
                     <div class="col-11">
@@ -73,7 +73,7 @@
     <div class="row">
         <div class="col-3">
             <span class="btn is-selected" id="geral">Geral</span>
-            <span class="btn not-selected" id="ing">Ingredientes</span>
+            <span class="btn not-selected" id="ing">Acompanhamentos</span>
         </div>
         <div class="col-9">
             <i class="fa-solid fa-delete-right del" data-bs-toggle="modal" data-bs-target="#itemDelModal"></i>
@@ -103,7 +103,8 @@
                 <textarea type="text" id="description" class="form-control" placeholder="Descrição sobre o item">{{ $description }}</textarea>
 
                 <label class="mt-3">Etiquetas:</label><br />
-                <input id="tags" class='customLook' value="{{ $tags }}">
+                <input id="db_tags" class='tags_db' value="{{ $tags }}">
+                <input id="tags" class='customLook'>
                 <button type="button" id="tag_more">+</button>
             </div>
 
@@ -136,7 +137,7 @@
     <div id="ingredients" class="visually-hidden">
         <div class="row">
             <div class="col-3">
-                <h4>Adicionar Ingredientes</h3>
+                <h4>Adicionar Acompanhamentos</h3>
                     <hr>
                     <label>Nome:</label>
                     <input type="text" class="form-control" placeholder="nome" id="ingredient">
@@ -149,7 +150,7 @@
                 <div class="t-contain">
                     <table id="ing_table" class="table table-striped table-borderless">
                         <thead>
-                            <th>Ingrediente</th>
+                            <th>Acompanhamento</th>
                             <th>Quantidade</th>
                             <th></th>
                         </thead>
@@ -235,7 +236,7 @@
                     color: "green",
                     icon: "fa-solid fa-check"
                 });
-                $("#ing_table").DataTable().ajax.reload(null, false);
+                $("#ing_table").DataTable().ajax.reload(null, false);            
                 $("#ingredient").val("");
                 $("#quant").val(1);
             } else {
@@ -281,6 +282,7 @@
                     icon: "fa-solid fa-check"
                 });
                 $("#ing_table").DataTable().ajax.reload(null, false);
+                $("#editModal").modal("toggle");
             } else {
                 iziToast.error({
                     title: res.title,
@@ -348,6 +350,7 @@
                     "cost": $("#cost").val(),
                     "imageurl": $("#imageurl").val(),
                     "description": $("#description").val(),
+                    "tags_in_db": $("#db_tags").val(),
                     "tags": $("#tags").val(),
                 }
             }).done((res) => {
@@ -427,6 +430,21 @@
             $.each(tags, (key, tag) => {
                 tags_suggestions.push(tag.tag);
             })
+            // Initialize tagify
+            var input = document.querySelector('.tags_db'),
+                tagify = new Tagify(input, {
+                    whitelist: tags_suggestions,
+                    pattern: /^[^ -]*$/,
+                    callbacks: {
+                        "invalid": onInvalidTag
+                    },
+                    dropdown: {
+                        position: 'text',
+                        enabled: 1 // show suggestions dropdown after 1 typed character
+                    }
+                });
+
+
             // Initialize tagify
             var input = document.querySelector('.customLook'),
                 tagify = new Tagify(input, {
