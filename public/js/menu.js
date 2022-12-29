@@ -55,40 +55,8 @@ function saveData() {
 // delete item from DB
 function remove() {
     $("#confirmModal").modal('toggle');
-    $.ajax({
-        method: "post",
-        url: "deletemenuitem",
-        data: {
-            "_token": $('#token').val(),
-            "id": $("#item_id").val()
-        }
-    }).done((res) => {
-        if (res.title == "Sucesso") {
-            iziToast.success({
-                title: res.title,
-                message: res.message,
-                color: "green",
-                icon: "fa-solid fa-check"
-            });
-        } else {
-            iziToast.error({
-                title: res.title,
-                message: res.message,
-                color: "red",
-                icon: "fa-sharp fa-solid fa-triangle-exclamation"
-            });
-        }
-
-        $("#menu").DataTable().ajax.reload(null, false);
-
-    }).fail((err) => {
-        iziToast.error({
-            title: "Erro",
-            message: "Ocorreu um erro a remover o item",
-            color: "red",
-            icon: "fa-sharp fa-solid fa-triangle-exclamation"
-        });
-    })
+    removeDB("deletemenuitem", $("#item_id").val());
+    $("#menu").DataTable().ajax.reload(null, false);
 }
 
 // Opens the confirmation modal

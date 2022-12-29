@@ -195,40 +195,8 @@
     // delete ingredients from DB
     function remove_ing() {
         $("#confirmModal").modal('toggle');
-        $.ajax({
-            method: "post",
-            url: "/professional/deleteingredient",
-            data: {
-                "_token": $('#token').val(),
-                "id": $("#ingredient_id").val()
-            }
-        }).done((res) => {
-            if (res.title == "Sucesso") {
-                iziToast.success({
-                    title: res.title,
-                    message: res.message,
-                    color: "green",
-                    icon: "fa-solid fa-check"
-                });
-            } else {
-                iziToast.error({
-                    title: res.title,
-                    message: res.message,
-                    color: "red",
-                    icon: "fa-sharp fa-solid fa-triangle-exclamation"
-                });
-            }
-
-            $("#ing_table").DataTable().ajax.reload(null, false);
-
-        }).fail((err) => {
-            iziToast.error({
-                title: "Erro",
-                message: "Ocorreu um erro a remover o ingrediente",
-                color: "red",
-                icon: "fa-sharp fa-solid fa-triangle-exclamation"
-            });
-        })
+        removeDB("/professional/deleteingredient", $("#ingredient_id").val());
+        $("#ing_table").DataTable().ajax.reload(null, false);
     }
 
     // inserts ingredients on the DB
