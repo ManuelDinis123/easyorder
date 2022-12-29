@@ -277,7 +277,7 @@
 
     // Update the data on the item card
     function updateCard() {
-        $("#card-name").text($("#title").val());
+        $("#card-name").text($("#item_title").val());
         $("#card-price").text($("#price").val() + "€");
 
 
