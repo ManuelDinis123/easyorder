@@ -73,7 +73,7 @@
         <div class="row">
             <div class="col-5" id="form">
                 <label class="mt-1">Nome:</label>
-                <input type="text" id="title" class="form-control" placeholder="Nome do item"
+                <input type="text" id="item_title" class="form-control" placeholder="Nome do item"
                     value="{{ $name }}" autocomplete="off">
 
                 <label class="mt-3">Preço:</label>
@@ -326,7 +326,7 @@
                 data: {
                     "_token": $('#token').val(),
                     "id": <?= $id ?>,
-                    "name": $("#title").val(),
+                    "name": $("#item_title").val(),
                     "price": $("#price").val(),
                     "cost": $("#cost").val(),
                     "imageurl": $("#imageurl").val(),
