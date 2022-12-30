@@ -57,7 +57,7 @@ class AuthController extends Controller
 
         if($user->isProfessional){
             $restaurantid = UserRestaurant::where("user_id", $user->id)->get()->first();
-            $restaurant = Restaurants::where("id", $restaurantid->id)->get()->first();
+            $restaurant = Restaurants::where("id", $restaurantid->restaurant_id)->get()->first();
             session(["restaurant" => [
                 "id" => $restaurant->id,
                 "name" => $restaurant->name

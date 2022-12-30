@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\AppHelper;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -17,11 +18,12 @@ Route::get('/', function () {
 
 // Home page of the normal user accounts
 Route::get('/home', function () {    
+    if (!AppHelper::hasLogin()) return redirect("/no-access");
     return view('frontend/home');
 });
 
 // Page to show when user doesn't have permission to enter a page
-Route::get('/no-access', function() {
+Route::get('/no-access', function () {
     return view('errors.404');
 });
 

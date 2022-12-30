@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AppHelper;
 use App\Models\Ingredients;
 use App\Models\ItemTags;
 use App\Models\Menu;
@@ -19,6 +20,8 @@ class MenuController extends Controller
      */
     function index()
     {
+        if(!AppHelper::checkAuth()) return redirect("/no-access"); 
+
         return view("frontend/professional/menu/menu");
     }
 
@@ -30,6 +33,8 @@ class MenuController extends Controller
      */
     function edit(Request $id)
     {
+        if(!AppHelper::checkAuth()) return redirect("/no-access"); 
+
         // Get data from the menu item
         $item = MenuItems::where("id", $id->route('id'))->get()->first();
 
@@ -105,6 +110,7 @@ class MenuController extends Controller
     {
 
         $restaurant_id = session()->get("restaurant")["id"];
+        $user_id = session()->get("user")["id"];
 
         $menu_id = Menu::where("restaurant_id", $restaurant_id)->get()->first();
 
@@ -116,7 +122,7 @@ class MenuController extends Controller
             "cost" => $data->cost,
             "description" => $data->description,
             "imageUrl" => $data->imageurl,
-            "created_by" => 1,
+            "created_by" => $user_id,
             "created_at" => date("Y-m-d"),
         ]);
 
@@ -145,7 +151,9 @@ class MenuController extends Controller
             "price" => $newdata->price,
             "cost" => $newdata->cost,
             "description" => $newdata->description,
-            "imageUrl" => $newdata->imageurl
+            "imageUrl" => $newdata->imageurl,
+            "edited_by" => session()->get("user")["id"],
+            "edited_at" => date("Y-m-d")
         ]);
 
         if (!$update && !$newdata->tags) return response()->json(["title" => "Erro", "message" => "Erro ao editar o item"], 200);
@@ -300,6 +308,7 @@ class MenuController extends Controller
     function addTags($inputTags, $itemId, $needsConvert = true)
     {
         $restaurant_id = session()->get("restaurant")["id"];
+        $connect_tags = null;
 
         if ($needsConvert) $inputTags = $this->obj_to_arr(json_decode($inputTags), "value");
         $dbTags = $this->obj_to_arr(MenuTags::where("id_restaurant", $restaurant_id)->get(), "tag");
