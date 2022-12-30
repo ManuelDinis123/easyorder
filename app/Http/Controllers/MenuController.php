@@ -123,7 +123,7 @@ class MenuController extends Controller
             "description" => $data->description,
             "imageUrl" => $data->imageurl,
             "created_by" => $user_id,
-            "created_at" => date("Y-m-d"),
+            "created_at" => date("Y-m-d H:i:s"),
         ]);
 
         if (!$menu_item) return response()->json(["title" => "Erro", "message" => "Ocorreu um Erro"], 200);
@@ -153,7 +153,7 @@ class MenuController extends Controller
             "description" => $newdata->description,
             "imageUrl" => $newdata->imageurl,
             "edited_by" => session()->get("user")["id"],
-            "edited_at" => date("Y-m-d")
+            "edited_at" => date("Y-m-d H:i:s")
         ]);
 
         if (!$update && !$newdata->tags) return response()->json(["title" => "Erro", "message" => "Erro ao editar o item"], 200);
