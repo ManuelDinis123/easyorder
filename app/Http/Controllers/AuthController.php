@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Users;
-use App\Models\Auth;
+use App\Models\UserAuth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {        
@@ -33,7 +33,7 @@ class AuthController extends Controller
         
         $user = $user->first(); // Gets the first object so that the properties can be accessed
         
-        $auth = Auth::where("user_id", $user->id)->get();
+        $auth = UserAuth::where("user_id", $user->id)->get();
 
         $auth = $auth->first();
                 
