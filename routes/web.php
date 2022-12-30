@@ -12,18 +12,24 @@ use App\Http\Controllers\UserConfigsController;
 
 // Root of the project, redirects to login or home depending on the authentication state of the user
 Route::get('/', function () {
-    // TODO: If user is already logged in redirect to home instead
-    return view('frontend/login');
+    return view(session()->has("authenticated") ? 'frontend/home' : 'frontend/login');
 });
 
 // Home page of the normal user accounts
-Route::get('/home', function () {
-    // TODO: change this to a controller
+Route::get('/home', function () {    
     return view('frontend/home');
+});
+
+// Page to show when user doesn't have permission to enter a page
+Route::get('/no-access', function() {
+    return view('errors.404');
 });
 
 // Authentication method
 Route::post('/auth', [AuthController::class, 'auth'])->name("auth");
+
+// Logout method
+Route::post('/logout', [AuthController::class, 'logout'])->name("logout");
 
 // Dashboard for the professional user accounts
 Route::get('/professional/dashboard', [DashboardController::class, 'index']);
@@ -57,3 +63,9 @@ Route::get('/professional/admin/permissions', [PermsController::class, 'index'])
 
 // Admin Options for the professional user account
 Route::get('/professional/admin/options', [OptionsController::class, 'index']);
+
+
+// any other route that isn't declared goes to 404 page
+Route::get('/{any}', function () {
+    abort(404, view("errors.404"));
+})->where('any', '.*');

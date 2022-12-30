@@ -47,13 +47,6 @@
     background-color: #e7e7e7;
 }
 
-
-.warn-icon {
-    color: #dc3545;
-    font-size: 100px;
-}
-
-
 @keyframes fadeIn {
     0% {
         scale: 98%;

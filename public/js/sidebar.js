@@ -5,4 +5,16 @@ $(document).ready(() => {
         $("#body-pd").toggleClass("body-pd");
         $("#header").toggleClass("body-pd");
     });
+
+    $("#leave").on('click', () => {
+        $.ajax({
+            method: 'post',
+            url: '/logout',
+            data: {
+                "_token": $('#token').val(),
+            }
+        }).done(res=>{
+            window.location.replace(res);
+        })
+    })
 });

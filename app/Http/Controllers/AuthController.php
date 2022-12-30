@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Restaurants;
 use App\Models\Users;
 use App\Models\UserAuth;
+use App\Models\UserRestaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {        
@@ -41,10 +44,36 @@ class AuthController extends Controller
             return response()->json($err, 200);
         }
 
+        // All data to be stored in session
+        $session_data = [
+            'id' => $user->id,
+            'firstName'=> $user->first_name,
+            'lastName' => $user->last_name,
+            'email' => $user->email,
+            'isProfessional' => $user->isProfessional
+        ];         
+
+        session(['authenticated' => true, "user" => $session_data]);
+
+        if($user->isProfessional){
+            $restaurantid = UserRestaurant::where("user_id", $user->id)->get()->first();
+            $restaurant = Restaurants::where("id", $restaurantid->id)->get()->first();
+            session(["restaurant" => [
+                "id" => $restaurant->id,
+                "name" => $restaurant->name
+            ]]);
+        }
+
         $return = ['status'=> "success", "isProfessional" => $user->isProfessional];
 
         return response()->json($return, 200);
     }
 
-    // Functions to use in this controller
+
+    function logout() {
+        session()->flush();        
+
+        return response("/", 200);
+    }
+    
 }

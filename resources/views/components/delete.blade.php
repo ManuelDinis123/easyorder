@@ -1,4 +1,11 @@
 {{-- Call this to get a confirm modal --}}
+<style>
+    .warn-icon {
+        color: #dc3545;
+        font-size: 100px;
+    }
+</style>
+
 <div class="modal fade" id="{{ $modal_id }}" aria-labelledby="{{ $modal_id }}Label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

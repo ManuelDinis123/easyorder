@@ -35,11 +35,6 @@
     width: 100% !important;
 }
 
-.warn-icon {
-    color: #dc3545;
-    font-size: 100px;
-}
-
 .dataTables_paginate {
     /* display: none; */
 }

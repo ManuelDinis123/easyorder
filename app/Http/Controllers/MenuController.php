@@ -88,7 +88,9 @@ class MenuController extends Controller
      */
     function get_tags()
     {
-        $tags = MenuTags::where("id_restaurant", 1)->get(); // ! 1 is a placeholder value        
+        $restaurant_id = session()->get("restaurant")["id"];
+
+        $tags = MenuTags::where("id_restaurant", $restaurant_id)->get();
 
         return response()->json($tags, 200);
     }
@@ -102,9 +104,13 @@ class MenuController extends Controller
     function create(Request $data)
     {
 
+        $restaurant_id = session()->get("restaurant")["id"];
+
+        $menu_id = Menu::where("restaurant_id", $restaurant_id)->get()->first();
+
         // Insert the menu_item
         $menu_item = MenuItems::create([
-            "menu_id" => 1, // ! PLACEHOLDER VALUE
+            "menu_id" => $menu_id->id,
             "name" => $data->name,
             "price" => $data->price,
             "cost" => $data->cost,
@@ -132,6 +138,8 @@ class MenuController extends Controller
      */
     function update(Request $newdata)
     {
+        $restaurant_id = session()->get("restaurant")["id"];
+
         $update =  MenuItems::whereId($newdata->id)->update([
             "name" => $newdata->name,
             "price" => $newdata->price,
@@ -167,7 +175,7 @@ class MenuController extends Controller
 
             if ($to_remove) {
                 $getid = MenuTags::whereIn("tag", $to_remove)
-                    ->where("id_restaurant", 1) // ! PLACEHOLDER VALUE
+                    ->where("id_restaurant", $restaurant_id)
                     ->get()->first();
 
                 ItemTags::where("tag_id", $getid->id)->delete();
@@ -291,8 +299,10 @@ class MenuController extends Controller
      */
     function addTags($inputTags, $itemId, $needsConvert = true)
     {
+        $restaurant_id = session()->get("restaurant")["id"];
+
         if ($needsConvert) $inputTags = $this->obj_to_arr(json_decode($inputTags), "value");
-        $dbTags = $this->obj_to_arr(MenuTags::where("id_restaurant", 1)->get(), "tag"); // ! 1 is a PLACEHOLDER VALUE
+        $dbTags = $this->obj_to_arr(MenuTags::where("id_restaurant", $restaurant_id)->get(), "tag");
 
         // Get the tags that aren't already in the db
         $newTags = array_diff(array_map('strtolower', $inputTags), array_map('strtolower', $dbTags)); // Put the values in lower-case so that ABC and abc are equal
@@ -300,7 +310,7 @@ class MenuController extends Controller
         foreach ($newTags as $tag) {
             $insertTag = MenuTags::create([
                 "tag" => $tag,
-                "id_restaurant" => 1 // ! PLACEHOLDER VALUE
+                "id_restaurant" => $restaurant_id
             ]);
 
             if (!$insertTag) return response()->json(["title" => "Erro", "message" => "Ocorreu um Erro"], 200);

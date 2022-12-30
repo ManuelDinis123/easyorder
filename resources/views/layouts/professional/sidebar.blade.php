@@ -68,10 +68,10 @@
                     </div>
                 </div>
             </div>
-            <a href="/" class="nav_link">
+            <span id="leave" class="nav_link" style="cursor: pointer">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span class="nav_name">SignOut</span>
-            </a>
+            </span>
         </nav>
     </div>
 
