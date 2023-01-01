@@ -129,7 +129,7 @@
             </div>
             <div class="row mt-3">
                 <div class="col-5">
-                    <button class="btn btn-primary" id="edit-confirm">Editar</button>
+                    <button class="btn btn-primary" id="edit-confirm" style="width: 100%">Editar</button>
                 </div>
             </div>
         </div>
