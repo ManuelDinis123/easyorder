@@ -26,7 +26,7 @@
 <div class="row">
     <div class="col-6">
         <h1>Esta pagina não existe ou não tem permissão para a visualizar</h1>
-        <a href="/" class="text-muted"><i class="fa-solid fa-house"></i> Voltar</a>
+        <a href="{{ session()->get("_previous")["url"]}}" class="text-muted">Voltar</a>
     </div>
     <div class="col-6">
         <i class="fa-solid fa-cloud-exclamation ico-err"></i>

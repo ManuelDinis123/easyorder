@@ -6,7 +6,6 @@
 
 
 {{-- Bootstrap --}}
-
 <link rel="stylesheet" href="{{ mix('plugins/bootstrap/css/bootstrap.min.css') }}">
 <script src="{{ mix('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
@@ -32,3 +31,6 @@
 {{-- Global Files --}}
 <link rel="stylesheet" href="{{ asset('css/global.css') }}">
 <script src="{{ asset('js/global.js') }}"></script>
+
+{{-- Animation.style --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />

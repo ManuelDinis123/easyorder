@@ -174,10 +174,12 @@
             $("#" + secondarybtn).addClass("not-selected");
             $("#" + mainbtn).removeClass("not-selected");
             $("#" + mainbtn).addClass("is-selected");
+            $("#" + secondarybtn).removeClass("animate__animated animate__pulse");
+            $("#" + mainbtn).addClass("animate__animated animate__pulse");
 
             // animation
-            $("#" + main).addClass("fd");
-            $("#" + secondary).removeClass("fd");
+            $("#" + main).addClass("animate__animated animate__fadeIn");
+            $("#" + secondary).removeClass("animate__animated animate__fadeIn");
         }
     }
 
