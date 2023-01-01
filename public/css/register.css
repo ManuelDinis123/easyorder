@@ -1,0 +1,211 @@
+html {
+    height: 100%;
+}
+
+body {
+    /* display: grid;
+    place-items: center; */
+    margin: 0;
+    padding: 0 24px;
+}
+
+.bg {
+    animation: slide 5s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, #1C46B2 50%, #4065c4 50%);
+    bottom: 0;
+    left: -50%;
+    opacity: .5;
+    position: fixed;
+    right: -50%;
+    top: 0;
+    z-index: -1;
+}
+
+.bg2 {
+    animation-direction: alternate-reverse;
+    animation-duration: 6s;
+}
+
+.bg3 {
+    animation-duration: 7s;
+}
+
+.content {
+    background-color: rgba(255, 255, 255, .8);
+    border-radius: .25em;
+    box-shadow: 0 0 .25em rgba(0, 0, 0, .25);
+    box-sizing: border-box;
+    left: 50%;
+    padding: 10vmin;
+    position: fixed;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(-25%);
+    }
+
+    100% {
+        transform: translateX(25%);
+    }
+}
+
+.login-card {
+    margin: 0 auto;
+    margin-top: 85px;
+    width: 400px;
+    padding: 51px 30px 44px;
+    border-radius: 24px;
+    background: #ffffff;
+    border-radius: 38px;
+}
+
+.login-header {
+    color: #1C46B2;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 45px;
+    text-align: center;
+}
+
+.lbls {
+    font-weight: 500;
+    font-size: 25px;
+    position: relative;
+}
+
+.form-style {
+    color: rgb(32, 32, 32);
+    width: 100%;
+    height: 40px;
+    border: none;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.534);
+    border-radius: 14px;
+    font-size: 20px;
+}
+
+.form-style:focus {
+    animation-name: input_focus;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes input_focus {
+    0% {
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.534);
+    }
+
+    100% {
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.877);
+    }
+}
+
+.icons {
+    display: block;
+    text-align: center;
+}
+
+#forgot_pssw>a {
+    color: rgb(87, 87, 87);
+    font-weight: 600;
+    float: right;
+    text-decoration: none;
+}
+
+#forgot_pss>a:hover {
+    animation-name: fpssw;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fpssw {
+    0% {
+        color: rgb(87, 87, 87);
+    }
+
+    100% {
+        color: rgb(0, 0, 0);
+    }
+}
+
+#login>a {
+    display: block;
+    color: #1C46B2;
+    font-weight: 600;
+    font-size: 18px;
+    width: 100%;
+    text-align: center;
+}
+
+#reg {
+    width: 100%;
+    height: 60px;
+
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+
+    border: none;
+    background: #1C46B2;
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 50px;
+}
+
+#reg:hover {
+    animation-name: buttonhover;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes buttonhover {
+    0% {
+        background: #1C46B2;
+    }
+
+    100% {
+        background: #163ea3;
+    }
+}
+
+/* 
+  input[type=text], input[type="password"]{
+    font-size: 20 !important;
+  } */
+
+.inner-addon {
+    position: relative;
+}
+
+/* style icon */
+.inner-addon .fa-regular {
+    position: absolute;
+    padding: 10px;
+    pointer-events: none;
+}
+
+/* align icon */
+.left-addon .fa-regular {
+    left: 0px;
+}
+
+.right-addon .fa-regular {
+    right: 0px;
+}
+
+/* add padding  */
+.left-addon input {
+    padding-left: 30px;
+}
+
+.right-addon input {
+    padding-right: 30px;
+}
+
+.fa-regular {
+    font-size: 20px;
+    color: rgb(104, 104, 104);
+}

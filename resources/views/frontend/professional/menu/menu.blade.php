@@ -100,6 +100,10 @@
 
     // saves the item data to Database
     function saveData(enter = false) {
+        map = ["title", "price", "cost", "description"];
+        animateErr(map);
+
+
         // The required data from the form
         var form_data = {
             name: $("#title").val(),

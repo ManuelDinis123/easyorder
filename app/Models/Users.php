@@ -10,4 +10,6 @@ class Users extends Model
     use HasFactory;
 
     protected $table = "users";
+    protected $guarded = ['id']; 
+    public $timestamps = false;
 }

@@ -69,6 +69,56 @@ class AuthController extends Controller
         return response()->json($return, 200);
     }
 
+    /**
+     * Create account page
+     * 
+     * 
+     * @return View
+     */
+    function createAccount() {
+        return view(session()->has("authenticated") ? 'frontend/home' : 'frontend/createacc');
+    }
+
+    /**
+     * Creates the account
+     * 
+     * @return Bool
+     */
+    function create(Request $user_data) {        
+        // Check if email is valid
+        if(!filter_var($user_data->email, FILTER_VALIDATE_EMAIL)){
+            return response()->json(["title"=>"Erro", "message"=>"Email invalido!", "input"=>"email"], 200);
+        }
+
+        // Check if email already exists
+        $exists = Users::where("email", $user_data->email)->get() ?? null;        
+
+        if($exists->first()){
+            return response()->json(["title"=>"Erro", "message"=>"Este email já esta em uso!", "input"=>"email"], 200);
+        }
+
+        // format date
+        $birth = date("Y-m-d", strtotime($user_data->db));
+
+        // insert into db
+        $new_user = Users::create([
+            "first_name" => $user_data->first,
+            "last_name" => $user_data->last,
+            "birthdate" => $birth,
+            "email" => $user_data->email,
+            "active" => 1,
+            "isProfessional" => 0
+        ]);
+
+        $auth = UserAuth::create([
+            "user_id" => $new_user->id,
+            "password" => password_hash($user_data->password, PASSWORD_DEFAULT)
+        ]);
+
+        return response()->json(["title"=>"Success", "redirect"=>"/"], 200);
+
+    }
+
 
     function logout() {
         session()->flush();        

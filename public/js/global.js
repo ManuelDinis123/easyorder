@@ -56,3 +56,39 @@ function removeDB(url, idToDelete, hasToast = true) {
         });
     })
 }
+
+/**
+ * Make inputs shake when not filled
+ * 
+ * @requires Array
+ */
+function animateErr(map, checkForEmpty = true) {
+    var hasEmpty = false;
+    map.forEach(id => {
+        if (!$("#" + id).val() || !checkForEmpty) {
+            hasEmpty = true;
+            $("#" + id).addClass("animate__animated animate__headShake");
+            $("#" + id).addClass("wrong");
+            setTimeout(() => {
+                $("#" + id).removeClass("animate__animated animate__headShake");
+                $("#" + id).removeClass("wrong");
+            }, 800);
+        }
+
+    });
+    return hasEmpty;
+}
+
+// TODO: Change all error toasts to this function
+
+/**
+ * Toast for error
+ */
+function errorToast(title, message) {
+    iziToast.error({
+        title: title,
+        message: message,
+        color: "red",
+        icon: "fa-solid fa-circle-xmark"
+    });
+}

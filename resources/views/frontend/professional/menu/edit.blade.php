@@ -221,35 +221,40 @@
 
     // inserts ingredients on the DB
     function add_ing() {
-        $.ajax({
-            method: "post",
-            url: "/professional/addingredients",
-            data: {
-                "_token": $('#token').val(),
-                "ingredient": $('#ingredient').val(),
-                "quantity": $('#quant').val(),
-                "id": <?= $id ?>,
-            }
-        }).done((res) => {
-            if (res.title == "Sucesso") {
-                iziToast.success({
-                    title: res.title,
-                    message: res.message,
-                    color: "green",
-                    icon: "fa-solid fa-check"
-                });
-                $("#ing_table").DataTable().ajax.reload(null, false);            
-                $("#ingredient").val("");
-                $("#quant").val(1);
-            } else {
-                iziToast.error({
-                    title: res.title,
-                    message: res.message,
-                    color: "red",
-                    icon: "fa-sharp fa-solid fa-triangle-exclamation"
-                });
-            }
-        });
+        var map = ["ingredient", "quant"];
+        var invalid = animateErr(map);
+
+        if (!invalid) {
+            $.ajax({
+                method: "post",
+                url: "/professional/addingredients",
+                data: {
+                    "_token": $('#token').val(),
+                    "ingredient": $('#ingredient').val(),
+                    "quantity": $('#quant').val(),
+                    "id": <?= $id ?>,
+                }
+            }).done((res) => {
+                if (res.title == "Sucesso") {
+                    iziToast.success({
+                        title: res.title,
+                        message: res.message,
+                        color: "green",
+                        icon: "fa-solid fa-check"
+                    });
+                    $("#ing_table").DataTable().ajax.reload(null, false);
+                    $("#ingredient").val("");
+                    $("#quant").val(1);
+                } else {
+                    iziToast.error({
+                        title: res.title,
+                        message: res.message,
+                        color: "red",
+                        icon: "fa-sharp fa-solid fa-triangle-exclamation"
+                    });
+                }
+            });
+        }
     }
 
     // Opens the edit modal
@@ -265,35 +270,40 @@
     }
 
     function edit_ingredients() {
-        $.ajax({
-            method: "post",
-            url: "/professional/updateingredients",
-            data: {
-                "_token": $('#token').val(),
-                "id": <?= $id ?>,
-                "ingid": $("#id_for_edit").val(),
-                "ingredient": $("#ingredient_name_edit").val(),
-                "quantity": $("#edit_quant").val(),
-            }
-        }).done((res) => {
-            if (res.title == "Sucesso") {
-                iziToast.success({
-                    title: res.title,
-                    message: res.message,
-                    color: "green",
-                    icon: "fa-solid fa-check"
-                });
-                $("#ing_table").DataTable().ajax.reload(null, false);
-                $("#editModal").modal("toggle");
-            } else {
-                iziToast.error({
-                    title: res.title,
-                    message: res.message,
-                    color: "red",
-                    icon: "fa-sharp fa-solid fa-triangle-exclamation"
-                });
-            }
-        })
+        var map = ["ingredient_name_edit", "edit_quant"];
+        var invalid = animateErr(map);
+
+        if (!invalid) {
+            $.ajax({
+                method: "post",
+                url: "/professional/updateingredients",
+                data: {
+                    "_token": $('#token').val(),
+                    "id": <?= $id ?>,
+                    "ingid": $("#id_for_edit").val(),
+                    "ingredient": $("#ingredient_name_edit").val(),
+                    "quantity": $("#edit_quant").val(),
+                }
+            }).done((res) => {
+                if (res.title == "Sucesso") {
+                    iziToast.success({
+                        title: res.title,
+                        message: res.message,
+                        color: "green",
+                        icon: "fa-solid fa-check"
+                    });
+                    $("#ing_table").DataTable().ajax.reload(null, false);
+                    $("#editModal").modal("toggle");
+                } else {
+                    iziToast.error({
+                        title: res.title,
+                        message: res.message,
+                        color: "red",
+                        icon: "fa-sharp fa-solid fa-triangle-exclamation"
+                    });
+                }
+            })
+        }
     }
 
     // Update the data on the item card
@@ -309,9 +319,11 @@
         if ($("#imageurl").val() === "") {
             $("#item-card").addClass("visually-hidden");
             $("#card-info").removeClass("visually-hidden");
+            $("#item-card").removeClass("animate__animated animate__headShake");
         } else {
-            $("#item-card").removeClass("visually-hidden");
             $("#card-info").addClass("visually-hidden");
+            $("#item-card").removeClass("visually-hidden");
+            $("#item-card").addClass("animate__animated animate__headShake");
         }
     }
 
@@ -341,37 +353,42 @@
         });
 
         $("#edit-confirm").on('click', () => {
-            $.ajax({
-                method: "post",
-                url: "/professional/updatemenuitem",
-                data: {
-                    "_token": $('#token').val(),
-                    "id": <?= $id ?>,
-                    "name": $("#item_title").val(),
-                    "price": $("#price").val(),
-                    "cost": $("#cost").val(),
-                    "imageurl": $("#imageurl").val(),
-                    "description": $("#description").val(),
-                    "tags_in_db": $("#db_tags").val(),
-                    "tags": $("#tags").val(),
-                }
-            }).done((res) => {
-                if (res.title == "Sucesso") {
-                    iziToast.success({
-                        title: res.title,
-                        message: res.message,
-                        color: "green",
-                        icon: "fa-solid fa-check"
-                    });
-                } else {
-                    iziToast.error({
-                        title: res.title,
-                        message: res.message,
-                        color: "red",
-                        icon: "fa-sharp fa-solid fa-triangle-exclamation"
-                    });
-                }
-            })
+            var map = ["item_title", "price", "cost", "description"];
+            invalid = animateErr(map);
+
+            if (!invalid) {
+                $.ajax({
+                    method: "post",
+                    url: "/professional/updatemenuitem",
+                    data: {
+                        "_token": $('#token').val(),
+                        "id": <?= $id ?>,
+                        "name": $("#item_title").val(),
+                        "price": $("#price").val(),
+                        "cost": $("#cost").val(),
+                        "imageurl": $("#imageurl").val(),
+                        "description": $("#description").val(),
+                        "tags_in_db": $("#db_tags").val(),
+                        "tags": $("#tags").val(),
+                    }
+                }).done((res) => {
+                    if (res.title == "Sucesso") {
+                        iziToast.success({
+                            title: res.title,
+                            message: res.message,
+                            color: "green",
+                            icon: "fa-solid fa-check"
+                        });
+                    } else {
+                        iziToast.error({
+                            title: res.title,
+                            message: res.message,
+                            color: "red",
+                            icon: "fa-sharp fa-solid fa-triangle-exclamation"
+                        });
+                    }
+                })
+            }
         })
 
         // Initialize the datatable

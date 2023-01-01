@@ -16,11 +16,17 @@ Route::get('/', function () {
     return view(session()->has("authenticated") ? 'frontend/home' : 'frontend/login');
 });
 
+
+
 // Home page of the normal user accounts
 Route::get('/home', function () {    
     if (!AppHelper::hasLogin()) return redirect("/no-access");
     return view('frontend/home');
 });
+
+// Register page
+Route::get('/register', [AuthController::class, 'createAccount']);
+Route::post('/createaccount', [AuthController::class, 'create'])->name("createaccount");
 
 // Page to show when user doesn't have permission to enter a page
 Route::get('/no-access', function () {

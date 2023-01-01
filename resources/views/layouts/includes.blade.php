@@ -34,3 +34,7 @@
 
 {{-- Animation.style --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+{{-- Bootstrap datepicker --}}
+<link rel="stylesheet" href="{{ mix('plugins/bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker.min.css') }}" type="text/css">
+<script src="{{ mix('plugins/bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.min.js') }}"></script>    

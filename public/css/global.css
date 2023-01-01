@@ -11,6 +11,10 @@ body {
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
 }
 
+.wrong {
+    box-shadow: 0px 4px 15px rgba(165, 2, 2, 0.719);
+}
+
 .btn-primary {
     background-color: #1C46B2;
     border: none;
@@ -22,4 +26,16 @@ body {
 
 .btn {
     border-radius: 50px;
+}
+
+.datepicker table tr td, .datepicker table tr th{
+    text-align:center;
+    width:30px;
+    height:30px;
+    border-radius:4px;
+    border:none
+}
+
+.datepicker-dropdown {
+    top: 129px !important;
 }

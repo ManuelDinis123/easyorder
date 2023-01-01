@@ -10,4 +10,6 @@ class UserAuth extends Model
     use HasFactory;
 
     protected $table = "authentication";
+    protected $guarded = ['id']; 
+    public $timestamps = false;
 }
