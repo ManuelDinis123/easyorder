@@ -1,7 +1,11 @@
 @include('layouts.includes')
 @extends('layouts.professional.sidebar', ['file' => "orders"])
 
+<link rel="stylesheet" href="{{asset("css/orders.css")}}">
 
 @section("content")
-<p>this is the orders page of the professional accounts</p>
+  Something Here
 @stop
+
+<script>  
+</script>

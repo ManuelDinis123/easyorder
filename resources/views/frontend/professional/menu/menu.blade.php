@@ -53,7 +53,6 @@
     @endslot
 @endcomponent
 
-
 @section('content')
     <div class="container-fluid" style="padding-top:15px">
         <div class="centered">
@@ -87,7 +86,7 @@
     </div>
 @stop
 
-<script>
+<script>    
     // Clears modal
     function clearModal() {
         $("#title").val("");

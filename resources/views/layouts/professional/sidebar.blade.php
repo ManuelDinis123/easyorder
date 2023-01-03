@@ -76,11 +76,23 @@
     </div>
 
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-    
-    <div class="height-100 bg-light pt-3">
+
+    @include('components.loader')
+
+    <div class="height-100 bg-light pt-3 visually-hidden" id="content">
         @yield('content')
     </div>
-    <script src="{{ asset("js/sidebar.js") }}"></script>
+    <script>
+        $(window).on('load', function() {
+            setTimeout(
+                $("#loading").fadeOut(500, function() {
+                    // fadeOut complete. Remove the loading div
+                    $("#loading").remove(); //makes page more lightweight 
+                    $("#content").removeClass("visually-hidden");
+                }), 2000); //wait for page load PLUS two seconds.
+        });
+    </script>
+    <script src="{{ asset('js/sidebar.js') }}"></script>
 </body>
 
 </html>
