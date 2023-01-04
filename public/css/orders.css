@@ -1,0 +1,44 @@
+.progress {
+    border-radius: 15px;
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.445);
+}
+
+.progress-bar {
+    background-color: #2d56be;
+}
+
+.dataTables_length {
+    display: none;
+}
+
+.dataTables_filter {
+    display: none;
+}
+
+.orders-table-header {
+    background-color: #1C46B2;
+    color: white;     
+}
+
+
+.dataTables_info {
+    margin-left: 13px !important;
+}
+
+.orders-container {
+    border-radius: 15px !important;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+}
+
+.paging_simple_numbers {
+    /* display: none */
+    font-weight: 500;
+}
+
+.current {    
+    font-weight: 800;    
+}
+
+.table-switch {
+    float: right;
+}

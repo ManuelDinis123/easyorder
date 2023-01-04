@@ -1,6 +1,4 @@
 
-
-
 /**
  * Check if values in Object are empty or not
  * 

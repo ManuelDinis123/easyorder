@@ -39,3 +39,12 @@ body {
 .datepicker-dropdown {
     top: 129px !important;
 }
+
+.paging_simple_numbers {
+    /* display: none */
+    font-weight: 500;
+}
+
+.current {    
+    font-weight: 800;    
+}
