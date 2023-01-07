@@ -323,7 +323,7 @@
         } else {
             $("#card-info").addClass("visually-hidden");
             $("#item-card").removeClass("visually-hidden");
-            if ({{!$imageurl}}) $("#item-card").addClass("animate__animated animate__bounceIn");
+            if ("{{$imageurl}}" == '') $("#item-card").addClass("animate__animated animate__bounceIn");
         }
     }
 

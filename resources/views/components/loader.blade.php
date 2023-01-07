@@ -14,9 +14,11 @@
         -webkit-animation: bounce05 var(--duration) linear infinite;
         animation: bounce05 var(--duration) linear infinite;
 
-        display: grid;
+        /* display: grid;
         place-content: center;
-        top: 45%;        
+        top: 45%;         */
+        left: 45%;
+        top: 45%;
         
     }
 
@@ -269,6 +271,5 @@
 <div class="typewriter" id="loading">
     <div class="slide"><i></i></div>
     <div class="paper"></div>
-    <div class="keyboard"></div>
-    <span class="text-muted mt-2" style="text-align: center">Loading...</span>
+    <div class="keyboard"></div>    
 </div>
