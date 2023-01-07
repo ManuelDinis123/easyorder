@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="orders-container">
-        <table class="table table-bordered mt-3 orders-table" id="orders" style="width: 100%">
+        <table class="table table-bordered mt-3 orders-table" id="orders">
             <thead class="orders-table-header">
                 <th>Cliente</th>
                 <th>Data de Entrega</th>
@@ -15,12 +15,15 @@
         </table>
     </div>
 @stop
-  
+
 <script>
     $("#document").ready(() => {
+
+
         $("#orders").dataTable({
 
             "ordering": false,
+            "autoWidth": false,
 
             "language": {
                 "paginate": {
@@ -37,11 +40,11 @@
                 dataSrc: ''
             },
             columns: [{
-                    data: "first_name",
+                    data: "full_name",
                     width: "25%"
                 },
                 {
-                    data: "ordered_at",
+                    data: "deadline",
                     width: "25%"
                 },
                 {
@@ -62,9 +65,9 @@
                     data: null,
                     width: "3%",
                     render: function(data, type, row, meta) {
-                        return '<div class="form-check form-switch table-switch">\
-                                  <input type="checkbox" class="form-check-input" role="switch" id="done">\
-                                </div>';
+                        return '<span>\
+                                    <a href="/professional/encomendas/' + row.id + '"><i class="fa-solid fa-eye" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i></a>\
+                                </span>';
                     }
                 },
             ]

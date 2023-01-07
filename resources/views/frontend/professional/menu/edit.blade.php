@@ -319,11 +319,11 @@
         if ($("#imageurl").val() === "") {
             $("#item-card").addClass("visually-hidden");
             $("#card-info").removeClass("visually-hidden");
-            $("#item-card").removeClass("animate__animated animate__headShake");
+            $("#item-card").removeClass("animate__animated animate__bounceIn");
         } else {
             $("#card-info").addClass("visually-hidden");
             $("#item-card").removeClass("visually-hidden");
-            $("#item-card").addClass("animate__animated animate__headShake");
+            if ({{!$imageurl}}) $("#item-card").addClass("animate__animated animate__bounceIn");
         }
     }
 

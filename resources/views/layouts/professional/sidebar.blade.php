@@ -83,7 +83,7 @@
         @yield('content')
     </div>
     <script>
-        $(window).on('load', function() {
+        $(window).on('load', () => {
             setTimeout(
                 $("#loading").fadeOut(500, function() {
                     // fadeOut complete. Remove the loading div

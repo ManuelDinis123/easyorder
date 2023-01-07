@@ -17,7 +17,7 @@
 
 .orders-table-header {
     background-color: #1C46B2;
-    color: white;     
+    color: white;
 }
 
 
@@ -35,10 +35,71 @@
     font-weight: 500;
 }
 
-.current {    
-    font-weight: 800;    
+.current {
+    font-weight: 800;
 }
 
 .table-switch {
+    float: right;
+}
+
+/* Edit page */
+
+.items-list {
+    width: 532px;
+    height: 780px;
+    box-shadow: 0px 3px 13px rgba(0, 0, 0, 0.233);
+    border-radius: 27px;
+}
+
+.item-card-content {
+    margin-left: 13px;
+}
+
+.food-card-label {
+    margin-left: 10px;
+    margin-top: 170px;
+    color: white;
+    font-size: 24px;
+    font-weight: bolder;
+}
+
+.food-card-quantity {
+    margin-top: 170px;
+    color: white;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.food-card-price {
+    margin-right: 10px;
+    margin-top: 170px;
+    color: white;
+    font-size: 24px;
+    font-weight: 500;
+    float: right;
+}
+
+.item-card-footer {
+    width: 505px;
+    height: 70px;
+    background: #D9D9D9;
+    border-radius: 26px;
+}
+
+.total-lbl {
+    font-size: 24;
+    font-weight: 700;
+    color: black;
+    margin-top: 16px;
+    margin-left: 10px;
+}
+
+.total-lbl-price {
+    font-size: 24;
+    font-weight: 600;
+    color: black;
+    margin-top: 16px;
+    margin-right: 10px;
     float: right;
 }
