@@ -12,7 +12,7 @@
         overflow: hidden
     }
 
-    .item-card {                
+    .item-card {
         border-radius: 14px;
         background-size: 100%;
         background-position: center;
@@ -34,45 +34,191 @@
     .item-gradient:hover {
         opacity: .7;
     }
+
+    .dataTables_info {
+        display: none;
+    }
 </style>
 
 <div class="modal fade" id="ingredientsModal" aria-labelledby="ingredientsModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <h4>Detalhes:</h4>
+            </div>
             <div class="modal-body">
-                <div class="row">
-                    <h4>Acompanhamentos:</h4>
-
+                <span class="headers-details"><i class="fa-solid fa-utensils"></i> Acompanhamentos:</span>
+                <ul class="list-group list-group-flush" id="ing_list"></ul>
+                <hr>
+                <span class="headers-details"><i class="fa-solid fa-exclamation"></i> Nota:</span>
+                <div class="note-card mt-3">
+                    <div class="note-text-container">
+                        <label class="note-text"></label>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Sair</button>
+                <button type="button" class="btn" data-bs-dismiss="modal">Sair</button>
             </div>
         </div>
     </div>
 </div>
 
 @section('content')
-    <div class="items-list">
-        <div class="pt-2 item-card-content">
-            <div class="scroll-card">
-                {{-- Creation of food cards --}}
-                @foreach ($items as $item)
-                    <div class="card-contain mt-3">
-                        <div class="item-card" style="background-image: url({{ $item['imageUrl'] }});">
-                            <div class="item-gradient">
-                                <label class="food-card-label">{{ $item['name'] }}</label>
-                                <label class="food-card-quantity"> x {{ $item['quantity'] }}</label>
-                                <label class="food-card-price">{{ $item['price'] * $item['quantity'] }}€</label>
+    <div class="row edit-contain">
+        <div class="col-4">
+            <div class="items-list">
+                <div class="pt-2 item-card-content">
+                    <div class="scroll-card">
+                        {{-- Creation of food cards --}}
+                        @foreach ($items as $item)
+                            <div class="card-contain mt-3">
+                                <div class="item-card" style="background-image: url({{ $item['imageUrl'] }});"
+                                    onclick="open_modal({{ $item['id'] }}, '{{ $item['note'] }}')">
+                                    <div class="item-gradient">
+                                        <label class="food-card-label">{{ $item['name'] }}</label>
+                                        <label class="food-card-quantity"> x {{ $item['quantity'] }}</label>
+                                        <label class="food-card-price">{{ $item['price'] * $item['quantity'] }}€</label>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
-                @endforeach
+                    <div class="item-card-footer mt-3">
+                        <label class="total-lbl">Total:</label>
+                        <label class="total-lbl-price">{{ $total_price }}€</label>
+                    </div>
+                </div>
             </div>
-            <div class="item-card-footer mt-3">
-                <label class="total-lbl">Total:</label>
-                <label class="total-lbl-price">{{ $total_price }}€</label>
+        </div>
+        <div class="col-7">
+            {{-- Progress --}}
+            <h2>Progresso:</h2>
+            <label class="percentage-lbl">{{ $progress }}% Completo</label>
+            <span>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ $progress }}" aria-valuemin="0"
+                        aria-valuemax="100" style="width:{{ $progress }}%">
+                        <span class="sr-only">{{ $progress }}% Complete</span>
+                    </div>
+                </div>
+            </span>
+
+            <hr class="mt-4">
+
+            {{-- Items table to mark as done --}}
+            <div class="ingredients-container pt-2">
+                <table class="table table-striped table-borderless ing-tab" id="markDoneTab">
+                    <thead>
+                        <th></th>
+                        <th></th>
+                    </thead>
+                </table>
             </div>
+
         </div>
     </div>
 @stop
+
+<script>
+    // Opens the ingredients modal and adds the 
+    function open_modal(id, note) {
+        if (note) {
+            $(".note-text").removeClass('text-muted');
+            $(".note-text").text(note);
+        } else {
+            $(".note-text").text("Sem nota adicional");
+            if (!$(".note-text").hasClass('text-muted')) {
+                $(".note-text").addClass('text-muted');
+            }
+        }
+        $("#ing_list li").remove();
+        $("#ing_list span").remove();
+        $.ajax({
+            method: "post",
+            url: '/professional/getingredients',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "id": id
+            },
+        }).done((res) => {
+            if (res.length != 0) {
+                $.each(res, (key, val) => {
+                    $("#ing_list").append(
+                        '<li class="list-group-item d-flex justify-content-between align-items-center">\
+                            ' + val["ingredient"] +
+                        '\
+                            <span class="badge bg-primary rounded-pill" style="background-color: #1C46B2 !important">' +
+                        val[
+                            "quantity"] + '</span>\
+                        </li>'
+                    );
+                })
+            } else {
+                $("#ing_list").append(
+                    '<span class="text-muted" style="display: flex; justify-content: center;">Este item não tem acompanhamentos registados</span>'
+                );
+            }
+        });
+        $("#ingredientsModal").modal("toggle");
+    }
+
+    // Marks items as done or undone
+    function mark(order_item_id, isDone) {
+        $.ajax({
+            method: "post",
+            url: "/professional/changeordersitemstatus",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "id": order_item_id,
+                "isDone": isDone
+            }
+        }).done((res) => {
+            (res.status == "Sucesso" ? successToast(res.status, res.message) : errorToast(res.status, res.message));
+            $("#markDoneTab").DataTable().ajax.reload(null, false);
+        })
+    }
+
+    $(document).ready(() => {
+        $("#markDoneTab").dataTable({
+            "ordering": false,
+            "autoWidth": false,
+
+            "language": {
+                "paginate": {
+                    "next": '<i class="fa-solid fa-caret-right"></i>',
+                    "previous": '<i class="fa-solid fa-caret-left"></i>'
+                }
+            },
+
+            ajax: {
+                method: "post",
+                url: '/professional/getorderitems',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "id": {{ $id }}
+                },
+                dataSrc: ''
+            },
+            columns: [{
+                    data: "name",
+                    width: "70%",
+                    render: function(data, type, row, meta) {
+                        return '<span>' + row["name"] + '<i class="fa-sharp fa-solid ' + (row['done'] ? ' fa-check check' : 'fa-xmark xmark') +'"></i></span>'
+                    }
+                },
+                {
+                    data: null,
+                    width: "30%",
+                    render: function(data, type, row, meta) {
+                        return (!row['done']) ?
+                            '<button class="btn btn-primary table-btn" onClick="mark(' + row[
+                                "order_item_id"] + ', 1)" >Marcar como pronto</button>' :
+                            '<button class="btn btn-danger table-btn" onClick="mark(' + row[
+                                "order_item_id"] + ', 0)">Desmarcar</button>'
+                    }
+                }
+            ]
+        });
+    });
+</script>

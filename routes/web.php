@@ -61,6 +61,8 @@ Route::post('/professional/deleteingredient', [MenuController::class, 'delete_in
 Route::get('/professional/encomendas', [OrdersController::class, 'index']);
 Route::get('/professional/encomendas/{id}', [OrdersController::class, 'edit']);
 Route::post('/professional/getorders', [OrdersController::class, 'get'])->name("getorders");
+Route::post('/professional/getorderitems', [OrdersController::class, 'get_items_from_order'])->name("getorderitems");
+Route::post('/professional/changeordersitemstatus', [OrdersController::class, 'change_status'])->name("changeordersitemstatus");
 
 // Statistics for the professional user accounts
 Route::get('/professional/stats', [StatsController::class, 'index']);

@@ -16,10 +16,9 @@
 }
 
 .orders-table-header {
-    background-color: #1C46B2;
+    background-color: #1c46b2;
     color: white;
 }
-
 
 .dataTables_info {
     margin-left: 13px !important;
@@ -46,7 +45,7 @@
 /* Edit page */
 
 .items-list {
-    width: 540px;
+    /* width: 540px; */
     height: 780px;
     box-shadow: 0px 3px 13px rgba(0, 0, 0, 0.233);
     border-radius: 27px;
@@ -56,7 +55,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     height: 650px;
-    width: 524px;
+    /* width: auto - 14px; */
 }
 
 .scroll-card::-webkit-scrollbar {
@@ -72,11 +71,11 @@
 .scroll-card::-webkit-scrollbar-thumb {
     -webkit-box-shadow: inset 0 0 6px #0e255e;
     border-radius: 10px;
-    background-color: #1C46B2;
+    background-color: #1c46b2;
 }
 
 .item-card-content {
-    margin-left: 13px;
+    margin-left: 24px;
 }
 
 .food-card-label {
@@ -106,7 +105,7 @@
 .item-card-footer {
     width: 505px;
     height: 70px;
-    background: #D9D9D9;
+    background: #d9d9d9;
     border-radius: 26px;
 }
 
@@ -125,4 +124,79 @@
     margin-top: 16px;
     margin-right: 10px;
     float: right;
+}
+
+.percentage-lbl {
+    font-size: 20px;
+}
+
+.ingredients-container {
+    height: fit-content;
+    border-radius: 36px;
+    background: #ffffff;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.171);
+}
+
+.ing-tab {
+    margin-left: 20px;
+    width: 90%;
+}
+
+.edit-contain {
+    display: flex;
+    justify-content: center;
+}
+
+.table-btn {
+    font-size: 12px;
+    width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.check {
+    color: #35b94b;
+    margin-left: 5px !important;
+}
+
+.xmark {
+    color: #dc3545;
+    margin-left: 5px !important;
+}
+
+.note-card {
+    height: fit-content;
+    border-radius: 50px;
+    background: #f5f5f5;
+    box-shadow: 5px 5px 10px #9f9f9f, -5px -5px 10px #ffffff;
+}
+
+.note-text-container {
+    margin-left: 10px;
+}
+
+.note-text {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.fa-exclamation {
+    font-size: 20px;
+    color: #dc3545;
+    transform: rotate(350deg);
+}
+
+.fa-utensils {
+    font-size: 20px;
+    color: #1C46B2;
+    transform: rotate(350deg);
+}
+
+.headers-details {
+    margin-left: 15px; 
+    margin-top: 5px; 
+    font-weight: 700
 }

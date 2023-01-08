@@ -79,7 +79,20 @@ function animateErr(map, checkForEmpty = true) {
     return hasEmpty;
 }
 
-// TODO: Change all error toasts to this function
+// TODO: Change all toasts to these function
+
+
+/**
+ * Toast for success
+ */
+function successToast(title, message) {
+    iziToast.success({
+        title: title,
+        message: message,
+        color: "green",
+        icon: "fa-solid fa-check"
+    });
+}
 
 /**
  * Toast for error

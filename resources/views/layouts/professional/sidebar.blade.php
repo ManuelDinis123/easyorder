@@ -84,13 +84,12 @@
     </div>
     <script>
         $(window).on('load', () => {
-            setTimeout(
-                $("#loading").fadeOut(500, function() {
-                    // fadeOut complete. Remove the loading div
-                    $("#loading").remove(); //makes page more lightweight 
-                    $("#content").removeClass("visually-hidden");
-                }), 2000); //wait for page load PLUS two seconds.
-        });
+            $("#loading").fadeOut(500, function() {
+                // fadeOut complete. Remove the loading div
+                $("#loading").remove(); //makes page more lightweight 
+                $("#content").removeClass("visually-hidden");
+            });
+        })
     </script>
     <script src="{{ asset('js/sidebar.js') }}"></script>
 </body>
