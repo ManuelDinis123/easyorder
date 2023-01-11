@@ -65,6 +65,26 @@
 </div>
 
 @section('content')
+    <div class="row">
+        <div class="col-6">
+            <span>Pedido de</span>
+            <h3 style="font-weight: 700">{{ $first_name . ' ' . $last_name }}</h3>
+        </div>
+        <div class="col-6">
+            <div style="float: right; margin-right:70px">
+                <span>Data de entrega</span>
+                <div class="deadline-contain">
+                    @if($deadline >= date("Y-m-d h:i:s"))
+                    <h3 style="font-weight: 700;">{{ $deadline }}</h3>
+                    @else
+                    <h3 class="deadline-warning"><i class="fa-solid fa-exclamation" style="font-size: 30px"></i> {{ $deadline }}</h3>
+                    @endif
+                    <button class="btn btn-dark close-order">Fechar Pedido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
     <div class="row edit-contain">
         <div class="col-4">
             <div class="items-list">
@@ -94,12 +114,12 @@
         <div class="col-7">
             {{-- Progress --}}
             <h2>Progresso:</h2>
-            <label class="percentage-lbl">{{ $progress }}% Completo</label>
+            <label id="progressLBL" class="percentage-lbl">{{ $progress }}% Completo</label>
             <span>
                 <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ $progress }}" aria-valuemin="0"
+                    <div id="progress_bar" class="progress-bar" role="progressbar" aria-valuenow="{{ $progress }}" aria-valuemin="0"
                         aria-valuemax="100" style="width:{{ $progress }}%">
-                        <span class="sr-only">{{ $progress }}% Complete</span>
+                        <span class="sr-only" id="sronly">{{ $progress }}% Complete</span>
                     </div>
                 </div>
             </span>
@@ -171,11 +191,19 @@
             data: {
                 "_token": "{{ csrf_token() }}",
                 "id": order_item_id,
-                "isDone": isDone
+                "isDone": isDone,
+                "order_id": {{ $id }}
             }
         }).done((res) => {
-            (res.status == "Sucesso" ? successToast(res.status, res.message) : errorToast(res.status, res.message));
+            (res.status == "Sucesso" ? successToast(res.status, res.message) : errorToast(res.status, res
+                .message));
             $("#markDoneTab").DataTable().ajax.reload(null, false);
+
+            // Update progress with new values            
+            $('#progress_bar').attr('aria-valuenow', res.progress).css('width', res.progress+'%');
+            $("#progressLBL").text(res.progress + '% Completo');
+            $("#sronly").text(res.progress + '% Complete');
+
         })
     }
 
@@ -196,7 +224,7 @@
                 url: '/professional/getorderitems',
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    "id": {{ $id }}
+                    "id": {{ $id }},
                 },
                 dataSrc: ''
             },
@@ -204,7 +232,9 @@
                     data: "name",
                     width: "70%",
                     render: function(data, type, row, meta) {
-                        return '<span>' + row["name"] + '<i class="fa-sharp fa-solid ' + (row['done'] ? ' fa-check check' : 'fa-xmark xmark') +'"></i></span>'
+                        return '<span>' + row["name"] + '<i class="fa-sharp fa-solid ' + (row[
+                                'done'] ? ' fa-check check' : 'fa-xmark xmark') +
+                            '"></i></span>'
                     }
                 },
                 {

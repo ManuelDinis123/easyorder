@@ -94,8 +94,6 @@ class OrdersController extends Controller
             ->get()
             ->toArray();
 
-        Log::info($items);
-
         return response()->json($items, 200);
     }
 
@@ -122,6 +120,38 @@ class OrdersController extends Controller
             $message = "Item " . $data->isDone ? "marcado como pronto" : "desmarcado" . " com sucesso!";
         }
 
-        return response()->json(["status" => $status, "message" => $message], 200);
+        // Update percentage
+        $progress = $this->calc_progress($data->order_id);        
+        Orders::whereId($data->order_id)->update([
+            "progress" => $progress
+        ]);
+
+        return response()->json(["status" => $status, "message" => $message, "progress" => $progress], 200);
+    }
+
+
+    /**
+     * Calculate the progress of a given order
+     * 
+     * @param id
+     * @return int
+     */
+    function calc_progress($order_id)
+    {
+        // get all items 
+        $order_items = OrderItems::where('order_id', $order_id)->get();
+
+        // count how many are done
+        $done = 0;
+        foreach ($order_items as $item) {
+            if ($item['done']) {
+                $done++;
+            }
+        }
+
+        // calculate the percentage
+        $percentage = $done != 0 ? ($done/count($order_items)) * 100 : 0;
+
+        return $percentage;
     }
 }
