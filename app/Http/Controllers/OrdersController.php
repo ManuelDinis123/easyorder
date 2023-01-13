@@ -60,7 +60,7 @@ class OrdersController extends Controller
             ->first()
             ->toArray();
 
-        // Get order ingredients
+        // Get order items
         $items = OrderItems::where("order_id", $order_details["id"])
             ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')
             ->get()
@@ -121,12 +121,62 @@ class OrdersController extends Controller
         }
 
         // Update percentage
-        $progress = $this->calc_progress($data->order_id);        
+        $progress = $this->calc_progress($data->order_id);
         Orders::whereId($data->order_id)->update([
             "progress" => $progress
         ]);
 
         return response()->json(["status" => $status, "message" => $message, "progress" => $progress], 200);
+    }
+
+    /**
+     * Closes the order if it's done
+     * 
+     * @param int
+     * @return array
+     */
+    function close_order(Request $id)
+    {
+        // Check if any of the items are not done
+        $items = OrderItems::where("order_id", $id->id)
+            ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')
+            ->get()
+            ->toArray();
+
+        foreach ($items as $item) {
+            if ($item["done"] != 1) {
+                return response()->json(["status" => "Erro", "message" => "Todos os items devem estar prontos para fechar o pedido"], 200);
+            }
+        }
+
+        $update = Orders::whereId($id->id)->update([
+            "closed" => 1
+        ]);
+
+        if (!$update) {
+            return response()->json(["status" => "Erro", "message" => "Ocorreu um erro ao fechar o pedido"], 200);
+        }
+
+        return response()->json(["status" => "Sucesso", "message" => "Pedido fechado com sucesso"], 200);
+    }
+
+    /**
+     * Cancel the order
+     * 
+     * @param int
+     * @return array
+     */
+    function cancel_order(Request $id)
+    {
+        $update = Orders::whereId($id->id)->update([
+            "isCancelled" => 1
+        ]);
+
+        if (!$update) {
+            return response()->json(["status" => "Erro", "message" => "Ocorreu um erro ao cancelar o pedido"], 200);
+        }
+
+        return response()->json(["status" => "Sucesso", "message" => "Pedido cancelado com sucesso"], 200);
     }
 
 
@@ -150,7 +200,7 @@ class OrdersController extends Controller
         }
 
         // calculate the percentage
-        $percentage = $done != 0 ? ($done/count($order_items)) * 100 : 0;
+        $percentage = $done != 0 ? ($done / count($order_items)) * 100 : 0;
 
         return $percentage;
     }

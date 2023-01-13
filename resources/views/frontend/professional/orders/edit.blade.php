@@ -74,12 +74,12 @@
             <div style="float: right; margin-right:70px">
                 <span>Data de entrega</span>
                 <div class="deadline-contain">
-                    @if($deadline >= date("Y-m-d h:i:s"))
-                    <h3 style="font-weight: 700;">{{ $deadline }}</h3>
+                    @if ($deadline >= date('Y-m-d h:i:s'))
+                        <h3 style="font-weight: 700;">{{ $deadline }}</h3>
                     @else
-                    <h3 class="deadline-warning"><i class="fa-solid fa-exclamation" style="font-size: 30px"></i> {{ $deadline }}</h3>
+                        <h3 class="deadline-warning"><i class="fa-solid fa-exclamation" style="font-size: 30px"></i>
+                            {{ $deadline }}</h3>
                     @endif
-                    <button class="btn btn-dark close-order">Fechar Pedido</button>
                 </div>
             </div>
         </div>
@@ -117,8 +117,8 @@
             <label id="progressLBL" class="percentage-lbl">{{ $progress }}% Completo</label>
             <span>
                 <div class="progress">
-                    <div id="progress_bar" class="progress-bar" role="progressbar" aria-valuenow="{{ $progress }}" aria-valuemin="0"
-                        aria-valuemax="100" style="width:{{ $progress }}%">
+                    <div id="progress_bar" class="progress-bar" role="progressbar" aria-valuenow="{{ $progress }}"
+                        aria-valuemin="0" aria-valuemax="100" style="width:{{ $progress }}%">
                         <span class="sr-only" id="sronly">{{ $progress }}% Complete</span>
                     </div>
                 </div>
@@ -135,7 +135,16 @@
                     </thead>
                 </table>
             </div>
-
+            <div class="row">
+                <div class="col-6">
+                    <button class="btn btn-primary close-order mt-3" style="width: 100%" id="closeOrder">Fechar
+                        Pedido</button>
+                </div>
+                <div class="col-6">
+                    <button class="btn btn-danger close-order mt-3" style="width: 100%" id="cancelOrder">Cancelar
+                        Pedido</button>
+                </div>
+            </div>
         </div>
     </div>
 @stop
@@ -183,6 +192,24 @@
         $("#ingredientsModal").modal("toggle");
     }
 
+    // closes / cancels the order
+    function closingOrder(isCancel) {
+        $.ajax({
+            method: 'post',
+            url: '/professional/' + (isCancel ? "cancel_order" : "close_order"),
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "id": {{ $id }},
+            }
+        }).done((res) => {
+            if (res.status == "Erro") {
+                errorToast(res.status, res.message)
+            } else {
+                successToast(res.status, res.message)
+            };
+        });
+    }
+
     // Marks items as done or undone
     function mark(order_item_id, isDone) {
         $.ajax({
@@ -200,7 +227,7 @@
             $("#markDoneTab").DataTable().ajax.reload(null, false);
 
             // Update progress with new values            
-            $('#progress_bar').attr('aria-valuenow', res.progress).css('width', res.progress+'%');
+            $('#progress_bar').attr('aria-valuenow', res.progress).css('width', res.progress + '%');
             $("#progressLBL").text(res.progress + '% Completo');
             $("#sronly").text(res.progress + '% Complete');
 
@@ -208,6 +235,16 @@
     }
 
     $(document).ready(() => {
+        // for cancelling the order
+        $("#cancelOrder").on('click', () => {
+            closingOrder(true);
+        });
+
+        // for closing the order
+        $("#closeOrder").on('click', () => {
+            closingOrder(false);
+        });
+
         $("#markDoneTab").dataTable({
             "ordering": false,
             "autoWidth": false,

@@ -47,7 +47,7 @@
                     data: "deadline",
                     width: "25%",
                     render: function(data, type, row, meta) {
-                        return (data >= '{{date("Y-m-d h:i:s")}}') ? '<span>'+data+'</span>' : '<span style="color: #dc3545; font-weight: 600">! '+data+' !</span>'
+                        return (data >= '{{date("Y-m-d h:i:s")}}') ? '<span>'+data+'</span>' : '<span style="color: #dc3545; font-weight: 600">'+data+'</span>'
                     }
                 },
                 {
