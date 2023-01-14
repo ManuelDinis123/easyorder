@@ -307,10 +307,10 @@
                     width: "30%",
                     render: function(data, type, row, meta) {
                         return (!row['done']) ?
-                            '<button class="btn btn-primary table-btn"' + "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : "" }}" + 'onClick="mark(' +
+                            '<button class="btn btn-primary table-btn"' + "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : "" }}" + ' onClick="mark(' +
                             row[
                                 "order_item_id"] + ', 1)" >Marcar como pronto</button>' :
-                            '<button class="btn btn-danger table-btn" '+ "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : ""}}"  + ' onClick="mark(' +
+                            '<button class="btn btn-danger table-btn"' + "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : ""}}" + ' onClick="mark(' +
                             row[
                                 "order_item_id"] + ', 0)">Desmarcar</button>'
                     }
