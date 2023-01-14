@@ -60,14 +60,14 @@
     @endslot
 @endcomponent
 
-<div class="modal fade" id="ingredientsModal" aria-labelledby="ingredientsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4>Detalhes:</h4>
-            </div>
-            <div class="modal-body">
-                <span class="headers-details"><i class="fa-solid fa-utensils"></i> Acompanhamentos:</span>
+{{-- Item Details --}}
+@component('components.modal_builder',
+    [
+        'modal_id' => 'ingredientsModal',
+        'hasHeader' => true,
+        'modalTitle' => 'Detalhes:',
+        'hasBody' => true,
+        'rawBody' => '<span class="headers-details"><i class="fa-solid fa-utensils"></i> Acompanhamentos:</span>
                 <ul class="list-group list-group-flush" id="ing_list"></ul>
                 <hr>
                 <span class="headers-details"><i class="fa-solid fa-exclamation"></i> Nota:</span>
@@ -75,14 +75,11 @@
                     <div class="note-text-container">
                         <label class="note-text"></label>
                     </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" data-bs-dismiss="modal">Sair</button>
-            </div>
-        </div>
-    </div>
-</div>
+                </div>',
+        'hasFooter' => true,
+        'buttons' => [['label' => 'Sair', 'id' => 'closeMdl', 'class' => 'btn', 'dismiss' => true]],
+    ])
+@endcomponent
 
 @section('content')
     <div class="row">
@@ -307,10 +304,14 @@
                     width: "30%",
                     render: function(data, type, row, meta) {
                         return (!row['done']) ?
-                            '<button class="btn btn-primary table-btn"' + "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : "" }}" + ' onClick="mark(' +
+                            '<button class="btn btn-primary table-btn"' +
+                            "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : '' }}" +
+                            ' onClick="mark(' +
                             row[
                                 "order_item_id"] + ', 1)" >Marcar como pronto</button>' :
-                            '<button class="btn btn-danger table-btn"' + "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : ""}}" + ' onClick="mark(' +
+                            '<button class="btn btn-danger table-btn"' +
+                            "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : '' }}" +
+                            ' onClick="mark(' +
                             row[
                                 "order_item_id"] + ', 0)">Desmarcar</button>'
                     }

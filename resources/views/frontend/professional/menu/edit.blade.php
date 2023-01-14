@@ -43,29 +43,25 @@
 @endcomponent
 
 {{-- Edit Ingredients modal --}}
-<div class="modal fade" id="editModal" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h3>Editar Acompanhamento:</h3>
-                <hr>
-                <div class="row">
-                    <div class="col-11">
-                        <label>Nome:</label>
-                        <input type="text" class="form-control" id="ingredient_name_edit">
-                        <label class="mt-2">Quantidade</label>
-                        <input type="number" class="form-control" id="edit_quant">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary" onclick="edit_ingredients()">Editar</button>
-            </div>
-            <input type="hidden" id="id_for_edit">
-        </div>
-    </div>
-</div>
+@component('components.modal_builder',
+    [
+        'modal_id' => 'editModal',
+        'hasHeader' => true,
+        'modalTitle' => 'Editar Acompanhamento:',
+        'hasBody' => true,
+        'inputs' => [
+            ['label' => 'Nome:', 'id' => 'ingredient_name_edit', 'type' => 'text'],
+            ['label' => 'Quantidade:', 'id' => 'edit_quant', 'type' => 'number'],
+            ['label' => '', 'id' => 'id_for_edit', 'type' => 'hidden'],
+        ],
+        'hasFooter' => true,
+        'buttons' => [
+            ['label' => 'Cancelar', 'id' => 'closeMdl', 'class' => 'btn btn-danger', 'dismiss' => true],
+            ['label' => 'Editar', 'id' => 'edtIngredientsBtn', 'class' => 'btn btn-primary', 'function' => 'edit_ingredients',
+            ],
+        ],
+    ])
+@endcomponent
 
 
 @section('content')
@@ -323,7 +319,7 @@
         } else {
             $("#card-info").addClass("visually-hidden");
             $("#item-card").removeClass("visually-hidden");
-            if ("{{$imageurl}}" == '') $("#item-card").addClass("animate__animated animate__bounceIn");
+            if ("{{ $imageurl }}" == '') $("#item-card").addClass("animate__animated animate__bounceIn");
         }
     }
 

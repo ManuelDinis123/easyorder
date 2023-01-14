@@ -23,7 +23,7 @@
                 <div class="modal-body">
                     {{-- Show a message at the end of the modal [message => 'message', classes => 'list of classes'] --}}
                     @if (isset($messages))
-                        @foreach($messages as $message)
+                        @foreach ($messages as $message)
                             <label class="{{ $message['classes'] }}">{{ $message['message'] }}</label><br />
                         @endforeach
                     @endif
@@ -35,9 +35,14 @@
                             @if (isset($input['optional']))
                                 <br /><span class="text-muted" style="font-size: 15px">(optional)</span>
                             @endif
-                            <input type="{{ $input['type'] }}"
-                                @if (isset($input['placeholder'])) placeholder="{{ $input['placeholder'] }}" @endif
-                                class="form-control mb-3" id="{{ $input['id'] }}" autocomplete="off">
+                            @if (isset($input['isTextarea']))
+                                <textarea type="{{ $input['type'] }}" @if (isset($input['placeholder'])) placeholder="{{ $input['placeholder'] }}" @endif
+                                    class="form-control mb-3" id="{{ $input['id'] }}" autocomplete="off"></textarea>
+                            @else
+                                <input type="{{ $input['type'] }}"
+                                    @if (isset($input['placeholder'])) placeholder="{{ $input['placeholder'] }}" @endif
+                                    class="form-control mb-3" id="{{ $input['id'] }}" autocomplete="off">
+                            @endif
                         @endforeach
                     @endif
                     {{-- for custom body --}}
@@ -58,7 +63,7 @@
                     {{-- Buttons on footer send array has [b1 => [label => 'button label', id => 'idOfBtn', 'class' => 'btn btn-primary', 'dismiss' => true (optional)]] --}}
                     @if (isset($buttons))
                         @foreach ($buttons as $button)
-                            <button id="{{ $button['id'] }}" class="{{ $button['class'] }}"
+                            <button id="{{ $button['id'] }}" class="{{ $button['class'] }}" @if (isset($button['function'])) onclick="{{$button['function']}}()" @endif
                                 @if (isset($button['dismiss'])) data-bs-dismiss="modal" @endif>{{ $button['label'] }}</button>
                         @endforeach
                     @endif
