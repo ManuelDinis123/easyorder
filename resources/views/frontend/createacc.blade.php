@@ -11,6 +11,28 @@
     <title>Register</title>
 </head>
 
+@component('components.modal_builder',
+    [
+        'modal_id' => 'ageConfirmation',
+        'hasBody' => true,
+        'rawBody' => "
+    <div class='row'>
+        <div class='col-4'>
+            <i class='fa-solid fa-face-thinking' style='font-size: 150px;'></i>
+        </div>
+        <div class='col-8'>
+            <span style='font-size: 25px; margin-top: 30%'>Tem <span id='totalAge' class='fw-bolder' style='font-size:50px; text-decoration:underline'></span> anos?</span>
+        </div>
+    </div>    
+    ",
+        'hasFooter' => true,
+        'buttons' => [
+            ['label' => 'Sim', 'id' => 'yes', 'class' => 'btn btn-primary'],
+            ['label' => 'Não', 'id' => 'no', 'class' => 'btn btn-danger', 'dismiss' => true],
+        ],
+    ])
+@endcomponent
+
 <body>
     <div class="bg"></div>
     <div class="bg bg2"></div>
@@ -42,7 +64,7 @@
 
 
 <script>
-    $("#reg").on('click', () => {
+    function makeAcc() {
         // map of input ids
         var map = ["first", "last", "db", "email", "password"];
         var empty = animateErr(map);
@@ -68,5 +90,29 @@
                 }
             });
         }
+    }
+
+    $("#reg").on('click', () => {
+        // calculate age
+        dob = new Date($("#db").val());
+        var today = new Date();
+        var age = Math.floor((today - dob) / (365.25 * 24 * 60 * 60 * 1000));
+
+        // Validate the age
+        if (age >= 100 || age <= 5 && age >= 0) {
+            $("#totalAge").text(age);
+            $("#ageConfirmation").modal("toggle");
+        } else if (age < 0) {
+            errorToast("Erro", "Idade negativa");
+            return;
+        } else {
+            makeAcc();
+        }
+
+    })
+
+    $("#yes").on('click', () => {
+        makeAcc();
+        $("#ageConfirmation").modal("toggle");
     })
 </script>

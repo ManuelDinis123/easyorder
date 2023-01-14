@@ -12,7 +12,7 @@ use App\Http\Controllers\StatsController;
 use App\Http\Controllers\UserConfigsController;
 
 // Root of the project, redirects to login or home depending on the authentication state of the user
-Route::get('/', function () {
+Route::get('/', function () {    
     return view(session()->has("authenticated") ? 'frontend/home' : 'frontend/login');
 });
 
