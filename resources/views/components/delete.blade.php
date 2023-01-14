@@ -21,10 +21,12 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-danger" onclick="{{ $function_name }}()">Confirmar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" @if (isset($function_name)) onclick="{{ $function_name }}()" @endif
+                    @if (isset($confirm_id)) id="{{ $confirm_id }}" @endif>Confirmar</button>
             </div>
-            <input type="hidden" id="{{ $hidden }}">
+            @if (isset($hidden))
+                <input type="hidden" id="{{ $hidden }}"> @endif
+                    </div>
+            </div>
         </div>
-    </div>
-</div>

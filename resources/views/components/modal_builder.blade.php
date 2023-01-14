@@ -21,9 +21,11 @@
             {{-- Set hasBody to true to use the body --}}
             @if (isset($hasBody))
                 <div class="modal-body">
-                    {{-- Show a message at the end of the modal [message => 'message', classes => 'list of classes', placement => 'start'] --}}
-                    @if (isset($message) && $message['placement'] == 'start')
-                        <label class="{{ $message['classes'] }}">{{ $message['message'] }}</label><br />
+                    {{-- Show a message at the end of the modal [message => 'message', classes => 'list of classes'] --}}
+                    @if (isset($messages))
+                        @foreach($messages as $message)
+                            <label class="{{ $message['classes'] }}">{{ $message['message'] }}</label><br />
+                        @endforeach
                     @endif
                     {{-- Set hasForm to true to have a form --}}
                     @if (isset($inputs))
@@ -41,11 +43,6 @@
                     {{-- for custom body --}}
                     @if (isset($rawBody))
                         {!! $rawBody !!}
-                    @endif
-                    {{-- Show a message at the end of the modal [message => 'message', classes => 'list of classes', placement => 'start'] --}}
-                    @if (isset($message) && $message['placement'] == 'end')
-                        <label
-                            class="{{ isset($message['classes']) ? $message['classes'] : '' }}">{{ $message['message'] }}</label>
                     @endif
                 </div>
             @endif

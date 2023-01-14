@@ -25,12 +25,12 @@ class OrdersController extends Controller
      * 
      * @return Array
      */
-    function get()
+    function get(Request $data)
     {
         // Get the orders and join the table with the users table to get the user who ordered it
-        $orders = Orders::select("orders.id", DB::raw('CONCAT(users.first_name, \' \', users.last_name) as full_name'), "orders.deadline", "orders.progress")
+        $orders = Orders::select("orders.id", DB::raw('CONCAT(users.first_name, \' \', users.last_name) as full_name'), "orders.deadline", "orders.progress", "orders.closed")
             ->where("restaurant_id", session()
-                ->get("restaurant")["id"])
+                ->get("restaurant")["id"])->where('orders.closed', $data->closed)->where('orders.isCancelled', $data->cancelled)
             ->join('users', 'users.id', '=', 'orders.ordered_by')
             ->get();
 
@@ -53,7 +53,9 @@ class OrdersController extends Controller
             "users.first_name",
             "users.last_name",
             "orders.deadline",
-            "orders.progress"
+            "orders.progress",
+            "orders.closed",
+            "orders.isCancelled"
         )->where("orders.id", $id->route('id'))
             ->join('users', 'users.id', '=', 'orders.ordered_by')
             ->get()

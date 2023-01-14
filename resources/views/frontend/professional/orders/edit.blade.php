@@ -40,6 +40,26 @@
     }
 </style>
 
+{{-- Warning for closing the order --}}
+@component('components.delete', ['modal_id' => 'closeWarning', 'confirm_id' => 'closeOrder'])
+    @slot('title')
+        Tem a certeza que quer fechar este pedido?
+    @endslot
+    @slot('span')
+        Isto não pode ser revertido
+    @endslot
+@endcomponent
+
+{{-- Warning for cancelling the order --}}
+@component('components.delete', ['modal_id' => 'cancelWarning', 'confirm_id' => 'cancelOrder'])
+    @slot('title')
+        Tem a certeza que quer cancelar este pedido?
+    @endslot
+    @slot('span')
+        Isto não pode ser revertido
+    @endslot
+@endcomponent
+
 <div class="modal fade" id="ingredientsModal" aria-labelledby="ingredientsModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -75,6 +95,8 @@
                 <span>Data de entrega</span>
                 <div class="deadline-contain">
                     @if ($deadline >= date('Y-m-d h:i:s'))
+                        <h3 style="font-weight: 700;">{{ $deadline }}</h3>
+                    @elseif($closed)
                         <h3 style="font-weight: 700;">{{ $deadline }}</h3>
                     @else
                         <h3 class="deadline-warning"><i class="fa-solid fa-exclamation" style="font-size: 30px"></i>
@@ -135,16 +157,20 @@
                     </thead>
                 </table>
             </div>
-            <div class="row">
-                <div class="col-6">
-                    <button class="btn btn-primary close-order mt-3" style="width: 100%" id="closeOrder">Fechar
-                        Pedido</button>
+            @if (!$closed && !$isCancelled)
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn btn-primary close-order mt-3" style="width: 100%" data-bs-toggle="modal"
+                            data-bs-target="#closeWarning">Fechar
+                            Pedido</button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-danger close-order mt-3" style="width: 100%" data-bs-toggle="modal"
+                            data-bs-target="#cancelWarning">Cancelar
+                            Pedido</button>
+                    </div>
                 </div>
-                <div class="col-6">
-                    <button class="btn btn-danger close-order mt-3" style="width: 100%" id="cancelOrder">Cancelar
-                        Pedido</button>
-                </div>
-            </div>
+            @endif
         </div>
     </div>
 @stop
@@ -238,11 +264,13 @@
         // for cancelling the order
         $("#cancelOrder").on('click', () => {
             closingOrder(true);
+            $("#cancelWarning").modal("toggle")
         });
 
         // for closing the order
         $("#closeOrder").on('click', () => {
             closingOrder(false);
+            $("#closeWarning").modal("toggle")
         });
 
         $("#markDoneTab").dataTable({
@@ -279,9 +307,11 @@
                     width: "30%",
                     render: function(data, type, row, meta) {
                         return (!row['done']) ?
-                            '<button class="btn btn-primary table-btn" onClick="mark(' + row[
+                            '<button class="btn btn-primary table-btn"' + "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : "" }}" + 'onClick="mark(' +
+                            row[
                                 "order_item_id"] + ', 1)" >Marcar como pronto</button>' :
-                            '<button class="btn btn-danger table-btn" onClick="mark(' + row[
+                            '<button class="btn btn-danger table-btn" '+ "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : ""}}"  + ' onClick="mark(' +
+                            row[
                                 "order_item_id"] + ', 0)">Desmarcar</button>'
                     }
                 }
