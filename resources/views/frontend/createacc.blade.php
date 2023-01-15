@@ -92,6 +92,10 @@
         }
     }
 
+    $("#db").datepicker({
+        format: 'dd/mm/yyyy'
+    })
+
     $("#reg").on('click', () => {
         // calculate age
         dob = new Date($("#db").val());

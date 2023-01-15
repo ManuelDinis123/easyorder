@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Models\UserAuth;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -18,6 +19,9 @@ class SettingsController extends Controller
 
     /**
      * For dropzone.js
+     * 
+     * @param file UploadedFile
+     * @return ImageName
      */
     function fileupload(Request $data) {
         $image = $data->file('file');

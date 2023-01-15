@@ -49,6 +49,7 @@ class AuthController extends Controller
             'id' => $user->id,
             'firstName'=> $user->first_name,
             'lastName' => $user->last_name,
+            'birthdate' => $user->birthdate,
             'email' => $user->email,
             'isProfessional' => $user->isProfessional,
             'pfp' => $user->pfp

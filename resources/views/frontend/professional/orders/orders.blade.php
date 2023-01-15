@@ -122,7 +122,8 @@
                     },
                     dataSrc: ''
                 },
-                columns: [{
+                columns: [
+                    {
                         data: "full_name",
                         width: "25%"
                     },

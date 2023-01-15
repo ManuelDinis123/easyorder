@@ -3,9 +3,103 @@
     justify-content: center;
 }
 
+.user-settings {
+    display: flex;
+    justify-content: center;
+}
+
 .pfp_settings {
+    transition: all 0.3 linear;
+    filter: brightness(100%);
     width: 150px;
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.pfp_settings:hover {
+    filter: brightness(50%);
+}
+
+.pfp_settings:hover ~ .cam {
+    visibility: visible;
+}
+
+.dz-message {
+    position: relative;
+}
+
+.cam {
+    position: absolute;
+    visibility: hidden;
+    top: 50px;
+    left: 80px;
+    font-size: 50px;
+    color: white;
+    pointer-events: none;
+}
+
+.settings-name {
+    display: flex;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.dropzone {
+    width: 50%;
+    height: fit-content;
+}
+.dpzone {
+    display: flex;
+    justify-content: center;
+}
+
+.info {
+    display: flex;
+    justify-content: center;
+}
+
+.generalInfo {
+    display: flex;
+    justify-content: center;
+    height: fit-content;
+    padding-bottom: 50px;
+    width: 456px;
+    border-radius: 43px;
+    background: #ffffff;
+    box-shadow: 0px 6.76454px 16.9114px 3.38227px rgba(153, 153, 153, 0.5);
+}
+
+.user-info-form {
+    margin: 15px 15px;
+}
+
+.settings-inpts {
+    margin: 0 auto;
+    width: 80%;
+}
+
+.settings-btns {    
+    width: 50%;
+    margin-left: 5px;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.settings-lbls {
+    font-size: 18px;
+    margin-left: 37px;
+    font-weight: 500;
+}
+
+.dropzone {
+    display: inline-block;
+    border: none;
+    background: none;
+    padding: 0 0;
+    height: 180px !important;
+    min-height: 180px !important;
 }
