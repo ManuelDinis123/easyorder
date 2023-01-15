@@ -38,3 +38,7 @@
 {{-- Bootstrap datepicker --}}
 <link rel="stylesheet" href="{{ mix('plugins/bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker.min.css') }}" type="text/css">
 <script src="{{ mix('plugins/bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.min.js') }}"></script>    
+
+{{-- Dropzone --}}
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />

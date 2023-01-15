@@ -8,6 +8,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OptionsController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\PermsController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\UserConfigsController;
 
@@ -78,6 +79,9 @@ Route::get('/professional/admin/permissions', [PermsController::class, 'index'])
 // Admin Options for the professional user account
 Route::get('/professional/admin/options', [OptionsController::class, 'index']);
 
+//Settings
+Route::get('/professional/configuracoes/user', [SettingsController::class, 'index']);
+Route::post('/professional/fileupload', [SettingsController::class, 'fileupload'])->name("fileupload");
 
 // any other route that isn't declared goes to 404 page
 Route::get('/{any}', function () {

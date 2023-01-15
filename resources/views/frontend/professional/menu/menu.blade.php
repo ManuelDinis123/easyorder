@@ -27,7 +27,7 @@
     ])
 @endcomponent
 
-@extends('layouts.professional.sidebar', ['file' => 'menu'])
+@extends('layouts.professional.sidebar', ['file' => 'none'])
 
 <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
 

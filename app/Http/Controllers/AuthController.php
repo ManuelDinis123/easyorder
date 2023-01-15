@@ -50,7 +50,8 @@ class AuthController extends Controller
             'firstName'=> $user->first_name,
             'lastName' => $user->last_name,
             'email' => $user->email,
-            'isProfessional' => $user->isProfessional
+            'isProfessional' => $user->isProfessional,
+            'pfp' => $user->pfp
         ];         
 
         session(['authenticated' => true, "user" => $session_data]);

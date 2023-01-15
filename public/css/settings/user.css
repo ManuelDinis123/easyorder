@@ -1,0 +1,11 @@
+.change-pfp {
+    display: flex;
+    justify-content: center;
+}
+
+.pfp_settings {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}

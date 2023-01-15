@@ -6,6 +6,12 @@
   color: #000000;
 }
 
+.navbar-pfp {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
 
 .dpDown {
     float: right;
@@ -89,11 +95,16 @@
 }
 
 /* icon styling */
-.n-icons {
+.n-icons {    
     font-size: 25px;
     vertical-align: middle;
     margin-right: 15px;
     cursor: pointer;
+}
+
+.icons-nav{
+    display: flex;
+    align-items: center;
 }
 
 .n-text {

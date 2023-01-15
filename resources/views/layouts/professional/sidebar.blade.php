@@ -11,27 +11,9 @@
         <div class="header_toggle">
             <i class="fa-light fa-bars" id="header-toggle"></i>
         </div>
-        <div class="ms-auto">
-            <a href="professional/configuracoes" class="aIco"><i class="fa-regular fa-gear n-icons"></i></a>
-            <a href="professional/chat" class="aIco"><i class="fa-regular fa-message-lines n-icons"></i></a>
-            {{-- Custom User Dropdown --}}
-            <div class="dpDown">
-                <i class="fa-regular fa-user n-icons" id="userIco" aria-expanded="false"></i>
-                <div class="custom-dpdown custom-dpdown-open hide-dpDown" id="userDp">
-                    <div class="custom-dpdown-header">
-                        <span
-                            class="custom-dpdown-title">{{ session()->get('user')['firstName'] . ' ' . session()->get('user')['lastName'] }}</span>
-                    </div>
-                    <div class="custom-dpdown-body">
-                        <span class="custom-dpdown-item-container"><a class="custom-dpdown-item" href="professional/configuracoes/?tab=user"><i
-                                    class="fa-solid fa-user-gear"></i> Configurações</a></span>
-                        <span class="custom-dpdown-item-container"><a class="custom-dpdown-item" href="/"><i
-                                    class="fa-solid fa-arrow-up-right-from-square"></i> EasyOrder</a></span>
-                        <span class="custom-dpdown-item-container leave"><span class="custom-dpdown-item" href="#"><i
-                                    class="fa-solid fa-door-open"></i> LogOut</span></span>
-                    </div>
-                </div>
-            </div>
+        <div class="ms-auto icons-nav">
+            <a href="/professional/configuracoes" class="aIco"><i class="fa-regular fa-gear n-icons"></i></a>
+            <a href="/professional/chat" class="aIco"><i class="fa-regular fa-message-lines n-icons"></i></a>
             {{-- Notifications --}}
             <div class="dpDown">
                 <i class="fa-regular fa-bell n-icons" id="bellIco" aria-expanded="false"></i>
@@ -59,11 +41,31 @@
                                 <label class="text-muted" style="font-size: 10px">Janeiro 15 2023</label>
                                 <label style="font-weight: 600">Dummy Text</label>
                             </a>
-                        </span>                        
+                        </span>
                     </div>
                 </div>
             </div>
-        </div>
+            {{-- Custom User Dropdown --}}
+            <div class="dpDown">
+                {{-- <i class="fa-regular fa-user n-icons" id="userIco" aria-expanded="false"></i> --}}
+                <img src="{{ asset('img/pfp/' . session()->get('user.pfp')) }}" class="navbar-pfp n-icons"
+                    id="userIco">
+                <div class="custom-dpdown custom-dpdown-open hide-dpDown" id="userDp">
+                    <div class="custom-dpdown-header">
+                        <span
+                            class="custom-dpdown-title">{{ session()->get('user')['firstName'] . ' ' . session()->get('user')['lastName'] }}</span>
+                    </div>
+                    <div class="custom-dpdown-body">
+                        <span class="custom-dpdown-item-container"><a class="custom-dpdown-item"
+                                href="/professional/configuracoes/user"><i class="fa-solid fa-user-gear"></i>
+                                Configurações</a></span>
+                        <span class="custom-dpdown-item-container"><a class="custom-dpdown-item" href="/"><i
+                                    class="fa-solid fa-arrow-up-right-from-square"></i> EasyOrder</a></span>
+                        <span class="custom-dpdown-item-container leave"><span class="custom-dpdown-item"
+                                href="#"><i class="fa-solid fa-door-open"></i> LogOut</span></span>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
