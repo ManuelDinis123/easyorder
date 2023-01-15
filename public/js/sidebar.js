@@ -6,7 +6,7 @@ $(document).ready(() => {
         $("#header").toggleClass("body-pd");
     });
 
-    $("#leave").on('click', () => {
+    $(".leave").on('click', () => {
         $.ajax({
             method: 'post',
             url: '/logout',

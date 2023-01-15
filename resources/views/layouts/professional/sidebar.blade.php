@@ -7,19 +7,63 @@
 </head>
 
 <body id="body-pd">
-
     <header class="header nav-extra" id="header">
         <div class="header_toggle">
             <i class="fa-light fa-bars" id="header-toggle"></i>
         </div>
         <div class="ms-auto">
-            <i class="fa-regular fa-gear n-icons"></i>
-            <i class="fa-regular fa-message-lines n-icons"></i>
-            <i class="fa-regular fa-bell n-icons"></i>
-            <i class="fa-regular fa-user n-icons"></i>
-            <a href="/home" style="color: black">
-                <i class="fa-regular fa-arrow-up-right-from-square n-icons"></i>
-            </a>
+            <a href="professional/configuracoes" class="aIco"><i class="fa-regular fa-gear n-icons"></i></a>
+            <a href="professional/chat" class="aIco"><i class="fa-regular fa-message-lines n-icons"></i></a>
+            {{-- Custom User Dropdown --}}
+            <div class="dpDown">
+                <i class="fa-regular fa-user n-icons" id="userIco" aria-expanded="false"></i>
+                <div class="custom-dpdown custom-dpdown-open hide-dpDown" id="userDp">
+                    <div class="custom-dpdown-header">
+                        <span
+                            class="custom-dpdown-title">{{ session()->get('user')['firstName'] . ' ' . session()->get('user')['lastName'] }}</span>
+                    </div>
+                    <div class="custom-dpdown-body">
+                        <span class="custom-dpdown-item-container"><a class="custom-dpdown-item" href="professional/configuracoes/?tab=user"><i
+                                    class="fa-solid fa-user-gear"></i> Configurações</a></span>
+                        <span class="custom-dpdown-item-container"><a class="custom-dpdown-item" href="/"><i
+                                    class="fa-solid fa-arrow-up-right-from-square"></i> EasyOrder</a></span>
+                        <span class="custom-dpdown-item-container leave"><span class="custom-dpdown-item" href="#"><i
+                                    class="fa-solid fa-door-open"></i> LogOut</span></span>
+                    </div>
+                </div>
+            </div>
+            {{-- Notifications --}}
+            <div class="dpDown">
+                <i class="fa-regular fa-bell n-icons" id="bellIco" aria-expanded="false"></i>
+                <div class="custom-dpdown custom-dpdown-open hide-dpDown" style="min-width: 200px;" id="bellDp">
+                    <div class="custom-dpdown-header">
+                        <span class="custom-dpdown-title">Notificações</span>
+                    </div>
+                    <div class="custom-dpdown-body">
+                        <span class="custom-dpdown-item-container">
+                            <a class="custom-dpdown-item" href="#">
+                                <label class="text-muted" style="font-size: 10px">Janeiro 15 2023</label>
+                                <label style="font-weight: 600">Dummy Text</label>
+                            </a>
+                        </span>
+                        <hr class="custom-dpdown-separation">
+                        <span class="custom-dpdown-item-container">
+                            <a class="custom-dpdown-item" href="#">
+                                <label class="text-muted" style="font-size: 10px">Janeiro 15 2023</label>
+                                <label style="font-weight: 600">Dummy Text</label>
+                            </a>
+                        </span>
+                        <hr class="custom-dpdown-separation">
+                        <span class="custom-dpdown-item-container">
+                            <a class="custom-dpdown-item" href="#">
+                                <label class="text-muted" style="font-size: 10px">Janeiro 15 2023</label>
+                                <label style="font-weight: 600">Dummy Text</label>
+                            </a>
+                        </span>                        
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
     </header>
 
@@ -68,7 +112,7 @@
                     </div>
                 </div>
             </div>
-            <span id="leave" class="nav_link" style="cursor: pointer">
+            <span id="leave" class="nav_link leave" style="cursor: pointer">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span class="nav_name">SignOut</span>
             </span>
@@ -90,6 +134,30 @@
                 $("#content").removeClass("visually-hidden");
             });
         })
+
+        $(document).ready(() => {
+            // Hide the dropdowns when clicking outside of them
+            $(document).on('click', function(event) {
+                var $trigger = $(".dpDown");
+                if ($trigger !== event.target && !$trigger.has(event.target).length) {
+                    $(".custom-dpdown-open").addClass('hide-dpDown');
+                }
+            })
+
+            // dropdowns for navbar
+            var map = ['user', 'bell']
+
+            $.each(map, (key, val) => {
+                $("#" + val + "Ico").on('click', () => {
+                    if ($("#" + val + "Dp").hasClass('hide-dpDown')) {
+                        $(".custom-dpdown-open").addClass('hide-dpDown');
+                        $("#" + val + "Dp").removeClass('hide-dpDown');
+                    } else {
+                        $("#" + val + "Dp").addClass('hide-dpDown');
+                    }
+                })
+            })
+        });
     </script>
     <script src="{{ asset('js/sidebar.js') }}"></script>
 </body>
