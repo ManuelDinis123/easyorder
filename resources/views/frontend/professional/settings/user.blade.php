@@ -4,7 +4,6 @@
 <link rel="stylesheet" href="{{ asset('css/settings/user.css') }}">
 
 @section('content')
-
     <div class="user-settings">
         <div class="generalInfo">
             <div class="container">
@@ -14,7 +13,7 @@
                         <form action="/professional/fileupload" class="dropzone" id="profile">
                             @csrf
                             <div class="dz-message" data-dz-message>
-                                <img src="{{ asset('img/pfp/' . session()->get('user.pfp')) }}" alt="profile"
+                                <img src="{{ asset('img/pfp/' . session()->get('user.pfp')) }}" onerror="this.src = '{{asset('img/pfp/defaultpfp.png')}}';" alt="profile"
                                     class="pfp_settings" id="pfp" />
                                 <i class="fa-solid fa-camera cam"></i>
                             </div>
