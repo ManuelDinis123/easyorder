@@ -5,7 +5,7 @@
 
 <style>
     .card-contain {
-        width: 505px;
+        width: 27vw;
         height: 202px;
         border-radius: 14px;
         cursor: pointer;

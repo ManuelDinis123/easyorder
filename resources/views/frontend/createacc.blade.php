@@ -112,7 +112,6 @@
         } else {
             makeAcc();
         }
-
     })
 
     $("#yes").on('click', () => {

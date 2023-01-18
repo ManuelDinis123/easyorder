@@ -6,7 +6,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col-3">
+        <div class="col-12">
             <button class="btn is-selected" id="ongoingbtn">Em progresso</button>
             <button class="btn not-selected" id="closedbtn">Finalizados</button>
             <button class="btn not-selected" id="cancelledbtn">Cancelados</button>
