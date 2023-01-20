@@ -3,6 +3,7 @@
 use App\Helpers\AppHelper;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CreateRestaurantController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OptionsController;
@@ -16,8 +17,6 @@ use App\Http\Controllers\UserConfigsController;
 Route::get('/', function () {    
     return view(session()->has("authenticated") ? 'frontend/home' : 'frontend/login');
 });
-
-
 
 // Home page of the normal user accounts
 Route::get('/home', function () {    
@@ -33,6 +32,9 @@ Route::post('/createaccount', [AuthController::class, 'create'])->name("createac
 Route::get('/no-access', function () {
     return view('errors.404');
 });
+
+// Page where users create a restaurant to switch account to professional
+Route::get('/novo/restaurante', [CreateRestaurantController::class, 'index']);
 
 // Authentication method
 Route::post('/auth', [AuthController::class, 'auth'])->name("auth");

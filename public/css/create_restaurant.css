@@ -1,0 +1,51 @@
+body {        
+    background-size: 300% 300%;
+    background-image: linear-gradient(
+          -45deg, 
+          rgb(109, 200, 241) 0%, 
+          rgb(87, 137, 230) 25%, 
+          rgb(68, 70, 183) 51%, 
+          rgb(164, 53, 255) 100%
+    );  
+    animation: AnimateBG 20s ease infinite;
+}
+
+.form-container {
+    margin: 0 auto;    
+    width: 380px;
+}
+
+.form-card {
+    padding-bottom: 25px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    background: #ffffff;
+    box-shadow: 0px 4px 13px rgba(0, 0, 0, 0.25);
+    border-radius:15px;
+}
+
+.dropzone {
+    min-height: 15px !important;
+    height: 15px;
+}
+
+.dz-message {
+    position: relative;
+}
+
+.cam {
+    position: absolute;
+    top: -41px;
+    left: 5px;
+}
+
+.select2-container--default .select2-selection--multiple {    
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+  @keyframes AnimateBG { 
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
