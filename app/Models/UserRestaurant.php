@@ -10,4 +10,6 @@ class UserRestaurant extends Model
     use HasFactory;
 
     protected $table = "user_restaurant";
+    protected $guarded = ['id']; 
+    public $timestamps = false;
 }

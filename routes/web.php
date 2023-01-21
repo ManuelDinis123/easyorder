@@ -35,6 +35,7 @@ Route::get('/no-access', function () {
 
 // Page where users create a restaurant to switch account to professional
 Route::get('/novo/restaurante', [CreateRestaurantController::class, 'index']);
+Route::post('/novo/create', [CreateRestaurantController::class, 'create'])->name("create");
 
 // Authentication method
 Route::post('/auth', [AuthController::class, 'auth'])->name("auth");

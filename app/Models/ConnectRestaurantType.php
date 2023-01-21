@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Restaurants extends Model
+class ConnectRestaurantType extends Model
 {
     use HasFactory;
 
-    protected $table = "restaurants";
+    protected $table = "connect_restaurant_type";
     protected $guarded = ['id']; 
     public $timestamps = false;
 }

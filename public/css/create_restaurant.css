@@ -15,6 +15,10 @@ body {
     width: 380px;
 }
 
+.text-muted {
+    font-size: 14px;
+}
+
 .form-card {
     padding-bottom: 25px;
     padding-left: 15px;
@@ -25,13 +29,36 @@ body {
     border-radius:15px;
 }
 
+.fa-xmark {
+    visibility: hidden;
+    pointer-events: none;
+}
+
 .dropzone {
     min-height: 15px !important;
     height: 15px;
 }
 
+.filePut {
+    margin-left: 15px;
+    margin-top: 3px;
+    background-color: white;
+    cursor: pointer;
+    padding:15%;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.452) !important
+}
+
 .dz-message {
     position: relative;
+}
+
+.dropzone:hover ~ .dz-message {
+    visibility: hidden !important;
+}
+
+.dropzone:hover ~ .dz-message2 {
+    visibility: visible !important;
 }
 
 .cam {
