@@ -57,6 +57,11 @@ class CreateRestaurantController extends Controller
 
         if (!$new) return response()->json(["title" => 'Erro', "message" => "Ocorreu um erro a criar o restaurante!"], 200);
 
+        session(["restaurant" => [
+            "id" => $new->id,
+            "name" => $new->name
+        ]]);
+
         foreach ($request->values['type'] as $type) {
             $typeid = RestaurantType::where('label', $type)->get()->first();
             if (!$typeid) return response()->json(["title" => 'Erro', "message" => "Ocorreu um erro a configurar o restaurante!"], 200);
