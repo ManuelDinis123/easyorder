@@ -83,6 +83,7 @@
                 $("#showLogo").attr("src", this.value)
                 $("#imgFile").val("");
                 $("#hasFile").val(0);
+                imgFile = null;
             })
 
             imgFile = null;
@@ -121,7 +122,7 @@
                         'name': $("#name").val(),
                         'description': $("#description").val(),
                         'imageUrl': $("#imageUrl").val(),
-                        'imageFile': imgFile ? imgFile : $("#hasFile").val()
+                        'imageFile': imgFile != null ? imgFile : $("#hasFile").val()
                     },
                 }).done((res) => {
                     if(res.title == "Erro") {
@@ -147,7 +148,7 @@
                     if (res.res_info.logo_url) {
                         $("#showLogo").attr("src", res.res_info.logo_url);
                     } else {
-                        $("#hasFile").val(1);
+                        $("#hasFile").val(res.res_info.logo_name);
                         $("#showLogo").attr("src", "{{ asset('img/logos') }}" + "/" + res.res_info.logo_name);
                     }
                     if (res.menu_count >= 1) {

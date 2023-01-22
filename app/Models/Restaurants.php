@@ -10,6 +10,6 @@ class Restaurants extends Model
     use HasFactory;
 
     protected $table = "restaurants";
-    protected $guarded = ['id']; 
+    protected $guarded = ['id'];
     public $timestamps = false;
 }

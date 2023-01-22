@@ -12,8 +12,10 @@ use App\Models\Types;
 use App\Models\UserRestaurant;
 use App\Models\Users;
 use App\Models\UsersTypes;
+use Hamcrest\Arrays\IsArray;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class RestaurantController extends Controller
@@ -117,7 +119,7 @@ class RestaurantController extends Controller
     }
 
     /**
-     * Publishes the restaurant
+     * gets info of the restaurant
      * 
      * @return response
      */
@@ -144,7 +146,7 @@ class RestaurantController extends Controller
     }
 
     /**
-     * Publishes the restaurant
+     * saves general info of the restaurant
      * 
      * @return response
      */
@@ -157,20 +159,30 @@ class RestaurantController extends Controller
         // check if there is a logo
         if ($data->imageUrl == null && $data->imageFile == 0) return response()->json(["title" => "Erro", "message" => "Insira um logo"], 200);
         if ($data->imageUrl != null && $data->imageFile != 0) return response()->json(["title" => "Erro", "message" => "Escolha apenas um formato de inserir imagem"], 200);
-
+        
         // Save image file
-        if ($data->imageFile != 0) {
+        if (is_array($data->imageFile)) {
             $imgName = $this->saveImage($data->imageFile);
+        } else {
+            $imgName = $data->imageFile;
         }
 
         $save = Restaurants::whereId(session()->get('restaurant.id'))->update([
             "name" => $data->name,
             "description" => $data->description,
             "logo_url" => $data->imageUrl,
-            "logo_name" => $data->imageFile == 0 ? null : $imgName,
+            "logo_name" => ($data->imageFile == 0 ? null : $imgName),
         ]);
 
-        if(!$save) return response()->json(["title" => "Erro", "message" => "Erro a guardar as informações"], 200);
+        $updatedValues = Restaurants::whereId(session()->get('restaurant.id'))->get()->first();        
+
+        if (!$save) return response()->json(["title" => "Erro", "message" => "Nada para atualizar"], 200);
+
+        session(["restaurant" => [
+            "id" => $updatedValues->id,
+            "name" => $updatedValues->name,
+            "isPublic" => 0
+        ]]);
 
         return response()->json(["title" => "Sucesso", "message" => "Informações do restaurante guardadas com sucesso"], 200);
     }
@@ -183,6 +195,28 @@ class RestaurantController extends Controller
     function publish()
     {
         if (session()->get('isPublic') == 1) return response()->json(["title" => "Erro", "message" => "Restaurante ja é publico"], 200);
+
+        // get num of items in the menu
+        $items = Menu::select(
+            "menu_item.id",
+            "menu_item.name",
+        )->where('restaurant_id', session()->get('restaurant.id'))
+            ->join('menu_item', 'menu.id', '=', 'menu_item.menu_id')
+            ->get()
+            ->count();
+
+        if ($items < 1) return response()->json(["title" => "Erro", "message" => "Menu deve conter pelo menos 1 item"], 200);
+
+        // get general restaurant info
+        $restaurant = Restaurants::whereId(session()->get('restaurant.id'))->update([
+            "isPublic" => 1
+        ]);
+
+        session()->put("restaurant.isPublic", 1);
+
+        if (!$restaurant) return response()->json(["title" => "Erro", "message" => "Erro ao publicar o restaurante"], 200);
+
+        return response()->json(["title" => "Sucesso", "message" => "Restaurante publicado com sucesso!"], 200);
     }
 
     // Save image file

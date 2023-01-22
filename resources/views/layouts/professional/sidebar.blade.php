@@ -143,7 +143,14 @@
                     '_token': "{{ csrf_token() }}"
                 }
             }).done((res)=>{
-                console.log(res);
+                if(res.title == "Erro") {
+                    errorToast(res.title, res.message);
+                } else {
+                    successToast(res.title, res.message);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                }
             })
         }
 
