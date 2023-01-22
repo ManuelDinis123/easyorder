@@ -10,4 +10,6 @@ class Menu extends Model
     use HasFactory;
     
     protected $table = "menu";
+    protected $guarded = ['id']; 
+    public $timestamps = false;
 }

@@ -86,7 +86,7 @@
                 if(res.title == "Erro") {
                     errorToast(res.title, res.message);
                 } else {
-                    successToast(res.title, res.message);
+                    window.location.replace("/professional");
                 }
             })
         })

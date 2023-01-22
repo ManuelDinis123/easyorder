@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
 use App\Models\ConnectRestaurantType;
+use App\Models\Menu;
 use App\Models\Restaurants;
 use App\Models\RestaurantType;
 use App\Models\Types;
@@ -62,6 +63,14 @@ class CreateRestaurantController extends Controller
             "name" => $new->name
         ]]);
 
+        // Create menu for restaurant
+        $newMenu = Menu::create([
+            "label" => "Default Menu",
+            "restaurant_id" => $new->id
+        ]);
+
+        if (!$newMenu) return response()->json(["title" => 'Erro', "message" => "Ocorreu um erro a criar o restaurante!"], 200);
+
         foreach ($request->values['type'] as $type) {
             $typeid = RestaurantType::where('label', $type)->get()->first();
             if (!$typeid) return response()->json(["title" => 'Erro', "message" => "Ocorreu um erro a configurar o restaurante!"], 200);
@@ -80,8 +89,6 @@ class CreateRestaurantController extends Controller
         if (!$updatePro) return response()->json(["title" => 'Erro', "message" => "Ocorreu um erro a atualizar o estado da sua conta!"], 200);
 
         session(["user.isProfessional" => 1]);
-
-        Log::info(session()->get("user.id"));
 
         // Create the user - restaurant connection
         $createConn = UserRestaurant::create([
