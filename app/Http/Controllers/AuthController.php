@@ -62,7 +62,8 @@ class AuthController extends Controller
             $restaurant = Restaurants::where("id", $restaurantid->restaurant_id)->get()->first();
             session(["restaurant" => [
                 "id" => $restaurant->id,
-                "name" => $restaurant->name
+                "name" => $restaurant->name,
+                "isPublic" => $restaurant->isPublic
             ]]);
         }
 
@@ -123,7 +124,7 @@ class AuthController extends Controller
 
 
     function logout() {
-        session()->flush();        
+        session()->flush();
 
         return response("/", 200);
     }

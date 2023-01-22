@@ -3,12 +3,12 @@
 use App\Helpers\AppHelper;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CreateRestaurantController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OptionsController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\PermsController;
+use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\UserConfigsController;
@@ -34,8 +34,11 @@ Route::get('/no-access', function () {
 });
 
 // Page where users create a restaurant to switch account to professional
-Route::get('/novo/restaurante', [CreateRestaurantController::class, 'index']);
-Route::post('/novo/create', [CreateRestaurantController::class, 'create'])->name("create");
+Route::get('/novo/restaurante', [RestaurantController::class, 'index']);
+Route::post('/novo/create', [RestaurantController::class, 'create'])->name("create");
+Route::post('/publish', [RestaurantController::class, 'publish'])->name("publish");
+Route::post('/professional/getrestaurant', [RestaurantController::class, 'get'])->name("getrestaurant");
+Route::post('/professional/saverestaurantinfo', [RestaurantController::class, 'saveInfo'])->name("saverestaurantinfo");
 
 // Authentication method
 Route::post('/auth', [AuthController::class, 'auth'])->name("auth");

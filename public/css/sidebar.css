@@ -450,3 +450,12 @@ a {
     -webkit-animation-name: slideIn;
     animation-name: slideIn;
 }
+
+.publish-btn {      
+    position: fixed;
+    bottom: 0px;
+    right: 0px; 
+    font-size: larger;
+    margin-bottom: 50px;
+    margin-right: 50px;
+}

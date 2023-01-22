@@ -19,7 +19,7 @@
             <div class="col-2">
                 <label for="imgFile" class="filePut">
                     <i class="fa-sharp fa-solid fa-camera"></i>
-                    <input type="file" id="imgFile" style="display: none">
+                    <input type="file" id="imgFile" style="display: none" accept="image/*">
                 </label>
             </div>
         </div>

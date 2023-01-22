@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\AppHelper;
 use App\Models\ConnectRestaurantType;
 use App\Models\Menu;
+use App\Models\MenuItems;
 use App\Models\Restaurants;
 use App\Models\RestaurantType;
 use App\Models\Types;
@@ -15,7 +16,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class CreateRestaurantController extends Controller
+class RestaurantController extends Controller
 {
     function index()
     {
@@ -41,11 +42,7 @@ class CreateRestaurantController extends Controller
 
         // Save image file
         if ($request->values['file'] != null) {
-            $imgData = $request->values['file'];
-            $image = str_replace('data:' . $imgData['type'] . ';base64,', '', $imgData['dataURL']);
-            $image = str_replace(' ', '+', $image);
-            $imgName = time() . ".png";
-            file_put_contents(public_path() . '/img/logos/' .  $imgName, base64_decode($image));
+            $this->saveImage($request->values['file']);
         }
 
         // Create the restaurant
@@ -60,7 +57,8 @@ class CreateRestaurantController extends Controller
 
         session(["restaurant" => [
             "id" => $new->id,
-            "name" => $new->name
+            "name" => $new->name,
+            "isPublic" => $new->isPublic
         ]]);
 
         // Create menu for restaurant
@@ -116,5 +114,85 @@ class CreateRestaurantController extends Controller
         if (!$connectType) return response()->json(["title" => 'Erro', "message" => "Ocorreu um erro a fazer-lhe o dono do restaurante!"], 200);
 
         return response()->json(["title" => "Sucesso", "message" => "Restaurante criado com sucesso!"], 200);
+    }
+
+    /**
+     * Publishes the restaurant
+     * 
+     * @return response
+     */
+    function get()
+    {
+        // get general restaurant info
+        $restaurant = Restaurants::select(
+            "name",
+            "description",
+            "logo_name",
+            "logo_url",
+        )->whereId(session()->get('restaurant.id'))->get()->first();
+
+        // get num of items in the menu
+        $items = Menu::select(
+            "menu_item.id",
+            "menu_item.name",
+        )->where('restaurant_id', session()->get('restaurant.id'))
+            ->join('menu_item', 'menu.id', '=', 'menu_item.menu_id')
+            ->get()
+            ->count();
+
+        return response()->json(["res_info" => $restaurant, "menu_count" => $items], 200);
+    }
+
+    /**
+     * Publishes the restaurant
+     * 
+     * @return response
+     */
+    function saveInfo(Request $data)
+    {
+        // if it's public already you can't do this again
+        if (session()->get('isPublic') == 1) return response()->json(["title" => "Erro", "message" => "Restaurante ja é publico"], 200);
+        // check if name or description are empty 
+        if (AppHelper::hasEmpty([$data->name, $data->description])) return response()->json(["title" => "Erro", "message" => "Preencha todos os campos"], 200);
+        // check if there is a logo
+        if ($data->imageUrl == null && $data->imageFile == 0) return response()->json(["title" => "Erro", "message" => "Insira um logo"], 200);
+        if ($data->imageUrl != null && $data->imageFile != 0) return response()->json(["title" => "Erro", "message" => "Escolha apenas um formato de inserir imagem"], 200);
+
+        // Save image file
+        if ($data->imageFile != 0) {
+            $imgName = $this->saveImage($data->imageFile);
+        }
+
+        $save = Restaurants::whereId(session()->get('restaurant.id'))->update([
+            "name" => $data->name,
+            "description" => $data->description,
+            "logo_url" => $data->imageUrl,
+            "logo_name" => $data->imageFile == 0 ? null : $imgName,
+        ]);
+
+        if(!$save) return response()->json(["title" => "Erro", "message" => "Erro a guardar as informações"], 200);
+
+        return response()->json(["title" => "Sucesso", "message" => "Informações do restaurante guardadas com sucesso"], 200);
+    }
+
+    /**
+     * Publishes the restaurant
+     * 
+     * @return response
+     */
+    function publish()
+    {
+        if (session()->get('isPublic') == 1) return response()->json(["title" => "Erro", "message" => "Restaurante ja é publico"], 200);
+    }
+
+    // Save image file
+    function saveImage($imageData)
+    {
+        $imgData = $imageData;
+        $image = str_replace('data:' . $imgData['type'] . ';base64,', '', $imgData['dataURL']);
+        $image = str_replace(' ', '+', $image);
+        $imgName = time() . ".png";
+        file_put_contents(public_path() . '/img/logos/' .  $imgName, base64_decode($image));
+        return $imgName;
     }
 }

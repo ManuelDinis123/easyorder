@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
+<link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
 <html>
 
 <head>
@@ -9,7 +9,7 @@
 <body id="body-pd">
     <header class="header nav-extra" id="header">
         <div class="header_toggle">
-            <i class="fa-light fa-bars" id="header-toggle"></i>
+            <i class="fa-light fa-bars hToggle" id="header-toggle"></i>
         </div>
         <div class="ms-auto icons-nav">
             <a href="/professional/configuracoes" class="aIco"><i class="fa-regular fa-gear n-icons"></i></a>
@@ -48,7 +48,8 @@
             {{-- Custom User Dropdown --}}
             <div class="dpDown">
                 {{-- <i class="fa-regular fa-user n-icons" id="userIco" aria-expanded="false"></i> --}}
-                <img src="{{ asset('img/pfp/' . session()->get('user.pfp')) }}" onerror="this.src = '{{asset('img/pfp/defaultpfp.png')}}';" class="navbar-pfp n-icons"
+                <img src="{{ asset('img/pfp/' . session()->get('user.pfp')) }}"
+                    onerror="this.src = '{{ asset('img/pfp/defaultpfp.png') }}';" class="navbar-pfp n-icons"
                     id="userIco">
                 <div class="custom-dpdown custom-dpdown-open hide-dpDown" id="userDp">
                     <div class="custom-dpdown-header">
@@ -95,7 +96,7 @@
                         <span class="nav_name">Estatísticas</span>
                     </a>
                     <div id="dp" class="dropdown">
-                        <a href="#" class="nav_drop" data-bs-toggle="dropdown">
+                        <a href="#" class="nav_drop hToggle" data-bs-toggle="dropdown" id="sidebarDropDown">
                             <i class="fa-sharp fa-solid fa-toolbox nav_icon"></i>
                             <span class="nav_name dropdown-toggle">Administração</span>
                         </a>
@@ -121,6 +122,10 @@
         </nav>
     </div>
 
+    @if (!session()->get('restaurant.isPublic'))
+        <button class="btn btn-primary publish-btn" onclick="publish()">Publicar Restaurante</button>
+    @endif
+
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 
     @include('components.loader')
@@ -129,6 +134,19 @@
         @yield('content')
     </div>
     <script>
+        // function to publish restaurant        
+        function publish() {
+            $.ajax({
+                method: 'post',
+                url: '/publish',
+                data: {
+                    '_token': "{{ csrf_token() }}"
+                }
+            }).done((res)=>{
+                console.log(res);
+            })
+        }
+
         $(window).on('load', () => {
             $("#loading").fadeOut(500, function() {
                 // fadeOut complete. Remove the loading div
@@ -137,7 +155,38 @@
             });
         })
 
+        // toggle the sidebar
+        function toggleSide() {
+            sidebarIsOpened = !sidebarIsOpened;
+            $("#nav-bar").toggleClass("show_side");
+            $("#header-toggle").toggleClass("fa-xmark");
+            $("#body-pd").toggleClass("body-pd");
+            $("#header").toggleClass("body-pd");
+        }
+
         $(document).ready(() => {
+            sidebarIsOpened = true;
+            $(".hToggle").on('click', function() {                
+                if (this.id == "sidebarDropDown") {
+                    if (!$("#" + this.id).hasClass("show") && !sidebarIsOpened) return;
+                    toggleSide();
+                } else {
+                    toggleSide();
+                }
+            });
+
+            $(".leave").on('click', () => {
+                $.ajax({
+                    method: 'post',
+                    url: '/logout',
+                    data: {
+                        "_token": $('#token').val(),
+                    }
+                }).done(res => {
+                    window.location.replace(res);
+                })
+            })
+
             // Hide the dropdowns when clicking outside of them
             $(document).on('click', function(event) {
                 var $trigger = $(".dpDown");
@@ -161,7 +210,6 @@
             })
         });
     </script>
-    <script src="{{ asset('js/sidebar.js') }}"></script>
 </body>
 
 </html>
