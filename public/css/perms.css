@@ -1,0 +1,52 @@
+.perms-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.perms-card {
+    box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, 0.25);
+    width: 240px;
+    border-radius: 20px;
+    background-color: white;
+}
+
+.new-card {
+    box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, 0.25);    
+    padding: 15px 15px;
+    border-radius: 20px;
+    background-color: white;
+}
+
+.checkboxes-card {
+    box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, 0.25);
+    padding: 15px 15px;
+    border-radius: 20px;
+    background-color: white;
+}
+
+.perm-label{
+    font-size: 20px;    
+}
+
+.perm-switch {
+    float: right;
+    font-size: 20px;
+}
+
+
+.fa-plus{
+    color: green;    
+}
+
+.dataTables_length {
+    display: none;
+}
+
+.dataTables_filter {
+    display: none;
+}
+
+.dataTables_info {
+    display: none;
+}

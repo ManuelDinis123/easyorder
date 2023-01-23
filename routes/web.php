@@ -81,6 +81,8 @@ Route::get('/professional/admin/users', [UserConfigsController::class, 'index'])
 
 // Permissions configs for the professional user account
 Route::get('/professional/admin/permissions', [PermsController::class, 'index']);
+Route::get('/professional/admin/permissions/criar', [PermsController::class, 'new']);
+Route::post('/professional/admin/permissions/get_types', [PermsController::class, 'getTypes'])->name("get_types");
 
 // Admin Options for the professional user account
 Route::get('/professional/admin/options', [OptionsController::class, 'index']);
