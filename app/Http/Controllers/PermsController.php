@@ -50,18 +50,33 @@ class PermsController extends Controller
             "restaurant_id" => session()->get('restaurant.id'),
             "created_by" => session()->get('user.id'),
             "created_at" => date("Y-m-d H:i:s"),
-        ];        
+        ];
 
         // Adds each permission to the array
         foreach ($data->permissions as $key => $option) {
-            $opt = [$key => ($option=='true'?1:0)];
+            $opt = [$key => ($option == 'true' ? 1 : 0)];
             $newType = array_merge($newType, $opt);
         }
 
         $save = Types::create($newType);
 
-        if (!$save) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a guardar este tipo de utilizador"]);
+        if (!$save) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a guardar este tipo de user"]);
 
-        return response()->json(["title" => "Sucesso", "message" => "Tipo de utilizador criado com sucesso!"]);
+        return response()->json(["title" => "Sucesso", "message" => "Tipo de user criado com sucesso!"]);
+    }
+
+
+    /**
+     * Removes type from db
+     * 
+     * @return response
+     */
+    function remove(Request $id)
+    {
+        $remove = Types::whereId($id->id)->delete();
+
+        if(!$remove) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a eliminar este tipo de user"]);
+
+        return response()->json(["title" => "Sucesso", "message" => "Tipo de user eliminado com sucesso!"]);
     }
 }
