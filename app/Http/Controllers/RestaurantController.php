@@ -102,6 +102,15 @@ class RestaurantController extends Controller
         $ownerType = Types::create([
             "label" => 'Owner',
             "restaurant_id" => $new->id,
+            "view_orders" => 1,
+            "write_orders" => 1,
+            "view_menu" => 1,
+            "write_menu" => 1,
+            "view_stats" => 1,
+            "invite_users" => 1,
+            "ban_users" => 1,
+            "admin" => 1,
+            "owner" => 1,
             "created_by" => session()->get('user.id'),
             "created_at" => date("Y-m-d H:i:s"),
         ]);
@@ -159,7 +168,7 @@ class RestaurantController extends Controller
         // check if there is a logo
         if ($data->imageUrl == null && $data->imageFile == 0) return response()->json(["title" => "Erro", "message" => "Insira um logo"], 200);
         if ($data->imageUrl != null && $data->imageFile != 0) return response()->json(["title" => "Erro", "message" => "Escolha apenas um formato de inserir imagem"], 200);
-        
+
         // Save image file
         if (is_array($data->imageFile)) {
             $imgName = $this->saveImage($data->imageFile);
@@ -174,7 +183,7 @@ class RestaurantController extends Controller
             "logo_name" => ($data->imageFile == 0 ? null : $imgName),
         ]);
 
-        $updatedValues = Restaurants::whereId(session()->get('restaurant.id'))->get()->first();        
+        $updatedValues = Restaurants::whereId(session()->get('restaurant.id'))->get()->first();
 
         if (!$save) return response()->json(["title" => "Erro", "message" => "Nada para atualizar"], 200);
 
