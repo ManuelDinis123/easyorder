@@ -46,7 +46,7 @@
                 </div>
             </div>
             {{-- Custom User Dropdown --}}
-            <div class="dpDown">                
+            <div class="dpDown">
                 <img src="{{ asset('img/pfp/' . session()->get('user.pfp')) }}"
                     onerror="this.src = '{{ asset('img/pfp/defaultpfp.png') }}';" class="navbar-pfp n-icons"
                     id="userIco">
@@ -82,19 +82,26 @@
                         <i class="fa-solid fa-house nav_icon"></i>
                         <span class="nav_name">Dashboard</span>
                     </a>
-                    <a href="/professional/encomendas" class="nav_link {{ $file == 'orders' ? 'active' : '' }}">
+                    <a id="view_orders" href="/professional/encomendas"
+                        class="nav_link {{ $file == 'orders' ? 'active' : '' }} 
+                        {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_orders') ? 'visually-hidden' : '') : '') : '' }}">
                         <i class="fa-solid fa-ballot-check nav_icon"></i>
                         <span class="nav_name">Encomendas</span>
                     </a>
-                    <a href="/professional/ementa" class="nav_link {{ $file == 'menu' ? 'active' : '' }}">
+                    <a id="view_menu" href="/professional/ementa"
+                        class="nav_link {{ $file == 'menu' ? 'active' : '' }}
+                        {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_menu') ? 'visually-hidden' : '') : '') : '' }}">
                         <i class="fa-solid fa-burger-cheese"></i>
                         <span class="nav_name">Ementa</span>
                     </a>
-                    <a href="/professional/stats" class="nav_link {{ $file == 'stats' ? 'active' : '' }}">
+                    <a id="view_stats" href="/professional/stats"
+                        class="nav_link {{ $file == 'stats' ? 'active' : '' }}
+                        {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_stats') ? 'visually-hidden' : '') : '') : '' }}">
                         <i class="fa-solid fa-chart-line-up nav_icon"></i>
                         <span class="nav_name">Estatísticas</span>
                     </a>
-                    <div id="dp" class="dropdown">
+                    <div id="dp"
+                        class="dropdown {{ !session()->get('type.owner') ? (!session()->get('type.owner') ? 'visually-hidden' : '') : '' }}">
                         <a href="#" class="nav_drop hToggle" data-bs-toggle="dropdown" id="sidebarDropDown">
                             <i class="fa-sharp fa-solid fa-toolbox nav_icon"></i>
                             <span class="nav_name dropdown-toggle">Administração</span>
@@ -141,8 +148,8 @@
                 data: {
                     '_token': "{{ csrf_token() }}"
                 }
-            }).done((res)=>{
-                if(res.title == "Erro") {
+            }).done((res) => {
+                if (res.title == "Erro") {
                     errorToast(res.title, res.message);
                 } else {
                     successToast(res.title, res.message);
@@ -172,7 +179,7 @@
 
         $(document).ready(() => {
             sidebarIsOpened = true;
-            $(".hToggle").on('click', function() {                
+            $(".hToggle").on('click', function() {
                 if (this.id == "sidebarDropDown") {
                     if (!$("#" + this.id).hasClass("show") && !sidebarIsOpened) return;
                     toggleSide();

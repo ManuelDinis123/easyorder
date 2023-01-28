@@ -75,6 +75,11 @@ class AuthController extends Controller
             session(["type" => [
                 "id" => $typeInfo->id,
                 "label" => $typeInfo->label,
+                "view_orders" => $typeInfo->view_orders,
+                "view_menu" => $typeInfo->view_menu,
+                "view_stats" => $typeInfo->view_stats,
+                "admin" => $typeInfo->admin,
+                "owner" => $typeInfo->owner,
             ]]);
         }
 
@@ -134,7 +139,10 @@ class AuthController extends Controller
         return response()->json(["title" => "Success", "redirect" => "/"], 200);
     }
 
-
+    /**
+     * Logs out the user
+     * 
+     */
     function logout()
     {
         session()->flush();

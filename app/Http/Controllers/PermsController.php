@@ -127,6 +127,7 @@ class PermsController extends Controller
             "edited_at" => date("Y-m-d H:i:s"),
         ];
 
+        
         // Adds each permission to the array
         foreach ($data->permissions as $key => $option) {
             $opt = [$key => ($option == 'true' ? 1 : 0)];
