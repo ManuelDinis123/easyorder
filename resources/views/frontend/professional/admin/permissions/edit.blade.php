@@ -7,7 +7,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-3 g-0">
+            <div class="col-lg-3 col-sm-12 g-0 mb-5">
                 <div class="new-card">
                     <h4 style="font-weight: 600;">Nome:</h4>
                     <input type="text" class="form-control" value="{{ $label }}" placeholder="Nome do Tipo"
@@ -15,7 +15,7 @@
                     <button class="btn btn-primary form-control mt-3" id="edit">Editar</button>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-lg-6 col-sm-12">
                 <div class="checkboxes-card">
                     <h4 style="font-weight: 600">Permissões:</h4>
                     <hr class="mt-2">
@@ -61,8 +61,7 @@
             ]
 
             var permissions = {};
-            $.each(map, (key, val) => {
-                console.log(val);
+            $.each(map, (key, val) => {                
                 permissions[val] = $("#" + val).is(":checked");
             })
 

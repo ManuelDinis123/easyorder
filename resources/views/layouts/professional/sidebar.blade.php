@@ -82,19 +82,19 @@
                         <i class="fa-solid fa-house nav_icon"></i>
                         <span class="nav_name">Dashboard</span>
                     </a>
-                    <a id="view_orders" href="/professional/encomendas"
+                    <a href="/professional/encomendas"
                         class="nav_link {{ $file == 'orders' ? 'active' : '' }} 
                         {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_orders') ? 'visually-hidden' : '') : '') : '' }}">
                         <i class="fa-solid fa-ballot-check nav_icon"></i>
                         <span class="nav_name">Encomendas</span>
                     </a>
-                    <a id="view_menu" href="/professional/ementa"
+                    <a href="/professional/ementa"
                         class="nav_link {{ $file == 'menu' ? 'active' : '' }}
                         {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_menu') ? 'visually-hidden' : '') : '') : '' }}">
                         <i class="fa-solid fa-burger-cheese"></i>
                         <span class="nav_name">Ementa</span>
                     </a>
-                    <a id="view_stats" href="/professional/stats"
+                    <a href="/professional/stats"
                         class="nav_link {{ $file == 'stats' ? 'active' : '' }}
                         {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_stats') ? 'visually-hidden' : '') : '') : '' }}">
                         <i class="fa-solid fa-chart-line-up nav_icon"></i>
