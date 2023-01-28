@@ -225,11 +225,9 @@
                 "id": {{ $id }},
             }
         }).done((res) => {
-            if (res.status == "Erro") {
-                errorToast(res.status, res.message)
-            } else {
-                successToast(res.status, res.message)
-            };
+            successToast(res.status, res.message)
+        }).fail((err)=>{
+            errorToast(err.responseJSON.status, err.responseJSON.message);
         });
     }
 
@@ -245,8 +243,7 @@
                 "order_id": {{ $id }}
             }
         }).done((res) => {
-            (res.status == "Sucesso" ? successToast(res.status, res.message) : errorToast(res.status, res
-                .message));
+            successToast(res.status, res.message)
             $("#markDoneTab").DataTable().ajax.reload(null, false);
 
             // Update progress with new values            
@@ -254,6 +251,8 @@
             $("#progressLBL").text(res.progress + '% Completo');
             $("#sronly").text(res.progress + '% Complete');
 
+        }).fail((err)=>{
+            errorToast(err.responseJSON.status, err.responseJSON.message);
         })
     }
 

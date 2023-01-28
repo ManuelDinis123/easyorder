@@ -46,8 +46,7 @@
                 </div>
             </div>
             {{-- Custom User Dropdown --}}
-            <div class="dpDown">
-                {{-- <i class="fa-regular fa-user n-icons" id="userIco" aria-expanded="false"></i> --}}
+            <div class="dpDown">                
                 <img src="{{ asset('img/pfp/' . session()->get('user.pfp')) }}"
                     onerror="this.src = '{{ asset('img/pfp/defaultpfp.png') }}';" class="navbar-pfp n-icons"
                     id="userIco">

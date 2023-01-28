@@ -28,32 +28,23 @@ function removeDB(url, idToDelete, hasToast = true) {
         }
     }).done((res) => {
         if (!hasToast) return;
-
-        if (res.title == "Sucesso") {
-            iziToast.success({
-                title: res.title,
-                message: res.message,
-                color: "green",
-                icon: "fa-solid fa-check"
-            });
-        } else {
-            iziToast.error({
-                title: res.title,
-                message: res.message,
-                color: "red",
-                icon: "fa-sharp fa-solid fa-triangle-exclamation"
-            });
-        }
+        iziToast.success({
+            title: res.title,
+            message: res.message,
+            color: "green",
+            icon: "fa-solid fa-check"
+        }); 
+        return true;
     }).fail((err) => {
-
         if (!hasToast) return;
 
         iziToast.error({
-            title: "Erro",
-            message: "Ocorreu um erro a remover o item",
+            title: err.responseJSON.title,
+            message: err.responseJSON.message,
             color: "red",
             icon: "fa-sharp fa-solid fa-triangle-exclamation"
         });
+        return false;
     })
 }
 

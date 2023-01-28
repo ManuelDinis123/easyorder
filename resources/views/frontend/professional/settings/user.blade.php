@@ -144,12 +144,9 @@
                     }
                 })
                 .done((res) => {
-                    console.log(res)
-                    if (res.status == 'Erro') {
-                        errorToast(res.status, res.message);
-                    } else {
-                        successToast(res.status, res.message);
-                    }
+                    successToast(res.status, res.message);
+                }).fail((err)=>{
+                    errorToast(err.responseJSON.status, err.responseJSON.message);
                 })
 
         })

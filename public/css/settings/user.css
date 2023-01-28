@@ -9,7 +9,7 @@
 }
 
 .pfp_settings {
-    transition: all 0.3 linear;
+    -webkit-transition : -webkit-filter .15s linear;
     filter: brightness(100%);
     width: 150px;
     height: 150px;
@@ -22,7 +22,7 @@
 }
 
 .pfp_settings:hover ~ .cam {
-    visibility: visible;
+    opacity: 1;
 }
 
 .dz-message {
@@ -30,8 +30,9 @@
 }
 
 .cam {
+    transition: all .15s linear;
+    opacity: 0;
     position: absolute;
-    visibility: hidden;
     top: 50px;
     left: 80px;
     font-size: 50px;

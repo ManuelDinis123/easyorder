@@ -46,16 +46,16 @@ class SettingsController extends Controller
      */
     function update(Request $request)
     {
-        Log::info($request->updatePsw);
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
         if ($request->update) {
             // Check if any of the values are empty
             if (AppHelper::hasEmpty($request->values)) {
-                return response()->json(["status" => "Erro", "message" => "Preencha todos os campos"], 200);
+                return response()->json(["status" => "Erro", "message" => "Preencha todos os campos"], 400);
             }
 
             // Check if email is valid
             if (!filter_var($request->values[3], FILTER_VALIDATE_EMAIL)) {
-                return response()->json(["status" => "Erro", "message" => "Email invalido!"], 200);
+                return response()->json(["status" => "Erro", "message" => "Email invalido!"], 400);
             }
 
             // Update info
@@ -84,7 +84,7 @@ class SettingsController extends Controller
             // Check if oldPsw matches user password
             $userPsw = UserAuth::where('user_id', session()->get('user.id'))->get()->first();
             if (!password_verify($request->passwords['oldPsw'], $userPsw->password)) {
-                return response()->json(["status" => "Erro", "message" => "Password errada"], 200);
+                return response()->json(["status" => "Erro", "message" => "Password errada"], 400);
             }
             // Update db with new password
             $updatePsw = UserAuth::where('user_id', session()->get('user.id'))->update([

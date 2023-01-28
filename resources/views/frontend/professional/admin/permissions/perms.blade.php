@@ -40,6 +40,11 @@
             $("#item_id").val(id);
         }
 
+        // Goes to the edit page
+        function goEdit(id) {
+            window.location.href = "permissions/" + id;
+        }
+
         // delete item from DB
         function remove() {
             $("#confirmModal").modal('toggle');
@@ -79,11 +84,10 @@
                         width: "10%",
                         render: function(data, type, row, meta) {
                             if (row.label == "Owner") return '';
-
                             return '<div  style="display: flex; align-items: center">\
-                                <i class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:5px;"></i>\
-                                <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\
-                                </div>';
+                                    <i class="fa-sharp fa-solid fa-pen" onClick="goEdit(' + row.id + ')" style="color:#1C46B2; cursor:pointer; margin-right:5px;"></i>\
+                                    <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\
+                                    </div>';
                         }
                     },
                 ]

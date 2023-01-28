@@ -21,8 +21,11 @@
 
 
 {{-- Delete ingredients modal --}}
-@component('components.delete',
-    ['modal_id' => 'confirmModal', 'function_name' => 'remove_ing', 'hidden' => 'ingredient_id'])
+@component('components.delete', [
+    'modal_id' => 'confirmModal',
+    'function_name' => 'remove_ing',
+    'hidden' => 'ingredient_id',
+])
     @slot('title')
         Quer mesmo apagar este ingrediente?
     @endslot
@@ -33,7 +36,11 @@
 
 
 {{-- Delete item modal --}}
-@component('components.delete', ['modal_id' => 'itemDelModal', 'function_name' => 'remove_itm', 'hidden' => 'item_id'])
+@component('components.delete', [
+    'modal_id' => 'itemDelModal',
+    'function_name' => 'remove_itm',
+    'hidden' => 'item_id',
+])
     @slot('title')
         Tem a certeza que quer remover este item?
     @endslot
@@ -43,24 +50,27 @@
 @endcomponent
 
 {{-- Edit Ingredients modal --}}
-@component('components.modal_builder',
-    [
-        'modal_id' => 'editModal',
-        'hasHeader' => true,
-        'modalTitle' => 'Editar Acompanhamento:',
-        'hasBody' => true,
-        'inputs' => [
-            ['label' => 'Nome:', 'id' => 'ingredient_name_edit', 'type' => 'text'],
-            ['label' => 'Quantidade:', 'id' => 'edit_quant', 'type' => 'number'],
-            ['label' => '', 'id' => 'id_for_edit', 'type' => 'hidden'],
+@component('components.modal_builder', [
+    'modal_id' => 'editModal',
+    'hasHeader' => true,
+    'modalTitle' => 'Editar Acompanhamento:',
+    'hasBody' => true,
+    'inputs' => [
+        ['label' => 'Nome:', 'id' => 'ingredient_name_edit', 'type' => 'text'],
+        ['label' => 'Quantidade:', 'id' => 'edit_quant', 'type' => 'number'],
+        ['label' => '', 'id' => 'id_for_edit', 'type' => 'hidden'],
+    ],
+    'hasFooter' => true,
+    'buttons' => [
+        ['label' => 'Cancelar', 'id' => 'closeMdl', 'class' => 'btn btn-danger', 'dismiss' => true],
+        [
+            'label' => 'Editar',
+            'id' => 'edtIngredientsBtn',
+            'class' => 'btn btn-primary',
+            'function' => 'edit_ingredients',
         ],
-        'hasFooter' => true,
-        'buttons' => [
-            ['label' => 'Cancelar', 'id' => 'closeMdl', 'class' => 'btn btn-danger', 'dismiss' => true],
-            ['label' => 'Editar', 'id' => 'edtIngredientsBtn', 'class' => 'btn btn-primary', 'function' => 'edit_ingredients',
-            ],
-        ],
-    ])
+    ],
+])
 @endcomponent
 
 
@@ -211,8 +221,9 @@
 
     // Delete item from DB
     function remove_itm() {
-        removeDB("/professional/deletemenuitem", <?= $id ?>, false);
-        window.location.replace("/professional/ementa");
+        var dl = removeDB("/professional/deletemenuitem", <?= $id ?>);
+        $("#itemDelModal").modal("toggle");
+        if (dl) window.location.replace("/professional/ementa");
     }
 
     // inserts ingredients on the DB
@@ -231,24 +242,12 @@
                     "id": <?= $id ?>,
                 }
             }).done((res) => {
-                if (res.title == "Sucesso") {
-                    iziToast.success({
-                        title: res.title,
-                        message: res.message,
-                        color: "green",
-                        icon: "fa-solid fa-check"
-                    });
-                    $("#ing_table").DataTable().ajax.reload(null, false);
-                    $("#ingredient").val("");
-                    $("#quant").val(1);
-                } else {
-                    iziToast.error({
-                        title: res.title,
-                        message: res.message,
-                        color: "red",
-                        icon: "fa-sharp fa-solid fa-triangle-exclamation"
-                    });
-                }
+                successToast(res.title, res.message);
+                $("#ing_table").DataTable().ajax.reload(null, false);
+                $("#ingredient").val("");
+                $("#quant").val(1);
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
             });
         }
     }
@@ -281,23 +280,11 @@
                     "quantity": $("#edit_quant").val(),
                 }
             }).done((res) => {
-                if (res.title == "Sucesso") {
-                    iziToast.success({
-                        title: res.title,
-                        message: res.message,
-                        color: "green",
-                        icon: "fa-solid fa-check"
-                    });
-                    $("#ing_table").DataTable().ajax.reload(null, false);
-                    $("#editModal").modal("toggle");
-                } else {
-                    iziToast.error({
-                        title: res.title,
-                        message: res.message,
-                        color: "red",
-                        icon: "fa-sharp fa-solid fa-triangle-exclamation"
-                    });
-                }
+                successToast(res.title, res.message);
+                $("#ing_table").DataTable().ajax.reload(null, false);
+                $("#editModal").modal("toggle");
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
             })
         }
     }
@@ -369,20 +356,10 @@
                     }
                 }).done((res) => {
                     if (res.title == "Sucesso") {
-                        iziToast.success({
-                            title: res.title,
-                            message: res.message,
-                            color: "green",
-                            icon: "fa-solid fa-check"
-                        });
-                    } else {
-                        iziToast.error({
-                            title: res.title,
-                            message: res.message,
-                            color: "red",
-                            icon: "fa-sharp fa-solid fa-triangle-exclamation"
-                        });
+                        successToast(res.title, res.message);
                     }
+                }).fail((err) => {
+                    errorToast(err.responseJSON.title, err.responseJSON.message);
                 })
             }
         })

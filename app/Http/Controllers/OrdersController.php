@@ -16,6 +16,9 @@ class OrdersController extends Controller
     function index()
     {
         if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
+        }
 
         return view("frontend/professional/orders/orders");
     }
@@ -27,6 +30,10 @@ class OrdersController extends Controller
      */
     function get(Request $data)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
+        }
         // Get the orders and join the table with the users table to get the user who ordered it
         $orders = Orders::select("orders.id", DB::raw('CONCAT(users.first_name, \' \', users.last_name) as full_name'), "orders.deadline", "orders.progress", "orders.closed")
             ->where("restaurant_id", session()
@@ -46,6 +53,9 @@ class OrdersController extends Controller
     function edit(Request $id)
     {
         if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
+        }
 
         // Get data from the menu item
         $order_details = Orders::select(
@@ -90,6 +100,10 @@ class OrdersController extends Controller
      */
     function get_items_from_order(Request $id)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
+        }
         $items = OrderItems::select("order_items.id as order_item_id", "menu_item.id", "menu_item.name", "order_items.done")
             ->where("order_id", $id->id)
             ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')
@@ -108,27 +122,27 @@ class OrdersController extends Controller
      */
     function change_status(Request $data)
     {
-        $status = "Erro";
-        $message = "Occoreu um erro ao realizar esta ação";
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'write_orders')) return response()->json(["status" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }        
 
         // Update the order item
         $update = OrderItems::whereId($data->id)->update([
             "done" => $data->isDone ? 1 : 0
         ]);
 
-        // Change the message if the update went through
-        if ($update) {
-            $status = "Sucesso";
-            $message = "Item " . $data->isDone ? "marcado como pronto" : "desmarcado" . " com sucesso!";
-        }
+        if (!$update) response()->json(["status" => "Erro", "message" => "Ocorreu um erro"], 500);
 
         // Update percentage
         $progress = $this->calc_progress($data->order_id);
-        Orders::whereId($data->order_id)->update([
+        $progressUpdate = Orders::whereId($data->order_id)->update([
             "progress" => $progress
         ]);
 
-        return response()->json(["status" => $status, "message" => $message, "progress" => $progress], 200);
+        if (!$progressUpdate) response()->json(["status" => "Erro", "message" => "Ocorreu um erro"], 500);
+
+        return response()->json(["status" => "Sucesso", "message" => "Item " . ($data->isDone == 1 ? "marcado como pronto" : "desmarcado") . " com sucesso!", "progress" => $progress], 200);
     }
 
     /**
@@ -139,6 +153,10 @@ class OrdersController extends Controller
      */
     function close_order(Request $id)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'write_orders')) return response()->json(["status" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }
         // Check if any of the items are not done
         $items = OrderItems::where("order_id", $id->id)
             ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')
@@ -147,7 +165,7 @@ class OrdersController extends Controller
 
         foreach ($items as $item) {
             if ($item["done"] != 1) {
-                return response()->json(["status" => "Erro", "message" => "Todos os items devem estar prontos para fechar o pedido"], 200);
+                return response()->json(["status" => "Erro", "message" => "Todos os items devem estar prontos para fechar o pedido"], 400);
             }
         }
 
@@ -156,7 +174,7 @@ class OrdersController extends Controller
         ]);
 
         if (!$update) {
-            return response()->json(["status" => "Erro", "message" => "Ocorreu um erro ao fechar o pedido"], 200);
+            return response()->json(["status" => "Erro", "message" => "Ocorreu um erro ao fechar o pedido"], 500);
         }
 
         return response()->json(["status" => "Sucesso", "message" => "Pedido fechado com sucesso"], 200);
@@ -170,12 +188,16 @@ class OrdersController extends Controller
      */
     function cancel_order(Request $id)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'write_orders')) return response()->json(["status" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }
         $update = Orders::whereId($id->id)->update([
             "isCancelled" => 1
         ]);
 
         if (!$update) {
-            return response()->json(["status" => "Erro", "message" => "Ocorreu um erro ao cancelar o pedido"], 200);
+            return response()->json(["status" => "Erro", "message" => "Ocorreu um erro ao cancelar o pedido"], 500);
         }
 
         return response()->json(["status" => "Sucesso", "message" => "Pedido cancelado com sucesso"], 200);

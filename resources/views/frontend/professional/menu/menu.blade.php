@@ -133,10 +133,10 @@
             clearModal();
             $("#addModal").modal('toggle');
             $("#menu").DataTable().ajax.reload(null, false);
-        }).fail((err) => {
+        }).fail((err) => {      
             iziToast.error({
-                title: "Erro",
-                message: "Ocorreu um erro ao guardar",
+                title: err.responseJSON.title,
+                message: err.responseJSON.message,
                 color: "red",
                 icon: "fa-sharp fa-solid fa-triangle-exclamation"
             });

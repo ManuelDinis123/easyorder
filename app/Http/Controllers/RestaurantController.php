@@ -23,7 +23,7 @@ class RestaurantController extends Controller
     function index()
     {
         // only users that aren't already with professional accounts can access this page        
-        if (session()->get("user.isProfessional")  || session()->get("user.authenticated")) return redirect("/no-access");
+        if (session()->get("user.isProfessional") || !session()->get("user.authenticated")) return redirect("/no-access");
 
         return view("frontend/create_restaurant");
     }
@@ -133,7 +133,7 @@ class RestaurantController extends Controller
      * @return response
      */
     function get()
-    {
+    {        
         // get general restaurant info
         $restaurant = Restaurants::select(
             "name",
@@ -162,12 +162,12 @@ class RestaurantController extends Controller
     function saveInfo(Request $data)
     {
         // if it's public already you can't do this again
-        if (session()->get('isPublic') == 1) return response()->json(["title" => "Erro", "message" => "Restaurante ja é publico"], 200);
+        if (session()->get('isPublic') == 1) return response()->json(["title" => "Erro", "message" => "Restaurante ja é publico"], 400);
         // check if name or description are empty 
-        if (AppHelper::hasEmpty([$data->name, $data->description])) return response()->json(["title" => "Erro", "message" => "Preencha todos os campos"], 200);
+        if (AppHelper::hasEmpty([$data->name, $data->description])) return response()->json(["title" => "Erro", "message" => "Preencha todos os campos"], 400);
         // check if there is a logo
-        if ($data->imageUrl == null && $data->imageFile == 0) return response()->json(["title" => "Erro", "message" => "Insira um logo"], 200);
-        if ($data->imageUrl != null && $data->imageFile != 0) return response()->json(["title" => "Erro", "message" => "Escolha apenas um formato de inserir imagem"], 200);
+        if ($data->imageUrl == null && $data->imageFile == 0) return response()->json(["title" => "Erro", "message" => "Insira um logo"], 400);
+        if ($data->imageUrl != null && $data->imageFile != 0) return response()->json(["title" => "Erro", "message" => "Escolha apenas um formato de inserir imagem"], 400);
 
         // Save image file
         if (is_array($data->imageFile)) {
@@ -185,7 +185,7 @@ class RestaurantController extends Controller
 
         $updatedValues = Restaurants::whereId(session()->get('restaurant.id'))->get()->first();
 
-        if (!$save) return response()->json(["title" => "Erro", "message" => "Nada para atualizar"], 200);
+        if (!$save) return response()->json(["title" => "Erro", "message" => "Nada para atualizar"], 400);
 
         session(["restaurant" => [
             "id" => $updatedValues->id,
@@ -203,7 +203,7 @@ class RestaurantController extends Controller
      */
     function publish()
     {
-        if (session()->get('isPublic') == 1) return response()->json(["title" => "Erro", "message" => "Restaurante ja é publico"], 200);
+        if (session()->get('isPublic') == 1) return response()->json(["title" => "Erro", "message" => "Restaurante ja é publico"], 400);
 
         // get num of items in the menu
         $items = Menu::select(
@@ -214,7 +214,7 @@ class RestaurantController extends Controller
             ->get()
             ->count();
 
-        if ($items < 1) return response()->json(["title" => "Erro", "message" => "Menu deve conter pelo menos 1 item"], 200);
+        if ($items < 1) return response()->json(["title" => "Erro", "message" => "Menu deve conter pelo menos 1 item"], 403);
 
         // get general restaurant info
         $restaurant = Restaurants::whereId(session()->get('restaurant.id'))->update([
@@ -223,9 +223,9 @@ class RestaurantController extends Controller
 
         session()->put("restaurant.isPublic", 1);
 
-        if (!$restaurant) return response()->json(["title" => "Erro", "message" => "Erro ao publicar o restaurante"], 200);
+        if (!$restaurant) return response()->json(["title" => "Erro", "message" => "Erro ao publicar o restaurante"], 500);
 
-        return response()->json(["title" => "Sucesso", "message" => "Restaurante publicado com sucesso!"], 200);
+        return response()->json(["title" => "Sucesso", "message" => "Restaurante publicado com sucesso!"], 500);
     }
 
     // Save image file

@@ -20,7 +20,10 @@ class MenuController extends Controller
      */
     function index()
     {
-        if(!AppHelper::checkAuth()) return redirect("/no-access"); 
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
+        }
 
         return view("frontend/professional/menu/menu");
     }
@@ -33,7 +36,10 @@ class MenuController extends Controller
      */
     function edit(Request $id)
     {
-        if(!AppHelper::checkAuth()) return redirect("/no-access"); 
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
+        }
 
         // Get data from the menu item
         $item = MenuItems::where("id", $id->route('id'))->get()->first();
@@ -67,6 +73,11 @@ class MenuController extends Controller
      */
     function get(Request $id)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
+        }
+
         $menu = Menu::where("restaurant_id", $id->id)->get(); // Get the menu that is associated with the id of the restaurant
 
         $menu = $menu->first();
@@ -93,6 +104,11 @@ class MenuController extends Controller
      */
     function get_tags()
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
+        }
+
         $restaurant_id = session()->get("restaurant")["id"];
 
         $tags = MenuTags::where("id_restaurant", $restaurant_id)->get();
@@ -108,6 +124,12 @@ class MenuController extends Controller
      */
     function create(Request $data)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }
+
+        if (AppHelper::hasEmpty([$data->name, $data->price, $data->cost, $data->description])) return response()->json(["title" => "Erro", "message" => "Preencha todos os campos"], 400);
 
         $restaurant_id = session()->get("restaurant")["id"];
         $user_id = session()->get("user")["id"];
@@ -126,7 +148,7 @@ class MenuController extends Controller
             "created_at" => date("Y-m-d H:i:s"),
         ]);
 
-        if (!$menu_item) return response()->json(["title" => "Erro", "message" => "Ocorreu um Erro"], 200);
+        if (!$menu_item) return response()->json(["title" => "Erro", "message" => "Ocorreu um Erro"], 500);
 
         if ($data->tags) {
             $this->addTags($data->tags, $menu_item->id, true);
@@ -144,6 +166,13 @@ class MenuController extends Controller
      */
     function update(Request $newdata)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }
+
+        if (AppHelper::hasEmpty([$newdata->name, $newdata->price, $newdata->cost, $newdata->description])) return response()->json(["title" => "Erro", "message" => "Preencha todos os campos"], 400);
+
         $restaurant_id = session()->get("restaurant")["id"];
 
         $update =  MenuItems::whereId($newdata->id)->update([
@@ -157,8 +186,6 @@ class MenuController extends Controller
         ]);
 
         if (!$update && !$newdata->tags) return response()->json(["title" => "Erro", "message" => "Erro ao editar o item"], 200);
-
-        Log::info($newdata);
 
         if ($newdata->tags || $newdata->tags_in_db) {
 
@@ -201,6 +228,11 @@ class MenuController extends Controller
      */
     function remove(Request $id)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }
+
         // Delete the connection from the tags
         $tag_connections = ItemTags::where("menu_item_id", $id->id)->delete();
 
@@ -210,7 +242,7 @@ class MenuController extends Controller
         // Delete the item
         $item = MenuItems::where("id", $id->id)->delete();
 
-        if (!$item) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao apagar o item", "erro" => $item], 200);
+        if (!$item) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao apagar o item", "erro" => $item], 500);
 
         return response()->json(["title" => "Sucesso", "message" => "Item apagado com sucesso"], 200);
     }
@@ -223,6 +255,10 @@ class MenuController extends Controller
      */
     function fetch_ingredients(Request $id)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
+        }
 
         $ingredients = Ingredients::where("menu_item_id", $id->id)->get() ?? null;
 
@@ -237,13 +273,20 @@ class MenuController extends Controller
      */
     function add_ingredients(Request $data)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }
+
+        if (AppHelper::hasEmpty([$data->ingredient, $data->quantity])) return response()->json(["title" => "Erro", "message" => "Preencha todos os campos"], 400);
+
         $ingredients = Ingredients::create([
             "ingredient" => $data->ingredient,
             "menu_item_id" => $data->id,
             "quantity" => $data->quantity
         ]);
 
-        if (!$ingredients) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao inserir o ingredient"], 200);
+        if (!$ingredients) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao inserir o ingredient"], 500);
 
         return response()->json(["title" => "Sucesso", "message" => "Ingrediente inserido com sucesso"], 200);
     }
@@ -257,13 +300,20 @@ class MenuController extends Controller
      */
     function update_ingredients(Request $data)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }
+
+        if (AppHelper::hasEmpty([$data->ingredient, $data->quantity])) return response()->json(["title" => "Erro", "message" => "Preencha todos os campos"], 400);
+
         $ingredients = Ingredients::whereId($data->ingid)->update([
             "ingredient" => $data->ingredient,
             "menu_item_id" => $data->id,
             "quantity" => $data->quantity
         ]);
 
-        if (!$ingredients) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao editar o ingredient"], 200);
+        if (!$ingredients) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao editar o ingredient"], 500);
 
         return response()->json(["title" => "Sucesso", "message" => "Ingrediente atualizado com sucesso"], 200);
     }
@@ -275,9 +325,14 @@ class MenuController extends Controller
      */
     function delete_ingredients(Request $id)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }
+
         $delete = Ingredients::where("id", $id->id)->delete();
 
-        if (!$delete) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao remover o ingrediente"], 200);
+        if (!$delete) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao remover o ingrediente"], 500);
 
         return response()->json(["title" => "Sucesso", "message" => "Ingrediente removido com sucesso"], 200);
     }
@@ -322,7 +377,7 @@ class MenuController extends Controller
                 "id_restaurant" => $restaurant_id
             ]);
 
-            if (!$insertTag) return response()->json(["title" => "Erro", "message" => "Ocorreu um Erro"], 200);
+            if (!$insertTag) return response()->json(["title" => "Erro", "message" => "Ocorreu um Erro"], 500);
         }
 
         foreach ($inputTags as $tag) {
@@ -335,6 +390,6 @@ class MenuController extends Controller
         }
 
 
-        if (!$connect_tags) return response()->json(["title" => "Erro", "message" => "Ocorreu um Erro"], 200);
+        if (!$connect_tags) return response()->json(["title" => "Erro", "message" => "Ocorreu um Erro"], 500);
     }
 }

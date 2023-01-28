@@ -73,7 +73,7 @@
                     @endforeach
                 </div>
             </div>
-        </div>
+        </div>        
         <script>
             function redirect(url) {
                 window.location.replace(url);
@@ -107,7 +107,7 @@
                 map = ["name", "description"]
                 invalid = animateErr(map);
 
-                if (invalid) return;
+                // if (invalid) return;
 
                 if(!$("#imageUrl").val() && $("#hasFile").val()==0) {
                     errorToast("Erro", "Insira um logo");
@@ -125,11 +125,9 @@
                         'imageFile': imgFile != null ? imgFile : $("#hasFile").val()
                     },
                 }).done((res) => {
-                    if(res.title == "Erro") {
-                        errorToast(res.title, res.message);
-                    } else {
-                        successToast(res.title, res.message);
-                    }
+                    successToast(res.title, res.message);
+                }).fail((err)=>{
+                    errorToast(err.responseJSON.title, err.responseJSON.message)
                 })
             })
 

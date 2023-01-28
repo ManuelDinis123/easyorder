@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Restaurants;
+use App\Models\Types;
 use App\Models\Users;
 use App\Models\UserAuth;
 use App\Models\UserRestaurant;
+use App\Models\UsersTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
-{        
+{
 
     /**
      * Get the Email and Password and verify them
@@ -21,43 +23,43 @@ class AuthController extends Controller
     function auth(Request $request)
     {
 
-        $err = ['status'=> "Error", "message" => "As suas credenciais de login estão incorretas."];
+        $err = ['status' => "Error", "message" => "As suas credenciais de login estão incorretas."];
 
-        if(!filter_var($request->email, FILTER_VALIDATE_EMAIL)){
+        if (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
             $err["message"] = "Insira um email valido";
             return response()->json($err, 200);
         }
 
-        $user = Users::where("email", $request->email)->get() ?? null;                
+        $user = Users::where("email", $request->email)->get() ?? null;
 
         if (!sizeof($user)) {
             return response()->json($err, 200);
         }
-        
+
         $user = $user->first(); // Gets the first object so that the properties can be accessed
-        
+
         $auth = UserAuth::where("user_id", $user->id)->get();
 
         $auth = $auth->first();
-                
-        if(!password_verify($request->password, $auth->password)){
+
+        if (!password_verify($request->password, $auth->password)) {
             return response()->json($err, 200);
         }
 
         // All data to be stored in session
         $session_data = [
             'id' => $user->id,
-            'firstName'=> $user->first_name,
+            'firstName' => $user->first_name,
             'lastName' => $user->last_name,
             'birthdate' => $user->birthdate,
             'email' => $user->email,
             'isProfessional' => $user->isProfessional,
             'pfp' => $user->pfp
-        ];         
+        ];
 
         session(['authenticated' => true, "user" => $session_data]);
 
-        if($user->isProfessional){
+        if ($user->isProfessional) {
             $restaurantid = UserRestaurant::where("user_id", $user->id)->get()->first();
             $restaurant = Restaurants::where("id", $restaurantid->restaurant_id)->get()->first();
             session(["restaurant" => [
@@ -65,9 +67,18 @@ class AuthController extends Controller
                 "name" => $restaurant->name,
                 "isPublic" => $restaurant->isPublic
             ]]);
+
+            // get type to put in session
+            $typeId = UsersTypes::where('user_id', $user->id)->get()->first();
+            $typeInfo = Types::whereId($typeId->type_id)->get()->first();
+
+            session(["type" => [
+                "id" => $typeInfo->id,
+                "label" => $typeInfo->label,
+            ]]);
         }
 
-        $return = ['status'=> "success", "isProfessional" => $user->isProfessional];
+        $return = ['status' => "success", "isProfessional" => $user->isProfessional];
 
         return response()->json($return, 200);
     }
@@ -78,7 +89,8 @@ class AuthController extends Controller
      * 
      * @return View
      */
-    function createAccount() {
+    function createAccount()
+    {
         return view(session()->has("authenticated") ? 'frontend/home' : 'frontend/createacc');
     }
 
@@ -87,17 +99,18 @@ class AuthController extends Controller
      * 
      * @return Bool
      */
-    function create(Request $user_data) {        
+    function create(Request $user_data)
+    {
         // Check if email is valid
-        if(!filter_var($user_data->email, FILTER_VALIDATE_EMAIL)){
-            return response()->json(["title"=>"Erro", "message"=>"Email invalido!", "input"=>"email"], 200);
+        if (!filter_var($user_data->email, FILTER_VALIDATE_EMAIL)) {
+            return response()->json(["title" => "Erro", "message" => "Email invalido!", "input" => "email"], 200);
         }
 
         // Check if email already exists
-        $exists = Users::where("email", $user_data->email)->get() ?? null;        
+        $exists = Users::where("email", $user_data->email)->get() ?? null;
 
-        if($exists->first()){
-            return response()->json(["title"=>"Erro", "message"=>"Este email já esta em uso!", "input"=>"email"], 200);
+        if ($exists->first()) {
+            return response()->json(["title" => "Erro", "message" => "Este email já esta em uso!", "input" => "email"], 200);
         }
 
         // format date
@@ -118,15 +131,14 @@ class AuthController extends Controller
             "password" => password_hash($user_data->password, PASSWORD_DEFAULT)
         ]);
 
-        return response()->json(["title"=>"Success", "redirect"=>"/"], 200);
-
+        return response()->json(["title" => "Success", "redirect" => "/"], 200);
     }
 
 
-    function logout() {
+    function logout()
+    {
         session()->flush();
 
         return response("/", 200);
     }
-    
 }
