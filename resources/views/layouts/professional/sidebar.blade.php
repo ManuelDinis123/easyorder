@@ -84,24 +84,24 @@
                     </a>
                     <a href="/professional/encomendas"
                         class="nav_link {{ $file == 'orders' ? 'active' : '' }} 
-                        {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_orders') ? 'visually-hidden' : '') : '') : '' }}">
+                        {{ (!session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_orders') ? 'visually-hidden' : '') : '') : '') }}">
                         <i class="fa-solid fa-ballot-check nav_icon"></i>
                         <span class="nav_name">Encomendas</span>
                     </a>
                     <a href="/professional/ementa"
                         class="nav_link {{ $file == 'menu' ? 'active' : '' }}
-                        {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_menu') ? 'visually-hidden' : '') : '') : '' }}">
+                        {{ (!session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_menu') ? 'visually-hidden' : '') : '') : '') }}">
                         <i class="fa-solid fa-burger-cheese"></i>
                         <span class="nav_name">Ementa</span>
                     </a>
                     <a href="/professional/stats"
                         class="nav_link {{ $file == 'stats' ? 'active' : '' }}
-                        {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_stats') ? 'visually-hidden' : '') : '') : '' }}">
+                        {{ (!session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_stats') ? 'visually-hidden' : '') : '') : '') }}">
                         <i class="fa-solid fa-chart-line-up nav_icon"></i>
                         <span class="nav_name">Estatísticas</span>
                     </a>
                     <div id="dp"
-                        class="dropdown {{ !session()->get('type.owner') ? (!session()->get('type.owner') ? 'visually-hidden' : '') : '' }}">
+                        class="dropdown {{ (!session()->get('type.owner') ? (!session()->get('type.admin') ? 'visually-hidden' : '') : '') }}">
                         <a href="#" class="nav_drop hToggle" data-bs-toggle="dropdown" id="sidebarDropDown">
                             <i class="fa-sharp fa-solid fa-toolbox nav_icon"></i>
                             <span class="nav_name dropdown-toggle">Administração</span>
