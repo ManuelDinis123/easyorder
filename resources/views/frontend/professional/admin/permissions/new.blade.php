@@ -47,22 +47,55 @@
 
 <script>
     $(document).ready(() => {
-        $("#create").on('click', () => {
-            var map = [
-                "view_orders",
-                "write_orders",
-                "view_menu",
-                "write_menu",
-                "view_stats",
-                "invite_users",
-                "ban_users",
-                "admin",
-            ]
+        // which checkboxes were checked by user checking the admin so that they can be unchecked when unchecking the admin checkbox
+        let toUncheck = [];
 
-            var permissions = {};
-            $.each(map, (key, val) => {
-                permissions[val] = $("#" + val).is(":checked");
+        const map = [
+            "view_orders",
+            "write_orders",
+            "view_menu",
+            "write_menu",
+            "view_stats",
+            "invite_users",
+            "ban_users",
+            "admin",
+        ]
+
+        // To iterate through the checkboxes and either see if they are checked or check/uncheck them
+        function iterateBoxes(get, toCheck = true) {
+            if (get) var permissions = {};
+            $.each((toCheck ? map : toUncheck), (key, val) => {
+                if (get) {
+                    permissions[val] = $("#" + val).is(":checked");
+                    return true;
+                }
+                if (!toCheck) {
+                    $("#" + val).prop("checked", false)
+                    toUncheck = [];
+                } else {
+                    if (!$("#" + val).is(":checked")) {
+                        $("#" + val).prop("checked", true)
+                        toUncheck[toUncheck.length] = val;
+                    };
+                }
             })
+            if (get) return permissions;
+        }
+
+        $("#admin").on('click', () => {
+            console.log(toUncheck)
+            if (!$("#admin").is(":checked")) {
+                iterateBoxes(false, false);
+                return;
+            }
+
+            $.each(map, (key, val) => {
+                iterateBoxes(false);
+            });
+        })
+
+        $("#create").on('click', () => {
+            var permissions = iterateBoxes(true);
 
             hasEmpty = animateErr(["name"]);
             if (hasEmpty) return;

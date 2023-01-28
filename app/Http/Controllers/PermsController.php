@@ -22,8 +22,8 @@ class PermsController extends Controller
     function new()
     {
         if (!AppHelper::checkAuth()) return redirect("/no-access");
-        if (!AppHelper::checkUserType(session()->get("type.id"), 'owner')) {
-            if (!AppHelper::checkUserType(session()->get("type.id"), 'admin')) return redirect("/professional");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            return redirect("/professional");
         }
 
         return view("frontend/professional/admin/permissions/new");
