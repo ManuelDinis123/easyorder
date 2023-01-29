@@ -20,6 +20,16 @@
                 </table>
             </div>
         </div>
+        <span class="btn-container mt-3">
+            <button class="btn btn-primary button-invite">Convidar Utilizadores</button>
+            <button class="btn btn-outline-dark">Ver Pendentes</button>
+        </span>
+            {{-- <div class="col-10">
+                <button class="btn btn-primary button-invite">Convidar Utilizadores</button>
+            </div>
+            <div class="col-2">
+                <button class="btn btn-warning">Ver Pendentes</button>
+            </div> --}}
     </div>
 @stop
 
@@ -87,7 +97,8 @@
                     className: 'mid',
                     render: function(data, type, row, meta) {
                         return "<div class=\"form-check form-switch\">\
-                            <input class=\"form-check-input\" type=\"checkbox\" role=\"switch\" id=\"flexSwitchCheckChecked\" " +
+                            <input class=\"form-check-input\" type=\"checkbox\" role=\"switch\" id=\"check" + row[
+                                'id'] + "\" " +
                             (data ? "checked" : "") + " " + (row['id'] ==
                                 {{ session()->get('user.id') }} ? 'disabled' : '') + ">\
                         </div>"

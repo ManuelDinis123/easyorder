@@ -1,4 +1,4 @@
-.table-card{
+.table-card {
     background-color: white;
     box-shadow: 0px 4px 8px 1px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
@@ -6,14 +6,14 @@
 
 .t-head {
     background-color: #1c46b2;
-    color: white;    
+    color: white;
 }
 
-.t-point1{
+.t-point1 {
     border-radius: 15px 0 0 0;
 }
 
-.t-point2{
+.t-point2 {
     border-radius: 0 15px 0 0;
 }
 
@@ -24,7 +24,6 @@
 .dataTables_info {
     display: none;
 }
-
 
 .dataTables_length {
     display: none;
@@ -41,7 +40,23 @@
     vertical-align: middle;
 }
 
-.t-contain{
+.t-contain {
     display: flex;
     justify-content: center;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.button-invite {
+    width: 74%;
+    margin-right: 1%;
+}
+
+.btn-container{
+    display: flex;
+    justify-content: center;
+    padding: 0px 90px 0px 90px;
 }
