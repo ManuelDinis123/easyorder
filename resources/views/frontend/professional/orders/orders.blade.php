@@ -19,30 +19,30 @@
         <div id="ongoing" class="orders-container">
             <table class="table table-bordered mt-3 orders-table" id="orders">
                 <thead class="orders-table-header">
-                    <th>Cliente</th>
+                    <th class="t-point1">Cliente</th>
                     <th>Data de Entrega</th>
                     <th>Progresso</th>
-                    <th></th>
+                    <th class="t-point2"></th>
                 </thead>
             </table>
         </div>
         <div class="visually-hidden orders-container" id="closed">
             <table class="table table-bordered mt-3 orders-table" id="orders_closed">
                 <thead class="orders-table-header">
-                    <th>Cliente</th>
+                    <th class="t-point1">Cliente</th>
                     <th>Data de Entrega</th>
                     <th>Progresso</th>
-                    <th></th>
+                    <th class="t-point2"></th>
                 </thead>
             </table>
         </div>
         <div class="visually-hidden orders-container" id="cancelled">
             <table class="table table-bordered mt-3 orders-table" id="orders_cancelled">
                 <thead class="orders-table-header">
-                    <th>Cliente</th>
+                    <th class="t-point1">Cliente</th>
                     <th>Data de Entrega</th>
                     <th>Progresso</th>
-                    <th></th>
+                    <th class="t-point2"></th>
                 </thead>
             </table>
         </div>

@@ -80,6 +80,7 @@ Route::get('/professional/stats', [StatsController::class, 'index']);
 
 // User configs for the professional user account
 Route::get('/professional/admin/users', [UserConfigsController::class, 'index']);
+Route::post('/professional/admin/getallusers', [UserConfigsController::class, 'get_all'])->name("getallusers");
 
 // Permissions configs for the professional user account
 Route::get('/professional/admin/permissions', [PermsController::class, 'index']);
