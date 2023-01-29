@@ -56,6 +56,7 @@ class OrdersController extends Controller
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
         }
+        if(!$this->can_view_order($id->route('id'))) return redirect("/professional/encomendas");
 
         // Get data from the menu item
         $order_details = Orders::select(
@@ -125,7 +126,7 @@ class OrdersController extends Controller
         if (!AppHelper::checkAuth()) return redirect("/no-access");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_orders')) return response()->json(["status" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
-        }        
+        }
 
         // Update the order item
         $update = OrderItems::whereId($data->id)->update([
@@ -227,5 +228,13 @@ class OrdersController extends Controller
         $percentage = $done != 0 ? ($done / count($order_items)) * 100 : 0;
 
         return $percentage;
+    }
+
+    // Check if an order is from the restaurant that the user is associated with
+    function can_view_order($id)
+    {        
+        $order = Orders::whereId($id)->get()->first();
+        if (session()->get("restaurant.id") != $order->restaurant_id) return 0;
+        return 1;
     }
 }

@@ -40,6 +40,7 @@ class MenuController extends Controller
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
         }
+        if(!$this->is_item_of_restaurant($id->route('id'))) return redirect("/professional/ementa");
 
         // Get data from the menu item
         $item = MenuItems::where("id", $id->route('id'))->get()->first();
@@ -391,5 +392,13 @@ class MenuController extends Controller
 
 
         if (!$connect_tags) return response()->json(["title" => "Erro", "message" => "Ocorreu um Erro"], 500);
+    }
+
+    // Check if an item is from the restaurant that the user is associated with
+    function is_item_of_restaurant($item_id){
+        $menuid = MenuItems::whereId($item_id)->get()->first();
+        $menu = Menu::whereId($menuid->menu_id)->get()->first();
+        if(session()->get("restaurant.id") != $menu->restaurant_id) return 0;        
+        return 1;
     }
 }

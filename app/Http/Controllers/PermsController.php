@@ -42,6 +42,7 @@ class PermsController extends Controller
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             return redirect("/professional");
         }
+        if(!$this->can_view_type($id->id)) return redirect("/professional/admin/permissions");
 
 
         $type = Types::whereId($id->id)->get()->first();
@@ -168,5 +169,13 @@ class PermsController extends Controller
         if (!$remove) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a eliminar este tipo de user"]);
 
         return response()->json(["title" => "Sucesso", "message" => "Tipo de user eliminado com sucesso!"]);
+    }
+
+    // Check if a type is from the restaurant that the user is associated with
+    function can_view_type($id)
+    {
+        $type = Types::whereId($id)->get()->first();
+        if (session()->get("restaurant.id") != $type->restaurant_id) return 0;
+        return 1;
     }
 }
