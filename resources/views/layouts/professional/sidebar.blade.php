@@ -82,26 +82,26 @@
                         <i class="fa-solid fa-house nav_icon"></i>
                         <span class="nav_name">Dashboard</span>
                     </a>
-                    <a href="/professional/encomendas"
+                    <a id="view_orders_side" href="/professional/encomendas"
                         class="nav_link {{ $file == 'orders' ? 'active' : '' }} 
-                        {{ (!session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_orders') ? 'visually-hidden' : '') : '') : '') }}">
+                        {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_orders') ? 'visually-hidden' : '') : '') : '' }}">
                         <i class="fa-solid fa-ballot-check nav_icon"></i>
                         <span class="nav_name">Encomendas</span>
                     </a>
-                    <a href="/professional/ementa"
+                    <a id="view_menu_side" href="/professional/ementa"
                         class="nav_link {{ $file == 'menu' ? 'active' : '' }}
-                        {{ (!session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_menu') ? 'visually-hidden' : '') : '') : '') }}">
+                        {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_menu') ? 'visually-hidden' : '') : '') : '' }}">
                         <i class="fa-solid fa-burger-cheese"></i>
                         <span class="nav_name">Ementa</span>
                     </a>
-                    <a href="/professional/stats"
+                    <a id="view_stats_side" href="/professional/stats"
                         class="nav_link {{ $file == 'stats' ? 'active' : '' }}
-                        {{ (!session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_stats') ? 'visually-hidden' : '') : '') : '') }}">
+                        {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_stats') ? 'visually-hidden' : '') : '') : '' }}">
                         <i class="fa-solid fa-chart-line-up nav_icon"></i>
                         <span class="nav_name">Estatísticas</span>
                     </a>
                     <div id="dp"
-                        class="dropdown {{ (!session()->get('type.owner') ? (!session()->get('type.admin') ? 'visually-hidden' : '') : '') }}">
+                        class="dropdown {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? 'visually-hidden' : '') : '' }}">
                         <a href="#" class="nav_drop hToggle" data-bs-toggle="dropdown" id="sidebarDropDown">
                             <i class="fa-sharp fa-solid fa-toolbox nav_icon"></i>
                             <span class="nav_name dropdown-toggle">Administração</span>
@@ -220,6 +220,40 @@
                         $("#" + val + "Dp").addClass('hide-dpDown');
                     }
                 })
+            })
+
+            $.ajax({
+                method: 'post',
+                url: '/update_session',
+                data: {
+                    "_token": "{{ csrf_token() }}"
+                }
+            }).done((res) => {
+                if (res == 0) return;
+                $.each(res.newSession, (key, val) => {
+                    if (val == 0) {
+                        $("#" + key + "_side").addClass('visually-hidden');
+                    } else {
+                        $("#" + key + "_side").removeClass('visually-hidden');
+                    }
+                })
+                if (res.newSession.admin == 0 && res.newSession.owner == 0) {
+                    $("#dp").addClass('visually-hidden');
+                } else {
+                    $("#view_menu_side").removeClass('visually-hidden');
+                    $("#view_orders_side").removeClass('visually-hidden');
+                    $("#view_stats_side").removeClass('visually-hidden');
+                    $("#dp").removeClass('visually-hidden');
+                }
+                setTimeout(() => {
+                    iziToast.warning({
+                        title: res.title,
+                        message: res.message,
+                        icon: "fa-solid fa-triangle-exclamation"
+                    });
+                }, 800);
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
             })
         });
     </script>

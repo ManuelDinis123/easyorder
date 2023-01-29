@@ -83,6 +83,11 @@ class AuthController extends Controller
             ]]);
         }
 
+        // Sets logged_in to 
+        $logged = Users::whereId(session()->get('user.id'))->update([
+            "logged_in" => 1
+        ]);
+
         $return = ['status' => "success", "isProfessional" => $user->isProfessional];
 
         return response()->json($return, 200);
@@ -145,8 +150,58 @@ class AuthController extends Controller
      */
     function logout()
     {
+        $logged = Users::whereId(session()->get('user.id'))->update([
+            "logged_in" => 0
+        ]);
+
         session()->flush();
 
         return response("/", 200);
+    }
+
+    /**
+     * Updates user session permissions if update_session is set to true
+     * 
+     * @return response
+     */
+    function update_session()
+    {
+        $hasToUpdate = Users::select("update_session")->whereId(session()->get('user.id'))->get()->first();
+        if ($hasToUpdate->update_session) {
+            // Get new permissions
+            $type_id = UsersTypes::where('user_id', session()->get('user.id'))->get()->first();
+            $type_permissions = Types::select(
+                "id",
+                "label",
+                "view_orders",
+                "view_menu",
+                "view_stats",
+                "admin",
+                "owner",
+            )->whereId($type_id->type_id)->get()->first();
+            session(["type" => [
+                "id" => $type_permissions->id,
+                "label" => $type_permissions->label,
+                "view_orders" => $type_permissions->view_orders,
+                "view_menu" => $type_permissions->view_menu,
+                "view_stats" => $type_permissions->view_stats,
+                "admin" => $type_permissions->admin,
+                "owner" => $type_permissions->owner,
+            ]]);
+            // Set update_session back to 0
+            Users::whereId(session()->get('user.id'))->update([
+                "update_session" => 0
+            ]);
+
+            return response()->json(["title" => "Atenção!", "message" => "As suas permissões foram alteradas", "newSession"=>[
+                "view_menu" => session()->get("type.view_menu"),
+                "view_orders" => session()->get("type.view_orders"),
+                "view_stats" => session()->get("type.view_stats"),
+                "admin" => session()->get("type.admin"),
+                "owner" => session()->get("type.owner"),
+                ]], 200);
+        } else {
+            return response(0, 200);
+        }
     }
 }

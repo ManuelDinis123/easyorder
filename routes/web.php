@@ -14,12 +14,12 @@ use App\Http\Controllers\StatsController;
 use App\Http\Controllers\UserConfigsController;
 
 // Root of the project, redirects to login or home depending on the authentication state of the user
-Route::get('/', function () {    
+Route::get('/', function () {
     return view(session()->has("authenticated") ? 'frontend/home' : 'frontend/login');
 });
 
 // Home page of the normal user accounts
-Route::get('/home', function () {    
+Route::get('/home', function () {
     if (!AppHelper::hasLogin()) return redirect("/no-access");
     return view('frontend/home');
 });
@@ -49,6 +49,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name("logout");
 // Dashboard for the professional user accounts
 Route::get('/professional/dashboard', [DashboardController::class, 'index']);
 Route::get('/professional', [DashboardController::class, 'index']);
+
+Route::post('/update_session', [AuthController::class, 'update_session'])->name("update_session");
 
 // Food Menu for the professional user accounts
 Route::get('/professional/ementa', [MenuController::class, 'index']);

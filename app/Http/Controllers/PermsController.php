@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
 use App\Models\Types;
+use App\Models\Users;
+use App\Models\UsersTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -127,18 +129,26 @@ class PermsController extends Controller
             "edited_at" => date("Y-m-d H:i:s"),
         ];
 
-        
         // Adds each permission to the array
         foreach ($data->permissions as $key => $option) {
             $opt = [$key => ($option == 'true' ? 1 : 0)];
             $newType = array_merge($newType, $opt);
-        }        
+        }
 
         $edit = Types::whereId($data->id)->update($newType);
 
-        if (!$edit) return response()->json(["title" => "Erro", "message" => "Tipo de user atualizado com sucesso!"]);
+        /* Sets update_session to true to all users with this type so that if they are logged in
+            while their type was updated it updates their session */
+        $users_ids = UsersTypes::where('type_id', $data->id)->get();
+        foreach ($users_ids as $ids) {
+            Users::whereId($ids->user_id)->update([
+                "update_session" => 1
+            ]);
+        }
 
-        return response()->json(["title" => "Sucesso", "message" => "Tipo de user atualizado com sucesso!"]);
+        if (!$edit) return response()->json(["title" => "Erro", "message" => "Erro a atualizar o tipo de user!"], 500);
+
+        return response()->json(["title" => "Sucesso", "message" => "Tipo de user atualizado com sucesso!"], 200);
     }
 
 

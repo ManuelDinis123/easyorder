@@ -112,11 +112,9 @@
                     "permissions": permissions
                 }
             }).done((res) => {
-                if (res.title == "Erro") {
-                    errorToast(res.title, res.message);
-                } else {
-                    successToast(res.title, res.message);
-                }
+                successToast(res.title, res.message);
+            }).fail((err)=>{
+                errorToast(err.responseJSON.title, err.responseJSON.message);
             })
         })
     });
