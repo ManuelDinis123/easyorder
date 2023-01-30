@@ -23,7 +23,7 @@ class RestaurantController extends Controller
     function index()
     {
         // only users that aren't already with professional accounts can access this page        
-        if (session()->get("user.isProfessional") || !session()->get("user.authenticated")) return redirect("/no-access");
+        // if (session()->get("user.isProfessional") || !session()->get("user.authenticated")) return redirect("/no-access");
 
         return view("frontend/create_restaurant");
     }
@@ -124,6 +124,20 @@ class RestaurantController extends Controller
 
         if (!$connectType) return response()->json(["title" => 'Erro', "message" => "Ocorreu um erro a fazer-lhe o dono do restaurante!"], 200);
 
+        // get type to put in session
+        $typeId = UsersTypes::where('user_id', session()->get('user.id'))->get()->first();
+        $typeInfo = Types::whereId($typeId->type_id)->get()->first();
+
+        session(["type" => [
+            "id" => $typeInfo->id,
+            "label" => $typeInfo->label,
+            "view_orders" => $typeInfo->view_orders,
+            "view_menu" => $typeInfo->view_menu,
+            "view_stats" => $typeInfo->view_stats,
+            "admin" => $typeInfo->admin,
+            "owner" => $typeInfo->owner,
+        ]]);
+
         return response()->json(["title" => "Sucesso", "message" => "Restaurante criado com sucesso!"], 200);
     }
 
@@ -133,7 +147,7 @@ class RestaurantController extends Controller
      * @return response
      */
     function get()
-    {        
+    {
         // get general restaurant info
         $restaurant = Restaurants::select(
             "name",
