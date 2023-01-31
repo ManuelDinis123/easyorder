@@ -3,6 +3,23 @@
 
 <link rel="stylesheet" href="{{ asset('css/admin_users.css') }}">
 
+@component('components.modal_builder', [
+    'modal_id' => 'inviteModal',
+    'hasHeader' => true,
+    'rawHeader' =>
+        '<h5 class="modal-title" id="addModalLabel"><i class="fa-regular fa-envelope text-icon"></i> Convidar Utilizadores</h5>',
+    'hasBody' => true,
+    'inputs' => [
+        ['label' => 'Email:', 'type' => 'text', 'id' => 'invite_email', 'placeholder' => 'Email de quem quer convidar'],
+    ],
+    'hasFooter' => true,
+    'buttons' => [
+        ['label' => 'Cancelar', 'id' => 'closeMdl', 'class' => 'btn btn-danger', 'dismiss' => true],
+        ['label' => 'Confirmar', 'id' => 'confirm', 'class' => 'btn btn-primary'],
+    ],
+])
+@endcomponent
+
 @section('content')
     <div class="container">
         <div class="t-contain">
@@ -21,14 +38,34 @@
             </div>
         </div>
         <span class="btn-container mt-3">
-            <button class="btn btn-primary button-invite">Convidar Utilizadores</button>
-            <button class="btn btn-outline-dark">Ver Pendentes</button>
+            <button class="btn btn-primary button-invite" data-bs-toggle="modal" data-bs-target="#inviteModal">Convidar
+                Utilizadores</button>
+            <button class="btn btn-outline-dark" onclick="window.location.href = 'users/pending'">Ver Pendentes</button>
         </span>
     </div>
 @stop
 
 <script>
     $(document).ready(() => {
+        $("#confirm").on('click', () => {
+            hasEmpty = animateErr(["invite_email"]);
+            if (hasEmpty) return;
+
+            $.ajax({
+                method: 'post',
+                url: '/professional/admin/invite_users',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "email": $("#invite_email").val(),
+                }
+            }).done((res) => {
+                successToast(res.title, res.message);
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
+            })
+        })
+
+
         $("#users").dataTable({
 
             "ordering": false,

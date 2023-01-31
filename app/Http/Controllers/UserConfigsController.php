@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Log;
 
 class UserConfigsController extends Controller
 {
-    function index() {
-        if(!AppHelper::checkAuth()) return redirect("/no-access"); 
+    function index()
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             return redirect("/professional");
         }
-        
+
         return view("frontend/professional/admin/users/users");
     }
 
@@ -23,7 +24,8 @@ class UserConfigsController extends Controller
      * 
      * @return response
      */
-    function get_all(){
+    function get_all()
+    {
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             return redirect("/professional");
         }
@@ -37,10 +39,42 @@ class UserConfigsController extends Controller
             "users.active",
             "users.pfp",
         )
-        ->join('users', 'users.id', '=', 'user_restaurant.user_id')
-        ->where('restaurant_id', session()->get('restaurant.id'))
-        ->get();
+            ->join('users', 'users.id', '=', 'user_restaurant.user_id')
+            ->where('restaurant_id', session()->get('restaurant.id'))
+            ->get();
 
         return response()->json($users, 200);
+    }
+
+    /**
+     * Pending page
+     * 
+     * @return view
+     */
+    function pending_page()
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            return redirect("/professional");
+        }
+
+        return view("frontend/professional/admin/users/pending");
+    }
+
+    /**
+     * Invite users
+     * 
+     * @return response
+     */
+    function invite(Request $email)
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            return redirect("/professional");
+        }        
+
+        if(!filter_var($email->email, FILTER_VALIDATE_EMAIL)) return response()->json(["title"=>"Erro", "message"=>"Email invalido"], 400);
+
+        
     }
 }

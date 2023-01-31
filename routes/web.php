@@ -80,7 +80,9 @@ Route::get('/professional/stats', [StatsController::class, 'index']);
 
 // User configs for the professional user account
 Route::get('/professional/admin/users', [UserConfigsController::class, 'index']);
+Route::get('/professional/admin/users/pending', [UserConfigsController::class, 'pending_page']);
 Route::post('/professional/admin/getallusers', [UserConfigsController::class, 'get_all'])->name("getallusers");
+Route::post('/professional/admin/invite_users', [UserConfigsController::class, 'invite'])->name("invite_users");
 
 // Permissions configs for the professional user account
 Route::get('/professional/admin/permissions', [PermsController::class, 'index']);
