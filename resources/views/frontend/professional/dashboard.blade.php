@@ -143,6 +143,7 @@
                     $("#name").val(res.res_info.name);
                     $("#description").val(res.res_info.description);
                     $("#imageUrl").val(res.res_info.logo_url);
+                    console.log(res.res_info);
                     if (res.res_info.logo_url) {
                         $("#showLogo").attr("src", res.res_info.logo_url);
                     } else {

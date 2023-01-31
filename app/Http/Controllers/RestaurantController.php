@@ -22,8 +22,8 @@ class RestaurantController extends Controller
 {
     function index()
     {
-        // only users that aren't already with professional accounts can access this page        
-        // if (session()->get("user.isProfessional") || !session()->get("user.authenticated")) return redirect("/no-access");
+        // only users that aren't already with professional accounts can access this page
+        if (session()->get("user.isProfessional")) return redirect("/");
 
         return view("frontend/create_restaurant");
     }
@@ -44,7 +44,7 @@ class RestaurantController extends Controller
 
         // Save image file
         if ($request->values['file'] != null) {
-            $this->saveImage($request->values['file']);
+           $imgName = $this->saveImage($request->values['file']);
         }
 
         // Create the restaurant
