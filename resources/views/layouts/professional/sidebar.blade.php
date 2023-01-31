@@ -149,14 +149,12 @@
                     '_token': "{{ csrf_token() }}"
                 }
             }).done((res) => {
-                if (res.title == "Erro") {
-                    errorToast(res.title, res.message);
-                } else {
-                    successToast(res.title, res.message);
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-                }
+                successToast(res.title, res.message);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
             })
         }
 

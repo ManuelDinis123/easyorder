@@ -239,7 +239,7 @@ class RestaurantController extends Controller
 
         if (!$restaurant) return response()->json(["title" => "Erro", "message" => "Erro ao publicar o restaurante"], 500);
 
-        return response()->json(["title" => "Sucesso", "message" => "Restaurante publicado com sucesso!"], 500);
+        return response()->json(["title" => "Sucesso", "message" => "Restaurante publicado com sucesso!"], 200);
     }
 
     // Save image file

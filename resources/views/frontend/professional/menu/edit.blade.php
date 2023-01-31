@@ -297,9 +297,7 @@
 
         $(".img_card").css("background-image", "linear-gradient(180deg, rgba(0, 0, 0, 0) 47.4%, #000000 100%), url(\"" +
             $("#imageurl").val() + "\")");
-
-
-        console.log($("#imageurl").val())
+    
         if ($("#imageurl").val() === "") {
             $("#item-card").addClass("visually-hidden");
             $("#card-info").removeClass("visually-hidden");
