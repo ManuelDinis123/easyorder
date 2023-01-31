@@ -299,6 +299,7 @@
             $("#imageurl").val() + "\")");
 
 
+        console.log($("#imageurl").val())
         if ($("#imageurl").val() === "") {
             $("#item-card").addClass("visually-hidden");
             $("#card-info").removeClass("visually-hidden");
@@ -306,7 +307,7 @@
         } else {
             $("#card-info").addClass("visually-hidden");
             $("#item-card").removeClass("visually-hidden");
-            if ("{{ $imageurl }}" == '') $("#item-card").addClass("animate__animated animate__bounceIn");
+            $("#item-card").addClass("animate__animated animate__bounceIn");
         }
     }
 
