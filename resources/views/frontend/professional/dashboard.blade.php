@@ -2,7 +2,6 @@
 @extends('layouts.professional.sidebar', ['file' => 'dashboard'])
 
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-
 @section('content')
     @if (session()->get('restaurant.isPublic'))
         <p>this is the dashboard page of the professional accounts</p>

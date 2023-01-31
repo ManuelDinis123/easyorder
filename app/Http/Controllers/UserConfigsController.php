@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Mail\InviteMail;
 use App\Models\UserRestaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class UserConfigsController extends Controller
 {
@@ -71,10 +73,13 @@ class UserConfigsController extends Controller
         if (!AppHelper::checkAuth()) return redirect("/no-access");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             return redirect("/professional");
-        }        
+        }
 
-        if(!filter_var($email->email, FILTER_VALIDATE_EMAIL)) return response()->json(["title"=>"Erro", "message"=>"Email invalido"], 400);
+        if (!filter_var($email->email, FILTER_VALIDATE_EMAIL)) return response()->json(["title" => "Erro", "message" => "Email invalido"], 400);
 
-        
+        $sendToEmail = strtolower($email->email);
+        Mail::to($sendToEmail)->send(new InviteMail());
+
+        return response()->json(["title" => "Sucesso", "message" => "Convite enviado"], 200);
     }
 }

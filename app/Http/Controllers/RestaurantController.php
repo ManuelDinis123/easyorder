@@ -60,6 +60,8 @@ class RestaurantController extends Controller
         session(["restaurant" => [
             "id" => $new->id,
             "name" => $new->name,
+            "logo_name" => $new->logo_name,
+            "logo_url" => $new->logo_url,
             "isPublic" => $new->isPublic
         ]]);
 
@@ -204,6 +206,8 @@ class RestaurantController extends Controller
         session(["restaurant" => [
             "id" => $updatedValues->id,
             "name" => $updatedValues->name,
+            "logo_name" => $updatedValues->logo_name,
+            "logo_url" => $updatedValues->logo_url,
             "isPublic" => 0
         ]]);
 

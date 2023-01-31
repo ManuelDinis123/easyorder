@@ -65,6 +65,8 @@ class AuthController extends Controller
             session(["restaurant" => [
                 "id" => $restaurant->id,
                 "name" => $restaurant->name,
+                "logo_name" => $restaurant->logo_name,
+                "logo_url" => $restaurant->logo_url,
                 "isPublic" => $restaurant->isPublic
             ]]);
 
