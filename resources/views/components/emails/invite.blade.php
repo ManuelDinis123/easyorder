@@ -1,4 +1,4 @@
-<div style="background-color: white; padding: 25px; border-style: solid; border-color: rgb(138, 138, 138); border-radius:20px; width: 380px; margin-left:25%">
+<div style="background-color: white; padding: 25px; border-style: solid; border-color: rgb(138, 138, 138); border-radius:20px; width: 380px;">
     <div class="header">
         <div class="top">
             <h1 style="font-weight:800; margin-left:48px; color:black; font-family: 'Arial'">Convite para Gestão:</h1>            
@@ -13,7 +13,7 @@
             {{ session()->get('restaurant.name') }}</span><br />
         <button
             style="background-color: #1C46B2; padding: 10px; border-radius:100px; margin-left:140px; margin-top: 15px; margin-bottom: 15px;"><a
-                style="color: white; text-decoration: none; font-family: 'Arial'" href="http://127.0.0.1:8000/register">Aceitar
+                style="color: white; text-decoration: none; font-family: 'Arial'" href="{{url("/invite/".$token)}}">Aceitar
                 Convite</a></button><br />
         <span style="color: rgb(24, 24, 24)">Convite enviado por:
             {{ session()->get('user.firstName') . ' ' . session()->get('user.lastName') }}</span><br>

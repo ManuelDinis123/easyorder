@@ -28,6 +28,9 @@ Route::get('/home', function () {
 Route::get('/register', [AuthController::class, 'createAccount']);
 Route::post('/createaccount', [AuthController::class, 'create'])->name("createaccount");
 
+// invite pages
+Route::get('/invite/{token}', [AuthController::class, 'invited']);
+
 // Page to show when user doesn't have permission to enter a page
 Route::get('/no-access', function () {
     return view('errors.404');

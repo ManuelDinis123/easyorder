@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
 use App\Mail\InviteMail;
+use App\Models\invite;
 use App\Models\UserRestaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UserConfigsController extends Controller
 {
@@ -77,8 +79,20 @@ class UserConfigsController extends Controller
 
         if (!filter_var($email->email, FILTER_VALIDATE_EMAIL)) return response()->json(["title" => "Erro", "message" => "Email invalido"], 400);
 
+        // Create a token and associate it to the email to send in url.
+        $token = Str::random(32, 'alpha_num');
+
+        $saveInvite = invite::create([
+            "token" => $token,
+            "email" => $email->email,
+            "restaurant_id" => session()->get('restaurant.id'),
+        ]);
+
+        if(!$saveInvite) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a criar o convite"], 500);
+
+        // Send the email
         $sendToEmail = strtolower($email->email);
-        Mail::to($sendToEmail)->send(new InviteMail());
+        Mail::to($sendToEmail)->send(new InviteMail($token));
 
         return response()->json(["title" => "Sucesso", "message" => "Convite enviado"], 200);
     }

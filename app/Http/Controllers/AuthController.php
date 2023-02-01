@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\invite;
 use App\Models\Restaurants;
 use App\Models\Types;
 use App\Models\Users;
@@ -195,15 +196,74 @@ class AuthController extends Controller
                 "update_session" => 0
             ]);
 
-            return response()->json(["title" => "Atenção!", "message" => "As suas permissões foram alteradas", "newSession"=>[
+            return response()->json(["title" => "Atenção!", "message" => "As suas permissões foram alteradas", "newSession" => [
                 "view_menu" => session()->get("type.view_menu"),
                 "view_orders" => session()->get("type.view_orders"),
                 "view_stats" => session()->get("type.view_stats"),
                 "admin" => session()->get("type.admin"),
                 "owner" => session()->get("type.owner"),
-                ]], 200);
+            ]], 200);
         } else {
             return response(0, 200);
         }
+    }
+
+    /**
+     * Page to redirect after user accepted invite
+     * 
+     * @return view
+     */
+    function invited(Request $token)
+    {
+        $fullData = [];
+
+        // Get info
+        $info = invite::where('token', $token->route('token'))
+            ->get()
+            ->first();
+
+        // Get restaurant info
+        $restaurant = Restaurants::select(
+            "id",
+            "name",
+            "logo_url",
+            "logo_name",
+        )->whereId($info->restaurant_id)
+            ->get()
+            ->first();
+
+        $fullData = array_merge($fullData, [
+            "email" => $info->email,
+            "r_id" => $restaurant->id,
+            "r_name" => $restaurant->name,
+            "logo_url" => $restaurant->logo_url,
+            "logo_name" => $restaurant->logo_name,
+        ]);
+
+        // Check if this email already has an account
+        $hasAccount = Users::where('email', $info->email)->get()->first();
+
+        if ($hasAccount) {
+            $fullData = array_merge($fullData, [
+                "userID" => $hasAccount->id,
+                "username" => $hasAccount->first_name . ' ' . $hasAccount->last_name,
+                "pfp" => $hasAccount->pfp
+            ]);
+
+            // Check if account is associated with any other restaurant
+            $hasRestaurant = UserRestaurant::where('user_id', $hasAccount->id)->get()->first();
+
+            if ($hasRestaurant) {
+                $fullData = array_merge($fullData, [
+                    "hasRestaurant" => true,
+                ]);
+
+                return view("frontend.invited.accepted")
+                ->with($fullData);
+            }
+        }
+
+        return view("frontend.invited.accepted")
+        ->with($fullData);
     }
 }
