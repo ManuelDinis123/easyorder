@@ -5,7 +5,7 @@
 @section('content')
     @if (session()->get('restaurant.isPublic'))
         <p>this is the dashboard page of the professional accounts</p>
-    @else
+    @elseif (session()->get('type.owner') == 1 || session()->get('type.admin') == 1)
         <div class="row">
             <div class="col-6">
                 <div class="general-set-up">
@@ -72,7 +72,7 @@
                     @endforeach
                 </div>
             </div>
-        </div>        
+        </div>
         <script>
             function redirect(url) {
                 window.location.replace(url);
@@ -108,7 +108,7 @@
 
                 // if (invalid) return;
 
-                if(!$("#imageUrl").val() && $("#hasFile").val()==0) {
+                if (!$("#imageUrl").val() && $("#hasFile").val() == 0) {
                     errorToast("Erro", "Insira um logo");
                     return;
                 }
@@ -125,7 +125,7 @@
                     },
                 }).done((res) => {
                     successToast(res.title, res.message);
-                }).fail((err)=>{
+                }).fail((err) => {
                     errorToast(err.responseJSON.title, err.responseJSON.message)
                 })
             })
@@ -157,5 +157,23 @@
                 })
             });
         </script>
+    @else
+        <div class="container">
+            <div class="center-container">
+                <div class="not-published-card">
+                    <div class="row g-0">
+                        <div class="col-1">
+                            <i class="fa-light fa-clock"></i>
+                        </div>
+                        <div class="col-10">
+                            <label>O Restaurante ainda não esta publicado</label><br />
+                            <span class="text-muted">Tera acesso a algumas informações sobre o restaurante quando o mesmo
+                                for
+                                publicado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
 @stop

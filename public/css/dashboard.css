@@ -34,3 +34,27 @@
 .status {
     color: #dc3545;
 }
+
+.center-container {
+    display: flex;
+    justify-content: center;
+}
+
+.not-published-card {
+    padding: 30px 35px;
+    background-color: white;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.452) !important;
+    border-radius: 15px;    
+}
+
+.not-published-card label {
+    font-weight: 600;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.not-published-card i {
+    vertical-align: middle;
+    font-size: 50px;
+    margin-top: 13px;
+}

@@ -128,7 +128,7 @@
         </nav>
     </div>
 
-    @if (!session()->get('restaurant.isPublic'))
+    @if (!session()->get('restaurant.isPublic') && (session()->get('type.owner') || session()->get('type.admin')))
         <button class="btn btn-primary publish-btn" onclick="publish()">Publicar Restaurante</button>
     @endif
 

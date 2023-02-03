@@ -35,6 +35,8 @@ class RestaurantController extends Controller
      */
     function create(Request $request)
     {
+        if (session()->get("user.isProfessional")) response()->json(["title" => 'Erro', "message" => "Já esta associado a outro restaurante"], 500);
+
         if (AppHelper::hasEmpty([$request->values['name'], isset($request->values['type']) ? $request->values['type'] : []]))
             return response()->json(["title" => 'Erro', "message" => "Preencha todos os campos obrigatorios"], 200);
 
@@ -177,6 +179,11 @@ class RestaurantController extends Controller
      */
     function saveInfo(Request $data)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }
+
         // if it's public already you can't do this again
         if (session()->get('isPublic') == 1) return response()->json(["title" => "Erro", "message" => "Restaurante ja é publico"], 400);
         // check if name or description are empty 
@@ -221,6 +228,11 @@ class RestaurantController extends Controller
      */
     function publish()
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }
+
         if (session()->get('isPublic') == 1) return response()->json(["title" => "Erro", "message" => "Restaurante ja é publico"], 400);
 
         // get num of items in the menu
