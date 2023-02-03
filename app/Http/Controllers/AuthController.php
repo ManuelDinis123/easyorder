@@ -234,6 +234,7 @@ class AuthController extends Controller
 
         $fullData = array_merge($fullData, [
             "email" => $info->email,
+            "token" => $info->token,
             "type" => $info->type,
             "r_id" => $restaurant->id,
             "r_name" => $restaurant->name,
@@ -327,6 +328,9 @@ class AuthController extends Controller
         } else {
             return response()->json(["title" => "Erro", "message" => "Ocorreu um erro"], 500);
         }
+
+        // Delete the invite
+        invite::where('token', $data->inv_uid)->delete();
 
         return response()->json(["title" => "Sucesso", "message" => "Conta criada com sucesso"], 200);
     }

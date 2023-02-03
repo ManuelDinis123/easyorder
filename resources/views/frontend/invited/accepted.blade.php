@@ -93,6 +93,7 @@
             data['type'] = "{{ $type }}"
             data['restaurant_id'] = "{{ $r_id }}";
             data['is_create'] = true;
+            data['inv_uid'] = "{{$token}}";
 
             $.ajax({
                 method: 'post',
