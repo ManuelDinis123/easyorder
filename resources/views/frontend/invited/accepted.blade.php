@@ -29,11 +29,13 @@
                 @if (isset($userID))
                     <div class="row g-0 mt-5 pb-5">
                         <div class="col-3">
-                            <img src="{{ asset('img/pfp/' . $pfp) }}" class="pfp">
+                            <img src="{{ asset('img/pfp/' . $pfp) }}" class="pfp mt-3">
                         </div>
                         <div class="col-9">
                             <label class="username">{{ $username }}</label><br />
-                            <button class="btn btn-primary mt-2">Entrar</button>
+                            <input type="password" class="form-control" placeholder="Insira a sua password"
+                                style="width: 70%" id="psw">
+                            <button class="btn btn-primary mt-2" id="enter_with_account">Entrar</button>
                         </div>
                     </div>
                 @else
@@ -84,6 +86,8 @@
             var map = ["first", "last", "db", "email", "password"];
             var hasEmpty = animateErr(map);
 
+            if (hasEmpty) return;
+
             var data = {};
             $.each(map, (key, id) => {
                 data[id] = $("#" + id).val();
@@ -93,12 +97,38 @@
             data['type'] = "{{ $type }}"
             data['restaurant_id'] = "{{ $r_id }}";
             data['is_create'] = true;
-            data['inv_uid'] = "{{$token}}";
+            data['inv_uid'] = "{{ $token }}";
 
             $.ajax({
                 method: 'post',
                 url: '/invite/register',
                 data: data
+            }).done((res) => {
+                successToast(res.title, res.message);
+                window.location.replace("/");
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
+            })
+        })
+
+        $("#enter_with_account").on('click', () => {
+            var map = ["psw"];
+            var hasEmpty = animateErr(map);
+
+            if (hasEmpty) return;
+
+            $.ajax({
+                method: 'post',
+                url: '/invite/register',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "userID": {{ $userID }},
+                    "password": $("#psw").val(),
+                    "has_account": true,
+                    'restaurant_id': "{{ $r_id }}",
+                    'type': "{{ $type }}",
+                    'inv_uid': "{{ $token }}"
+                }
             }).done((res) => {
                 successToast(res.title, res.message);
                 window.location.replace("/");

@@ -27,10 +27,12 @@ class UserConfigsController extends Controller
 
         $data = [];
         foreach ($types as $type) {
-            $data[] = [
-                "value" => $type->id,
-                "label" => $type->label,
-            ];
+            if($type->label != 'Owner'){
+                $data[] = [
+                    "value" => $type->id,
+                    "label" => $type->label,
+                ];
+            }
         }
 
         return view("frontend/professional/admin/users/users")->with(["types" => $data]);

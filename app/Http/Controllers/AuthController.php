@@ -325,6 +325,31 @@ class AuthController extends Controller
 
             if (!$userType) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
         } elseif ($data->has_account) {
+            // Check if password is correct
+            $pssw = UserAuth::where("user_id", $data->userID)->get()->first();
+
+            if (!password_verify($data->password, $pssw->password)) return response()->json(["title" => "Erro", "message" => "Password errada"], 403);
+
+            $connect_user_restaurant = UserRestaurant::create([
+                "user_id" => $data->userID,
+                "restaurant_id" => $data->restaurant_id
+            ]);
+
+            if (!$connect_user_restaurant) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
+
+            $userType = UsersTypes::create([
+                "user_id" => $data->userID,
+                "type_id" => $data->type
+            ]);
+
+            if (!$userType) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
+
+            $turnPro = Users::whereId($data->userID)->update([
+                "isProfessional" => 1
+            ]);
+
+            if (!$turnPro) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a mudar a sua conta para professional"], 500);
+
         } else {
             return response()->json(["title" => "Erro", "message" => "Ocorreu um erro"], 500);
         }
