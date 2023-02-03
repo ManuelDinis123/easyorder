@@ -12,6 +12,14 @@
     'inputs' => [
         ['label' => 'Email:', 'type' => 'text', 'id' => 'invite_email', 'placeholder' => 'Email de quem quer convidar'],
     ],
+    'select' => [
+        'configs' => [
+            'id' => 'types',
+            'label' => 'Tipo de user:',
+            'default' => 'Selecione um tipo',
+        ],
+        'options' => $types,
+    ],
     'hasFooter' => true,
     'buttons' => [
         ['label' => 'Cancelar', 'id' => 'closeMdl', 'class' => 'btn btn-danger', 'dismiss' => true],
@@ -48,7 +56,7 @@
 <script>
     $(document).ready(() => {
         $("#confirm").on('click', () => {
-            hasEmpty = animateErr(["invite_email"]);
+            hasEmpty = animateErr(["invite_email", "types"]);
             if (hasEmpty) return;
 
             $.ajax({
@@ -57,9 +65,10 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "email": $("#invite_email").val(),
+                    "type": $("#types").val(),
                 }
             }).done((res) => {
-                successToast(res.title, res.message);
+                successToast(res.title, res.message);                
             }).fail((err) => {
                 errorToast(err.responseJSON.title, err.responseJSON.message);
             })

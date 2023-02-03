@@ -51,7 +51,7 @@
                     <label class="lbls mt-4">Password:</label>
                     <input type="password" id="password" class="form-control mt-1" placeholder="A sua palavra-passe">
 
-                    <button id="reg" class="btn btn-primary mt-4 form-control">Registar</button>
+                    <button id="reg" class="btn btn-primary mt-5 form-control">Registar</button>
                 @endif
             </div>
         </div>
@@ -78,4 +78,32 @@
     $("#db").datepicker({
         format: 'dd/mm/yyyy'
     })
+
+    $(document).ready(() => {
+        $("#reg").on('click', () => {
+            var map = ["first", "last", "db", "email", "password"];
+            var hasEmpty = animateErr(map);
+
+            var data = {};
+            $.each(map, (key, id) => {
+                data[id] = $("#" + id).val();
+            })
+
+            data['_token'] = "{{ csrf_token() }}";
+            data['type'] = "{{ $type }}"
+            data['restaurant_id'] = "{{ $r_id }}";
+            data['is_create'] = true;
+
+            $.ajax({
+                method: 'post',
+                url: '/invite/register',
+                data: data
+            }).done((res) => {
+                successToast(res.title, res.message);
+                window.location.replace("/");
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
+            })
+        })
+    });
 </script>

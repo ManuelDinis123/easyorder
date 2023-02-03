@@ -1,5 +1,4 @@
 {{-- Call this to get a custom modal --}}
-
 <div class="modal fade" id="{{ $modal_id }}" aria-labelledby="{{ $modal_id }}Label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -45,6 +44,18 @@
                             @endif
                         @endforeach
                     @endif
+                    {{-- If there's a select select [Configs, Options] --}}
+                    @if (isset($select))
+                        <label class="mt-1">{{$select['configs']['label']}}</label>
+                        <select id="{{ $select['configs']['id'] }}"
+                            class="form-select {{ $select['configs']['id'] }}">
+                            <option value="0" class="text-muted" disabled selected>{{ $select['configs']['default'] }}
+                            </option>
+                            @foreach ($select['options'] as $option)
+                                <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
+                            @endforeach
+                        </select>
+                    @endif
                     {{-- for custom body --}}
                     @if (isset($rawBody))
                         {!! $rawBody !!}
@@ -63,7 +74,8 @@
                     {{-- Buttons on footer send array has [b1 => [label => 'button label', id => 'idOfBtn', 'class' => 'btn btn-primary', 'dismiss' => true (optional)]] --}}
                     @if (isset($buttons))
                         @foreach ($buttons as $button)
-                            <button id="{{ $button['id'] }}" class="{{ $button['class'] }}" @if (isset($button['function'])) onclick="{{$button['function']}}()" @endif
+                            <button id="{{ $button['id'] }}" class="{{ $button['class'] }}"
+                                @if (isset($button['function'])) onclick="{{ $button['function'] }}()" @endif
                                 @if (isset($button['dismiss'])) data-bs-dismiss="modal" @endif>{{ $button['label'] }}</button>
                         @endforeach
                     @endif

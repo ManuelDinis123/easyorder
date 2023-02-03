@@ -30,6 +30,7 @@ Route::post('/createaccount', [AuthController::class, 'create'])->name("createac
 
 // invite pages
 Route::get('/invite/{token}', [AuthController::class, 'invited']);
+Route::post('/invite/register', [AuthController::class, 'invite_finish'])->name('register');
 
 // Page to show when user doesn't have permission to enter a page
 Route::get('/no-access', function () {

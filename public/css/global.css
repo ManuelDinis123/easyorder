@@ -11,6 +11,11 @@ body {
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3) !important;
 }
 
+.form-select {
+    border-radius: 14px !important;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
 .wrong {
     box-shadow: 0px 4px 15px rgba(165, 2, 2, 0.719) !important;
 }

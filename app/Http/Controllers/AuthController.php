@@ -234,6 +234,7 @@ class AuthController extends Controller
 
         $fullData = array_merge($fullData, [
             "email" => $info->email,
+            "type" => $info->type,
             "r_id" => $restaurant->id,
             "r_name" => $restaurant->name,
             "logo_url" => $restaurant->logo_url,
@@ -259,11 +260,74 @@ class AuthController extends Controller
                 ]);
 
                 return view("frontend.invited.accepted")
-                ->with($fullData);
+                    ->with($fullData);
             }
         }
 
         return view("frontend.invited.accepted")
-        ->with($fullData);
+            ->with($fullData);
+    }
+
+    /**
+     * Actions to take when user accepts invite
+     * 
+     * @return response
+     */
+    function invite_finish(Request $data)
+    {
+        if ($data->is_create) {
+            // Check if email is valid
+            if (!filter_var($data->email, FILTER_VALIDATE_EMAIL)) {
+                return response()->json(["title" => "Erro", "message" => "Email invalido!"], 400);
+            }
+
+            // Check if email already exists
+            $exists = Users::where("email", $data->email)->get() ?? null;
+
+            if ($exists->first()) {
+                return response()->json(["title" => "Erro", "message" => "Este email já esta em uso!"], 400);
+            }
+
+            // format date
+            $birth = date("Y-m-d", strtotime($data->db));
+
+            // insert into db
+            $new_user = Users::create([
+                "first_name" => $data->first,
+                "last_name" => $data->last,
+                "birthdate" => $birth,
+                "email" => $data->email,
+                "active" => 1,
+                "isProfessional" => 1
+            ]);
+
+            if (!$new_user) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a criar a sua conta"], 500);
+
+            $auth = UserAuth::create([
+                "user_id" => $new_user->id,
+                "password" => password_hash($data->password, PASSWORD_DEFAULT)
+            ]);
+
+            if (!$auth) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a criar a sua conta"], 500);
+
+            $connect_user_restaurant = UserRestaurant::create([
+                "user_id" => $new_user->id,
+                "restaurant_id" => $data->restaurant_id
+            ]);
+
+            if (!$connect_user_restaurant) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
+
+            $userType = UsersTypes::create([
+                "user_id" => $new_user->id,
+                "type_id" => $data->type
+            ]);
+
+            if (!$userType) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
+        } elseif ($data->has_account) {
+        } else {
+            return response()->json(["title" => "Erro", "message" => "Ocorreu um erro"], 500);
+        }
+
+        return response()->json(["title" => "Sucesso", "message" => "Conta criada com sucesso"], 200);
     }
 }
