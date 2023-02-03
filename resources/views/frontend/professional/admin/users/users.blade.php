@@ -68,10 +68,17 @@
                     "type": $("#types").val(),
                 }
             }).done((res) => {
-                successToast(res.title, res.message);                
+                successToast(res.title, res.message);
+                $("#invite_email").val("");
+                $("#types").val(0);
             }).fail((err) => {
                 errorToast(err.responseJSON.title, err.responseJSON.message);
             })
+        })
+
+        $("#closeMdl").on('click', () => {
+            $("#invite_email").val("");
+            $("#types").val(0);
         })
 
 
