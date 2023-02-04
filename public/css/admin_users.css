@@ -73,3 +73,7 @@
 .pfp-tab-container{
     position: relative;
 }
+
+.tb-clock {
+    font-size: 25px;
+}

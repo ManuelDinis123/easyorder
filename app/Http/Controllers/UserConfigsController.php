@@ -85,6 +85,37 @@ class UserConfigsController extends Controller
     }
 
     /**
+     *  Get pending invites
+     * 
+     * @return view
+     */
+    function getPending()
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            return redirect("/professional");
+        }
+
+        // Get all invites
+        $all_pending_invites = invite::select("invite.token", "invite.email", "types.label")
+            ->join('types', 'types.id', '=', 'invite.type')
+            ->where('invite.restaurant_id', session()->get('restaurant.id'))
+            ->get();
+
+        
+        $pending = [];
+        foreach ($all_pending_invites as $invite) {            
+            $pending[] = [
+                "token" => $invite->token,
+                "email" => $invite->email,
+                "label" => $invite->label,
+            ];
+        }
+
+        return response()->json($pending, 200);
+    }
+
+    /**
      * Invite users
      * 
      * @return response
@@ -131,5 +162,17 @@ class UserConfigsController extends Controller
         Mail::to($sendToEmail)->send(new InviteMail($token));
 
         return response()->json(["title" => "Sucesso", "message" => "Convite enviado"], 200);
+    }
+
+    /**
+     * To remove invites
+     * 
+     * @return response
+     */
+    function delete_invites(Request $data){
+        $del = invite::where('token', $data->id)->delete();
+        if(!$del) response()->json(["title" => "Erro", "message" => "Erro a remover o convite"], 500);
+
+        return response()->json(["title" => "Sucesso", "message" => "Removido com sucesso"], 200);
     }
 }
