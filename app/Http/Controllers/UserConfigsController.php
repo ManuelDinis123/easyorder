@@ -102,9 +102,9 @@ class UserConfigsController extends Controller
             ->where('invite.restaurant_id', session()->get('restaurant.id'))
             ->get();
 
-        
+
         $pending = [];
-        foreach ($all_pending_invites as $invite) {            
+        foreach ($all_pending_invites as $invite) {
             $pending[] = [
                 "token" => $invite->token,
                 "email" => $invite->email,
@@ -169,10 +169,70 @@ class UserConfigsController extends Controller
      * 
      * @return response
      */
-    function delete_invites(Request $data){
+    function delete_invites(Request $data)
+    {
         $del = invite::where('token', $data->id)->delete();
-        if(!$del) response()->json(["title" => "Erro", "message" => "Erro a remover o convite"], 500);
+        if (!$del) response()->json(["title" => "Erro", "message" => "Erro a remover o convite"], 500);
 
         return response()->json(["title" => "Sucesso", "message" => "Removido com sucesso"], 200);
+    }
+
+    /**
+     *  User details page
+     * 
+     * @return view
+     */
+    function user_details(Request $id)
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            return redirect("/professional");
+        }
+        if (!$this->is_user_of_restaurant($id->route('id'))) return redirect("/professional/admin/users");
+
+        $user = Users::join('users_types', 'users_types.user_id', '=', 'users.id')
+            ->join('types', 'types.id', '=', 'users_types.type_id')
+            ->where('users.id', $id->route('id'))->get()->first();
+
+        // for type dropdown
+        $allTypes = Types::where('restaurant_id', session()->get('restaurant.id'))->get();
+
+        $typesforview = [];
+        foreach($allTypes as $type) {
+            $typesforview[] = [
+                "id" => $type->id,
+                "label" => $type->label,
+            ];
+        }
+
+        return view("frontend/professional/admin/users/details")->with([
+            "name" => $user->first_name . " " . $user->last_name,
+            "email" => $user->email,
+            "birthdate" => $user->birthdate,
+            "active" => $user->active,
+            "pfp" => $user->pfp,
+            "label" => $user->label,
+            "typeID" => $user->type_id,
+            "permissions_description" => [
+                "view_orders" => $user->view_orders ? 'Ver pedidos' : '',
+                "write_orders" => $user->write_orders ? 'Fazer alterações nos pedidos' : '',
+                "view_menu" => $user->view_menu ? 'Ver a ementa' : '',
+                "write_menu" => $user->write_menu ? 'Fazer alterações na Ementa e os seus respetivos items' : '',
+                "view_stats" => $user->view_stats ? 'Ver as estatísticas do restaurante' : '',
+                "invite_users" => $user->invite_users ? 'Convidar outros utilizadores' : '',
+                "ban_users" => $user->ban_users ? 'Banir utilizadores' : '',
+            ],
+            "isOwner" => $user->owner,
+            "isAdmin" => $user->admin,
+        ])
+        ->with("types", $typesforview);
+    }
+
+    // Check if an user is from the restaurant that the user is associated with
+    function is_user_of_restaurant($id)
+    {
+        $userID = UserRestaurant::where('user_id', $id)->get()->first();
+        if (session()->get("restaurant.id") != $userID->restaurant_id) return 0;
+        return 1;
     }
 }
