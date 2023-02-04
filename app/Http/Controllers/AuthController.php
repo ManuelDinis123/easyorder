@@ -222,6 +222,8 @@ class AuthController extends Controller
             ->get()
             ->first();
 
+        if(!$info) return redirect("/");
+
         // Get restaurant info
         $restaurant = Restaurants::select(
             "id",
