@@ -110,7 +110,10 @@
                     data: "pfp",
                     width: "10%",
                     render: function(data, type, row, meta) {
-                        return "<img class='tab-pfp' src='/img/pfp/" + data + "'></span>";
+                        var hasCrown="";
+                        if(row['owner']) hasCrown = "<i class='fa-sharp fa-solid fa-crown owner-crown'></i>";
+                        return "<div class='pfp-tab-container'>"+hasCrown+"\
+                        <img class='tab-pfp' src='/img/pfp/" + data + "'></div>";
                     }
                 },
                 {
@@ -143,11 +146,17 @@
                     width: "10%",
                     className: 'mid',
                     render: function(data, type, row, meta) {
+                        isDisabled = "";
+                        if(row['id'] == {{ session()->get('user.id') }}) isDisabled=" disabled ";
+
+                        if(row['owner']==1) isDisabled=" disabled ";
+
+                        if(row['admin']==1 && {{session()->get('type.owner')}}!=1) isDisabled=" disabled ";
+
                         return "<div class=\"form-check form-switch\">\
                             <input class=\"form-check-input\" type=\"checkbox\" role=\"switch\" id=\"check" + row[
                                 'id'] + "\" " +
-                            (data ? "checked" : "") + " " + (row['id'] ==
-                                {{ session()->get('user.id') }} ? 'disabled' : '') + ">\
+                            (data ? "checked" : "") + isDisabled + ">\
                         </div>"
                     }
                 },
@@ -156,7 +165,7 @@
                     width: "5%",
                     className: 'mid',
                     render: function(data, type, row, meta) {
-                        if (row['id'] == {{ session()->get('user.id') }}) return '';
+                        if (row['id'] == {{ session()->get('user.id') }} || row['owner']==1) return '';
                         return '<span>\
                                     <a href="#"><i class="fa-solid fa-eye" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i></a>\
                                 </span>';

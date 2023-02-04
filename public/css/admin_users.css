@@ -60,3 +60,16 @@
     justify-content: center;
     padding: 0px 90px 0px 90px;
 }
+
+.owner-crown {
+    font-size: 23px;
+    transform: rotate(323deg);
+    position: absolute;
+    top: -6px;
+    left: -8px;
+    color: rgb(255, 187, 0);    
+}
+
+.pfp-tab-container{
+    position: relative;
+}

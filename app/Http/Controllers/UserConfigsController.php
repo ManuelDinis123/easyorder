@@ -27,7 +27,7 @@ class UserConfigsController extends Controller
 
         $data = [];
         foreach ($types as $type) {
-            if($type->label != 'Owner'){
+            if ($type->label != 'Owner') {
                 $data[] = [
                     "value" => $type->id,
                     "label" => $type->label,
@@ -57,9 +57,13 @@ class UserConfigsController extends Controller
             "users.birthdate",
             "users.active",
             "users.pfp",
+            "types.owner",
+            "types.admin"
         )
             ->join('users', 'users.id', '=', 'user_restaurant.user_id')
-            ->where('restaurant_id', session()->get('restaurant.id'))
+            ->join('users_types', 'users_types.user_id', '=', 'users.id')
+            ->join('types', 'types.id', '=', 'users_types.type_id')
+            ->where('user_restaurant.restaurant_id', session()->get('restaurant.id'))
             ->get();
 
         return response()->json($users, 200);
@@ -106,9 +110,9 @@ class UserConfigsController extends Controller
             ->where([
                 ['user_restaurant.restaurant_id', '=', session()->get('restaurant.id')],
                 ['users.email', '=', $email->email],
-            ])->get()->first();        
+            ])->get()->first();
 
-        if(isset($inRestaurant->email)) return response()->json(["title" => "Erro", "message" => "Este utilizador já esta no restaurante"], 400);
+        if (isset($inRestaurant->email)) return response()->json(["title" => "Erro", "message" => "Este utilizador já esta no restaurante"], 400);
 
         // Create a token and associate it to the email to send in url.
         $token = Str::random(32, 'alpha_num');
