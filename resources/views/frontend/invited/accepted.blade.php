@@ -122,7 +122,7 @@
                 url: '/invite/register',
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    "userID": {{ $userID }},
+                    "userID": {{ (isset($userID)) ? $userID : 0  }},
                     "password": $("#psw").val(),
                     "has_account": true,
                     'restaurant_id': "{{ $r_id }}",
