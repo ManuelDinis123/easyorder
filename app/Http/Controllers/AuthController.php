@@ -311,38 +311,12 @@ class AuthController extends Controller
 
             if (!$auth) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a criar a sua conta"], 500);
 
-            $connect_user_restaurant = UserRestaurant::create([
-                "user_id" => $new_user->id,
-                "restaurant_id" => $data->restaurant_id
-            ]);
-
-            if (!$connect_user_restaurant) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
-
-            $userType = UsersTypes::create([
-                "user_id" => $new_user->id,
-                "type_id" => $data->type
-            ]);
-
-            if (!$userType) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
+            $this->switchToPro($new_user->id, $data->restaurant_id, $data->type);
         } elseif ($data->has_account) {
             // Check if password is correct
             $pssw = UserAuth::where("user_id", $data->userID)->get()->first();
 
             if (!password_verify($data->password, $pssw->password)) return response()->json(["title" => "Erro", "message" => "Password errada"], 403);
-
-            $connect_user_restaurant = UserRestaurant::create([
-                "user_id" => $data->userID,
-                "restaurant_id" => $data->restaurant_id
-            ]);
-
-            if (!$connect_user_restaurant) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
-
-            $userType = UsersTypes::create([
-                "user_id" => $data->userID,
-                "type_id" => $data->type
-            ]);
-
-            if (!$userType) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
 
             $turnPro = Users::whereId($data->userID)->update([
                 "isProfessional" => 1
@@ -350,6 +324,7 @@ class AuthController extends Controller
 
             if (!$turnPro) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a mudar a sua conta para professional"], 500);
 
+            $this->switchToPro($data->userID, $data->restaurant_id, $data->type);
         } else {
             return response()->json(["title" => "Erro", "message" => "Ocorreu um erro"], 500);
         }
@@ -358,5 +333,27 @@ class AuthController extends Controller
         invite::where('token', $data->inv_uid)->delete();
 
         return response()->json(["title" => "Sucesso", "message" => "Conta criada com sucesso"], 200);
+    }
+
+    /**
+     * Turns a user account to a pro account and associates them to a restaurant
+     * 
+     * @return Response
+     */
+    function switchToPro($userID, $restaurantID, $typeID)
+    {
+        $connect_user_restaurant = UserRestaurant::create([
+            "user_id" => $userID,
+            "restaurant_id" => $restaurantID
+        ]);
+
+        if (!$connect_user_restaurant) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
+
+        $userType = UsersTypes::create([
+            "user_id" => $userID,
+            "type_id" => $typeID
+        ]);
+
+        if (!$userType) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
     }
 }
