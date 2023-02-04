@@ -34,7 +34,7 @@ function removeDB(url, idToDelete, hasToast = true) {
             color: "green",
             icon: "fa-solid fa-check"
         }); 
-        return true;
+        return 1;
     }).fail((err) => {
         if (!hasToast) return;
 
@@ -44,7 +44,7 @@ function removeDB(url, idToDelete, hasToast = true) {
             color: "red",
             icon: "fa-sharp fa-solid fa-triangle-exclamation"
         });
-        return false;
+        return 0;
     })
 }
 

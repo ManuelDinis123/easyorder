@@ -223,7 +223,7 @@
     function remove_itm() {
         var dl = removeDB("/professional/deletemenuitem", <?= $id ?>);
         $("#itemDelModal").modal("toggle");
-        if (dl) window.location.replace("/professional/ementa");
+        window.location.replace("/professional/ementa");
     }
 
     // inserts ingredients on the DB
