@@ -264,6 +264,22 @@ class UserConfigsController extends Controller
         return response()->json(["title" => "Sucesso", "message" => "Tipo mudado com sucesso"], 200);
     }
 
+    /**
+     * Actives / Deactivates users
+     * 
+     * @return response
+     */
+    function changeUserState(Request $id)
+    {
+        $state = Users::whereId($id->id)->update([
+            "active" => $id->active
+        ]);
+
+        if (!$state) return response()->json(["title" => "Erro", "message" => "Erro a " . ($id->active == 1 ? 'ativar' : 'desativar') . " este user"], 500);
+
+        return response()->json(["title" => "Sucesso", "message" => "User " . ($id->active == 1 ? 'ativado' : 'desativado') . " com sucesso"], 200);
+    }
+
     // Check if an user is from the restaurant that the user is associated with
     function is_user_of_restaurant($id)
     {

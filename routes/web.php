@@ -88,6 +88,7 @@ Route::get('/professional/admin/users/pending', [UserConfigsController::class, '
 Route::get('/professional/admin/users/{id}', [UserConfigsController::class, 'user_details']);
 Route::post('/professional/admin/getallusers', [UserConfigsController::class, 'get_all'])->name("getallusers");
 Route::post('/professional/admin/change_type', [UserConfigsController::class, 'changeType'])->name("change_type");
+Route::post('/professional/admin/change_state', [UserConfigsController::class, 'changeUserState'])->name("change_state");
 Route::post('/professional/admin/invite_users', [UserConfigsController::class, 'invite'])->name("invite_users");
 Route::post('/professional/admin/get_pending', [UserConfigsController::class, 'getPending'])->name("get_pending");
 Route::post('/professional/admin/delete_invite', [UserConfigsController::class, 'delete_invites'])->name("delete_invite");

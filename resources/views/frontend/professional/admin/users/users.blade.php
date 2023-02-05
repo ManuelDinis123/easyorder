@@ -54,6 +54,23 @@
 @stop
 
 <script>
+    // Deactivate user
+    function deactivate(id) {
+        $.ajax({
+            method: 'post',
+            url: '/professional/admin/change_state',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "id": id,
+                "active": $("#check" + id).is(":checked") ? 1 : 0,
+            }
+        }).done((res) => {
+            successToast(res.title, res.message);
+        }).fail((err) => {
+            errorToast(err.responseJSON.title, err.responseJSON.message);
+        })
+    }
+
     $(document).ready(() => {
         $("#confirm").on('click', () => {
             hasEmpty = animateErr(["invite_email", "types"]);
@@ -80,7 +97,6 @@
             $("#invite_email").val("");
             $("#types").val(0);
         })
-
 
         $("#users").dataTable({
 
@@ -147,7 +163,7 @@
                     width: "10%",
                     className: 'mid',
                     render: function(data, type, row, meta) {
-                        isDisabled = "";
+                        isDisabled = " onclick=\"deactivate(" + row['id'] + ")\"";
                         if (row['id'] == {{ session()->get('user.id') }}) isDisabled =
                             " disabled ";
 
@@ -157,7 +173,8 @@
                             isDisabled = " disabled ";
 
                         return "<div class=\"form-check form-switch\">\
-                            <input class=\"form-check-input\" type=\"checkbox\" role=\"switch\" id=\"check" + row[
+                            <input class=\"form-check-input switchActive\" type=\"checkbox\" role=\"switch\" id=\"check" +
+                            row[
                                 'id'] + "\" " +
                             (data ? "checked" : "") + isDisabled + ">\
                         </div>"
