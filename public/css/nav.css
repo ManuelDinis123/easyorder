@@ -1,0 +1,106 @@
+:root {
+    --header-height: 5rem;
+    --nav-width: 68px;
+    --nav-color: #0c0c0c;
+    --body-font: "Nunito", sans-serif;
+    --normal-font-size: 1rem;
+    --z-fixed: 100;
+}
+
+*,
+::before,
+::after {
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    margin: var(--header-height) 0 0 0;
+    padding: 0 1rem;
+    font-size: var(--normal-font-size);
+    transition: 0.5s;
+}
+
+a {
+    text-decoration: none;
+}
+
+.header {
+    width: 100%;
+    height: var(--header-height);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    background-color: var(--nav-color);
+    z-index: var(--z-fixed);
+    transition: 0.5s;
+}
+
+/* extra styling for the navbar */
+.nav-extra {
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* icon styling */
+.nav-item {
+    font-size: 30px;
+    vertical-align: middle;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.nav-line {
+    font-size: 30px;
+    vertical-align: middle;
+    margin-right: 15px;
+    color: #ffffff;
+}
+
+.icons-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-item i {
+    color: #ffffff;
+}
+
+.nav-item i:hover {
+    color: #ffffff;
+}
+
+.inner-addon{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.nav-search {    
+    height: 40px;
+    border: 0px;
+    border-radius: 24px;
+    width: 400px;
+    padding-left: 40px;
+}
+
+.nav-search:focus {
+    outline: none;
+}
+
+.left-addon {
+    position: relative;
+    font-size: 24px;
+    color: black;
+    left: 34px;
+    top: 8px;
+}
+
+.logo img {
+    height: 63px;
+    width: 60px;
+    object-fit: cover;
+}
+

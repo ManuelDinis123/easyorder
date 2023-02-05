@@ -1,11 +1,15 @@
 @include('layouts.includes')
+@extends('layouts.clients.nav')
 
-<h1>this is the clients home page!</h1>
+@section('content')
 
-@if (!session()->get('user.isProfessional'))
-    <button class="btn btn-primary mt-3" onclick="onSwitchProfessional()">Ativar conta profissional</button>
-@endif
+    <h1>this is the clients home page!</h1>
 
+    @if (!session()->get('user.isProfessional'))
+        <button class="btn btn-primary mt-3" onclick="onSwitchProfessional()">Ativar conta profissional</button>
+    @endif
+
+@stop
 
 
 <script>
