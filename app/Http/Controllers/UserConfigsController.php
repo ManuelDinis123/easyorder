@@ -19,7 +19,7 @@ class UserConfigsController extends Controller
     function index()
     {
         if (!AppHelper::checkAuth()) return redirect("/no-access");
-        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'invite_users'], false))) {
             return redirect("/professional");
         }
 
@@ -46,7 +46,7 @@ class UserConfigsController extends Controller
      */
     function get_all()
     {
-        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'invite_users'], false))) {
             return redirect("/professional");
         }
 
@@ -78,7 +78,7 @@ class UserConfigsController extends Controller
     function pending_page()
     {
         if (!AppHelper::checkAuth()) return redirect("/no-access");
-        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'invite_users'], false))) {
             return redirect("/professional");
         }
 
@@ -93,7 +93,7 @@ class UserConfigsController extends Controller
     function getPending()
     {
         if (!AppHelper::checkAuth()) return redirect("/no-access");
-        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'invite_users'], false))) {
             return redirect("/professional");
         }
 
@@ -124,7 +124,7 @@ class UserConfigsController extends Controller
     function invite(Request $email)
     {
         if (!AppHelper::checkAuth()) return redirect("/no-access");
-        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'invite_users'], false))) {
             return redirect("/professional");
         }
 
@@ -271,6 +271,11 @@ class UserConfigsController extends Controller
      */
     function changeUserState(Request $id)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'ban_users'], false))) {
+            return response()->json(["title" => "Erro", "message" => "Não tem permissões para " . ($id->active == 1 ? 'ativar' : 'desativar') . " o User"], 403);
+        }
+
         $state = Users::whereId($id->id)->update([
             "active" => $id->active
         ]);

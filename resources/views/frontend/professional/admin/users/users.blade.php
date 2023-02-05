@@ -28,6 +28,10 @@
 ])
 @endcomponent
 
+@php
+    $canWrite = session()->get('type.owner') || session()->get('type.admin');
+@endphp
+
 @section('content')
     <div class="container">
         <div class="t-contain">
@@ -172,6 +176,8 @@
                         if (row['admin'] == 1 && {{ session()->get('type.owner') }} != 1)
                             isDisabled = " disabled ";
 
+                        if (!{{ $canWrite ? 1 : 0 }}&&!{{session()->get('type.ban_users')?1:0}}) isDisabled = " disabled ";
+
                         return "<div class=\"form-check form-switch\">\
                             <input class=\"form-check-input switchActive\" type=\"checkbox\" role=\"switch\" id=\"check" +
                             row[
@@ -185,6 +191,7 @@
                     width: "5%",
                     className: 'mid',
                     render: function(data, type, row, meta) {
+                        if (!{{ $canWrite ? 1 : 0 }}) return "";
                         return '<span>\
                                     <a href="/professional/admin/users/' + row['id'] + '"><i class="fa-solid fa-eye" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i></a>\
                                 </span>';

@@ -101,7 +101,7 @@
                         <span class="nav_name">Estatísticas</span>
                     </a>
                     <div id="dp"
-                        class="dropdown {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? 'visually-hidden' : '') : '' }}">
+                        class="dropdown {{ (session()->get('type.owner') || session()->get('type.admin') || session()->get('type.invite_users') || session()->get('type.ban_users')) ? '' : 'visually-hidden' }}">
                         <a href="#" class="nav_drop hToggle" data-bs-toggle="dropdown" id="sidebarDropDown">
                             <i class="fa-sharp fa-solid fa-toolbox nav_icon"></i>
                             <span class="nav_name dropdown-toggle">Administração</span>
@@ -111,10 +111,15 @@
                             <li><a class="dropdown-item activate {{ $file == 'edit_users' ? 'li_on' : '' }}"
                                     href="/professional/admin/users"><i class="fa-solid fa-users-gear"></i>
                                     Utilizadores</a></li>
-                            <li><a class="dropdown-item activate {{ $file == 'perms' ? 'li_on' : '' }}"
+                            <li id="dpl2"
+                                class="{{ session()->get('type.owner') || session()->get('type.admin') ? '' : 'visually-hidden' }}">
+                                <a class="dropdown-item activate {{ $file == 'perms' ? 'li_on' : '' }}"
                                     href="/professional/admin/permissions"><i class="fa-solid fa-lock"></i>
-                                    Permissões</a></li>
-                            <li><a class="dropdown-item activate {{ $file == 'options' ? 'li_on' : '' }}"
+                                    Permissões</a>
+                            </li>
+                            <li id="dpl3"
+                                class="{{ session()->get('type.owner') || session()->get('type.admin') ? '' : 'visually-hidden' }}">
+                                <a class="dropdown-item activate {{ $file == 'options' ? 'li_on' : '' }}"
                                     href="/professional/admin/options"><i class="fa-solid fa-gear"></i>
                                     Opções</a></li>
                         </ul>
@@ -241,6 +246,9 @@
                     $("#view_menu_side").removeClass('visually-hidden');
                     $("#view_orders_side").removeClass('visually-hidden');
                     $("#view_stats_side").removeClass('visually-hidden');
+                    $("#dp").removeClass('visually-hidden');
+                }
+                if(res.newSession.ban_users == 1 || res.newSession.invite_users == 1){
                     $("#dp").removeClass('visually-hidden');
                 }
                 setTimeout(() => {

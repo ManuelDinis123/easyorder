@@ -84,6 +84,8 @@ class AuthController extends Controller
                 "view_stats" => $typeInfo->view_stats,
                 "write_orders" => $typeInfo->write_orders,
                 "write_menu" => $typeInfo->write_menu,
+                "invite_users" => $typeInfo->invite_users,
+                "ban_users" => $typeInfo->ban_users,
                 "admin" => $typeInfo->admin,
                 "owner" => $typeInfo->owner,
             ]]);
@@ -193,6 +195,8 @@ class AuthController extends Controller
                 "view_stats" => $type_permissions->view_stats,
                 "write_orders" => $type_permissions->write_orders,
                 "write_menu" => $type_permissions->write_menu,
+                "invite_users" => $type_permissions->invite_users,
+                "ban_users" => $type_permissions->ban_users,
                 "admin" => $type_permissions->admin,
                 "owner" => $type_permissions->owner,
             ]]);
@@ -207,6 +211,8 @@ class AuthController extends Controller
                 "view_stats" => session()->get("type.view_stats"),
                 "admin" => session()->get("type.admin"),
                 "owner" => session()->get("type.owner"),
+                "invite_users" => session()->get("type.invite_users"),
+                "ban_users" => session()->get("type.ban_users"),
             ]], 200);
         } else {
             return response(0, 200);
