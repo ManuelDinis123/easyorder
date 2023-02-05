@@ -46,7 +46,7 @@ class RestaurantController extends Controller
 
         // Save image file
         if ($request->values['file'] != null) {
-           $imgName = $this->saveImage($request->values['file']);
+            $imgName = $this->saveImage($request->values['file']);
         }
 
         // Create the restaurant
@@ -169,7 +169,13 @@ class RestaurantController extends Controller
             ->get()
             ->count();
 
-        return response()->json(["res_info" => $restaurant, "menu_count" => $items], 200);
+        // get num of permissions
+        $perms = Types::where('restaurant_id', session()->get('restaurant.id'))->get()->count();
+
+        // get num of users
+        $users = UserRestaurant::where('restaurant_id', session()->get('restaurant.id'))->get()->count();
+
+        return response()->json(["res_info" => $restaurant, "menu_count" => $items, "perms" => $perms, "users" => $users], 200);
     }
 
     /**

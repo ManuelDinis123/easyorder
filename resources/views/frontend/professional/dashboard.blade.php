@@ -154,6 +154,16 @@
                         $("#status1").addClass('fa-check');
                         $("#status1").css('color', 'green');
                     }
+                    if (res.users >= 1) {
+                        $("#status3").removeClass('fa-xmark');
+                        $("#status3").addClass('fa-check');
+                        $("#status3").css('color', 'green');
+                    }
+                    if (res.perms >= 1) {
+                        $("#status2").removeClass('fa-xmark');
+                        $("#status2").addClass('fa-check');
+                        $("#status2").css('color', 'green');
+                    }
                 })
             });
         </script>
