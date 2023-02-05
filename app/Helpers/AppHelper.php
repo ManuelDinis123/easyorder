@@ -25,7 +25,7 @@ class AppHelper
      */
     public static function checkAuth()
     {
-        return session()->get('authenticated') && session()->get('user')['isProfessional'];
+        return session()->get('authenticated') && (session()->get('user')['isProfessional']&&session()->get('user')['active']);
     }
 
     /**

@@ -55,6 +55,7 @@ class AuthController extends Controller
             'birthdate' => $user->birthdate,
             'email' => $user->email,
             'isProfessional' => $user->isProfessional,
+            'active' => $user->active,
             'pfp' => $user->pfp
         ];
 
@@ -91,7 +92,7 @@ class AuthController extends Controller
             "logged_in" => 1
         ]);
 
-        $return = ['status' => "success", "isProfessional" => $user->isProfessional];
+        $return = ['status' => "success", "isProfessional" => ($user->isProfessional && $user->active)];
 
         return response()->json($return, 200);
     }
