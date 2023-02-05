@@ -42,11 +42,13 @@
                         <select id="user_type" class="form-select" {{ $isDisabled }}>
                             <option value="0" disabled>Selecione um Tipo</option>
                             @foreach ($types as $type)
-                                <option value="{{ $type['id'] }}" {{ $type['id'] == $typeID ? 'selected' : '' }}>
+                                <option value="{{ $type['id'] }}" {{ $type['id'] == $typeID ? 'selected' : '' }}
+                                    {{ $type['owner'] ? 'disabled' : '' }}>
                                     {{ $type['label'] }}</option>
                             @endforeach
                         </select>
-                        <button class="btn btn-primary mt-3" style="width: 100%" {{ $isDisabled }}>Editar</button>
+                        <button class="btn btn-primary mt-3" id="changeType" style="width: 100%"
+                            {{ $isDisabled }}>Editar</button>
                     </div>
                     <div class="col-7">
                         <div class="access-description">
@@ -77,4 +79,25 @@
     function editPermissions(id) {
         window.location.href = "/professional/admin/permissions/" + id;
     }
+
+    $(document).ready(() => {
+        $("#changeType").on('click', () => {
+            $.ajax({
+                method: 'post',
+                url: '/professional/admin/change_type',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    user_id: {{ $id }},
+                    new_type: $("#user_type").val()
+                }
+            }).done((res) => {
+                successToast(res.title, res.message);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
+            })
+        })
+    });
 </script>

@@ -8,6 +8,7 @@ use App\Models\invite;
 use App\Models\Types;
 use App\Models\UserRestaurant;
 use App\Models\Users;
+use App\Models\UsersTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -198,14 +199,16 @@ class UserConfigsController extends Controller
         $allTypes = Types::where('restaurant_id', session()->get('restaurant.id'))->get();
 
         $typesforview = [];
-        foreach($allTypes as $type) {
+        foreach ($allTypes as $type) {
             $typesforview[] = [
                 "id" => $type->id,
                 "label" => $type->label,
+                "owner" => $type->owner
             ];
         }
 
         return view("frontend/professional/admin/users/details")->with([
+            "id" => $id->route('id'),
             "name" => $user->first_name . " " . $user->last_name,
             "email" => $user->email,
             "birthdate" => $user->birthdate,
@@ -225,7 +228,40 @@ class UserConfigsController extends Controller
             "isOwner" => $user->owner,
             "isAdmin" => $user->admin,
         ])
-        ->with("types", $typesforview);
+            ->with("types", $typesforview);
+    }
+
+    /**
+     * Change type of a user
+     * 
+     * @return response
+     */
+    function changeType(Request $ids)
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            return redirect("/professional");
+        }
+
+        // User musn't be an owner and admin users can't change other admin users
+        $current_type = UsersTypes::join('types', 'types.id', '=', 'type_id')
+            ->where('user_id', $ids->user_id)->get()->first();
+
+        if ($current_type->owner || ($current_type->admin && !session()->get("type.owner"))) return response()->json(["title" => "Erro", "message" => "Não pode mudar o tipo deste utilizador"], 403);
+
+        // Change user type
+        $update = UsersTypes::where('user_id', $ids->user_id)->update([
+            "type_id" => $ids->new_type
+        ]);
+
+        if (!$update) return response()->json(["title" => "Erro", "message" => "Erro a atualizar o tipo de user"], 500);
+
+        // Set update session to 1 for that user
+        Users::whereId($ids->user_id)->update([
+            "update_session" => 1
+        ]);
+
+        return response()->json(["title" => "Sucesso", "message" => "Tipo mudado com sucesso"], 200);
     }
 
     // Check if an user is from the restaurant that the user is associated with
