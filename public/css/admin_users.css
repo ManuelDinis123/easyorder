@@ -118,7 +118,6 @@
 }
 
 .access-description{
-    /* margin-left: 100px; */
     float: right;
 }
 
@@ -135,5 +134,13 @@
 }
 
 .pm-list {
-    width: 80%;
+    width: 80% !important;    
+}
+
+.pm-list li {
+    width: 500px;
+}
+
+.pm-btn {
+    width: 500px;
 }

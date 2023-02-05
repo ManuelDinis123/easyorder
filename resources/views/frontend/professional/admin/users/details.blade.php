@@ -34,7 +34,7 @@
                         <input type="text" value="{{ $email }}" class="form-control" disabled>
                         <hr style="margin-top: 30px">
                         <label class="mt-2">Tipo:</label>
-                        <select id="user_type" class="form-select"«>
+                        <select id="user_type" class="form-select">
                             <option value="0" disabled>Selecione um Tipo</option>
                             @foreach ($types as $type)
                                 <option value="{{ $type['id'] }}" {{ $type['id'] == $typeID ? 'selected' : '' }}>
@@ -54,7 +54,7 @@
                                         @endif
                                     @endforeach
                                 </ul>
-                                <button class="btn btn-primary mt-3 pm-list" onclick="editPermissions({{$typeID}})"
+                                <button class="btn btn-primary mt-3 pm-btn" onclick="editPermissions({{$typeID}})"
                                     {{ $isOwner || ($isAdmin && !session()->get('type.owner')) ? 'disabled' : '' }}>Editar
                                     estas permissões</button>
                             </div>
