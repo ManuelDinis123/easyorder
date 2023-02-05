@@ -5,6 +5,11 @@
 
 @section('content')
 
+    @php
+        // Disables certain features depending if the user beeing seen is owner or admin
+        $isDisabled = $isOwner || ($isAdmin && !session()->get('type.owner')) ? 'disabled' : '';
+    @endphp
+
     <div class="container">
         <div class="details-card">
             <div class="row g-0">
@@ -34,14 +39,14 @@
                         <input type="text" value="{{ $email }}" class="form-control" disabled>
                         <hr style="margin-top: 30px">
                         <label class="mt-2">Tipo:</label>
-                        <select id="user_type" class="form-select">
+                        <select id="user_type" class="form-select" {{ $isDisabled }}>
                             <option value="0" disabled>Selecione um Tipo</option>
                             @foreach ($types as $type)
                                 <option value="{{ $type['id'] }}" {{ $type['id'] == $typeID ? 'selected' : '' }}>
                                     {{ $type['label'] }}</option>
                             @endforeach
                         </select>
-                        <button class="btn btn-primary mt-3" style="width: 100%">Editar Tipo</button>
+                        <button class="btn btn-primary mt-3" style="width: 100%" {{ $isDisabled }}>Editar</button>
                     </div>
                     <div class="col-7">
                         <div class="access-description">
@@ -54,8 +59,8 @@
                                         @endif
                                     @endforeach
                                 </ul>
-                                <button class="btn btn-primary mt-3 pm-btn" onclick="editPermissions({{$typeID}})"
-                                    {{ $isOwner || ($isAdmin && !session()->get('type.owner')) ? 'disabled' : '' }}>Editar
+                                <button class="btn btn-primary mt-3 pm-btn" onclick="editPermissions({{ $typeID }})"
+                                    {{ $isDisabled }}>Editar
                                     estas permissões</button>
                             </div>
                         </div>
@@ -69,7 +74,7 @@
 
 
 <script>
-    function editPermissions(id){
-        window.location.href = "/professional/admin/permissions/"+id;
+    function editPermissions(id) {
+        window.location.href = "/professional/admin/permissions/" + id;
     }
 </script>
