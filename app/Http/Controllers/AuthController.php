@@ -82,6 +82,8 @@ class AuthController extends Controller
                 "view_orders" => $typeInfo->view_orders,
                 "view_menu" => $typeInfo->view_menu,
                 "view_stats" => $typeInfo->view_stats,
+                "write_orders" => $typeInfo->write_orders,
+                "write_menu" => $typeInfo->write_menu,
                 "admin" => $typeInfo->admin,
                 "owner" => $typeInfo->owner,
             ]]);
@@ -189,6 +191,8 @@ class AuthController extends Controller
                 "view_orders" => $type_permissions->view_orders,
                 "view_menu" => $type_permissions->view_menu,
                 "view_stats" => $type_permissions->view_stats,
+                "write_orders" => $type_permissions->write_orders,
+                "write_menu" => $type_permissions->write_menu,
                 "admin" => $type_permissions->admin,
                 "owner" => $type_permissions->owner,
             ]]);

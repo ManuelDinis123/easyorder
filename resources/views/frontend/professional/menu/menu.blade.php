@@ -1,30 +1,41 @@
 @include('layouts.includes')
 <!-- Create New Modal -->
-@component('components.modal_builder',
-    [
-        'modal_id' => 'addModal',
-        'hasHeader' => true,
-        'rawHeader' =>
-            '<h5 class="modal-title" id="addModalLabel"><i class="fa-solid fa-circle-plus text-icon"></i> Adicionar Novo Item</h5>',
-        'hasBody' => true,
-        'inputs' => [
-            ['label' => 'Nome:', 'type' => 'text', 'id' => 'title', 'placeholder' => 'Nome do item'],
-            ['label' => 'Preço:', 'type' => 'number', 'id' => 'price', 'placeholder' => 'Preço €'],
-            ['label' => 'Custo:', 'type' => 'number', 'id' => 'cost', 'placeholder' => 'Custo de produção €'],
-            ['label' => 'Descrição:', 'type' => 'text', 'id' => 'description', 'placeholder' => 'Descrição sobre o item', 'isTextarea' => true,],
-            ['label' => 'Imagem:', 'type' => 'text', 'id' => 'imageurl', 'placeholder' => 'https://imageurl.jpg', 'optional' => true],
+@component('components.modal_builder', [
+    'modal_id' => 'addModal',
+    'hasHeader' => true,
+    'rawHeader' =>
+        '<h5 class="modal-title" id="addModalLabel"><i class="fa-solid fa-circle-plus text-icon"></i> Adicionar Novo Item</h5>',
+    'hasBody' => true,
+    'inputs' => [
+        ['label' => 'Nome:', 'type' => 'text', 'id' => 'title', 'placeholder' => 'Nome do item'],
+        ['label' => 'Preço:', 'type' => 'number', 'id' => 'price', 'placeholder' => 'Preço €'],
+        ['label' => 'Custo:', 'type' => 'number', 'id' => 'cost', 'placeholder' => 'Custo de produção €'],
+        [
+            'label' => 'Descrição:',
+            'type' => 'text',
+            'id' => 'description',
+            'placeholder' => 'Descrição sobre o item',
+            'isTextarea' => true,
         ],
-        'rawBody' => '<label class="mt-3">Etiquetas:</label><br />
+        [
+            'label' => 'Imagem:',
+            'type' => 'text',
+            'id' => 'imageurl',
+            'placeholder' => 'https://imageurl.jpg',
+            'optional' => true,
+        ],
+    ],
+    'rawBody' => '<label class="mt-3">Etiquetas:</label><br />
                 <span class="text-muted" style="font-size: 15px">(optional)</span><br />
                 <input id="tags" class="customLook">
                 <button type="button" id="tag_more">+</button>',
-        'hasFooter' => true,
-        'buttons' => [
-            ['label' => 'Cancelar', 'id'=>'closeMdl', 'class'=>'btn btn-danger', 'dismiss' => true],
-            ['label' => 'Guardar', 'id'=>'save', 'class'=>'btn btn-success'],
-            ['label' => 'Guardar e abrir', 'id'=>'save_enter', 'class'=>'btn btn-primary'],
-        ]
-    ])
+    'hasFooter' => true,
+    'buttons' => [
+        ['label' => 'Cancelar', 'id' => 'closeMdl', 'class' => 'btn btn-danger', 'dismiss' => true],
+        ['label' => 'Guardar', 'id' => 'save', 'class' => 'btn btn-success'],
+        ['label' => 'Guardar e abrir', 'id' => 'save_enter', 'class' => 'btn btn-primary'],
+    ],
+])
 @endcomponent
 
 @extends('layouts.professional.sidebar', ['file' => 'menu'])
@@ -32,7 +43,11 @@
 <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
 
 {{-- Confirm delete modal --}}
-@component('components.delete', ['modal_id' => 'confirmModal', 'function_name' => 'remove', 'hidden' => 'item_id'])
+@component('components.delete', [
+    'modal_id' => 'confirmModal',
+    'function_name' => 'remove',
+    'hidden' => 'item_id',
+])
     @slot('title')
         Tem a certeza que quer remover este item?
     @endslot
@@ -40,6 +55,10 @@
         Isto não pode ser revertido
     @endslot
 @endcomponent
+
+@php
+    $canWrite = session()->get('type.write_menu') || session()->get('type.owner') || session()->get('type.admin');
+@endphp
 
 @section('content')
     <div class="container-fluid" style="padding-top:15px">
@@ -52,8 +71,10 @@
                         <h3 class="c-h">Ementa</h3>
                     </div>
                     <div class="col-6">
-                        <span class="icons" data-bs-toggle="modal" data-bs-target="#addModal"><i
-                                class="fa-solid fa-plus"></i></span>
+                        @if ($canWrite)
+                            <span class="icons" data-bs-toggle="modal" data-bs-target="#addModal"><i
+                                    class="fa-solid fa-plus"></i></span>
+                        @endif
                     </div>
                 </div>
 
@@ -133,7 +154,7 @@
             clearModal();
             $("#addModal").modal('toggle');
             $("#menu").DataTable().ajax.reload(null, false);
-        }).fail((err) => {      
+        }).fail((err) => {
             iziToast.error({
                 title: err.responseJSON.title,
                 message: err.responseJSON.message,
@@ -204,8 +225,10 @@
                     data: null,
                     render: function(data, type, row, meta) {
                         return '<span>\
-                    <a href="/professional/ementa/' + row.id + '"><i class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i></a>\
-                    <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\
+                    <a href="/professional/ementa/' + row.id + '"><i class="fa-sharp fa-solid ' + (
+                            {{ $canWrite ? 1 : 0 }} ? 'fa-pen' : 'fa-eye') + '" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i></a>\
+                    <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark' + (
+                            {{ $canWrite ? 1 : 0 }} ? '' : 'visually-hidden') + '" style="color:#bf1313; cursor:pointer;"></i>\
                     </span>';
                     }
                 },

@@ -73,6 +73,10 @@
 ])
 @endcomponent
 
+@php
+    $canWrite = session()->get('type.write_menu') || session()->get('type.owner') || session()->get('type.admin');
+    $disable = session()->get('type.write_menu') || session()->get('type.owner') || session()->get('type.admin') ? '' : 'disabled';
+@endphp
 
 @section('content')
 
@@ -81,37 +85,42 @@
             <span class="btn is-selected" id="geral">Geral</span>
             <span class="btn not-selected" id="ing">Acompanhamentos</span>
         </div>
-        <div class="col-9">
-            <i class="fa-solid fa-delete-right del" data-bs-toggle="modal" data-bs-target="#itemDelModal"></i>
-        </div>
+        @if ($canWrite)
+            <div class="col-9">
+                <i class="fa-solid fa-delete-right del" data-bs-toggle="modal" data-bs-target="#itemDelModal"></i>
+            </div>
+        @endif
     </div>
     <hr>
     <div id="general">
         <div class="row">
             <div class="col-5" id="form">
                 <label class="mt-1">Nome:</label>
-                <input type="text" id="item_title" class="form-control" placeholder="Nome do item"
+                <input type="text" id="item_title" {{ $disable }} class="form-control" placeholder="Nome do item"
                     value="{{ $name }}" autocomplete="off">
 
                 <label class="mt-3">Preço:</label>
-                <input type="number" id="price" class="form-control" placeholder="Preço €" value="{{ $price }}"
-                    autocomplete="off">
+                <input type="number" id="price" {{ $disable }} class="form-control" placeholder="Preço €"
+                    value="{{ $price }}" autocomplete="off">
 
                 <label class="mt-3">Custo:</label>
-                <input type="number" id="cost" class="form-control" placeholder="Custo de produção €"
-                    value="{{ $cost }}" autocomplete="off">
+                <input type="number" id="cost" {{ $disable }} class="form-control"
+                    placeholder="Custo de produção €" value="{{ $cost }}" autocomplete="off">
 
                 <label class="mt-3">Imagem:</label>
-                <input type="text" id="imageurl" class="form-control" placeholder="https://imageurl.jpg"
-                    value="{{ $imageurl }}" autocomplete="off">
+                <input type="text" id="imageurl" {{ $disable }} class="form-control"
+                    placeholder="https://imageurl.jpg" value="{{ $imageurl }}" autocomplete="off">
 
                 <label class="mt-3">Descrição:</label>
-                <textarea type="text" id="description" class="form-control" placeholder="Descrição sobre o item">{{ $description }}</textarea>
+                <textarea type="text" id="description" {{ $disable }} class="form-control"
+                    placeholder="Descrição sobre o item">{{ $description }}</textarea>
 
                 <label class="mt-3">Etiquetas:</label><br />
-                <input id="db_tags" class='tags_db' value="{{ $tags }}">
-                <input id="tags" class='customLook'>
-                <button type="button" id="tag_more">+</button>
+                <input id="db_tags" class='tags_db' value="{{ $tags }}" {{ $disable }}>
+                @if ($canWrite)
+                    <input id="tags" class='customLook'>
+                    <button type="button" id="tag_more">+</button>
+                @endif
             </div>
 
             <div class="col-6">
@@ -135,23 +144,27 @@
             </div>
             <div class="row mt-3">
                 <div class="col-5">
-                    <button class="btn btn-primary" id="edit-confirm" style="width: 100%">Editar</button>
+                    @if ($canWrite)
+                        <button class="btn btn-primary" id="edit-confirm" style="width: 100%">Editar</button>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
     <div id="ingredients" class="visually-hidden">
         <div class="row">
-            <div class="col-3">
-                <h4>Adicionar Acompanhamentos</h3>
-                    <hr>
-                    <label>Nome:</label>
-                    <input type="text" class="form-control" placeholder="nome" id="ingredient">
+            @if ($canWrite)
+                <div class="col-3">
+                    <h4>Adicionar Acompanhamentos</h3>
+                        <hr>
+                        <label>Nome:</label>
+                        <input type="text" class="form-control" placeholder="nome" id="ingredient">
 
-                    <label class="mt-3">Quantidade</label>
-                    <input type="number" class="form-control" value="1" min="1" id="quant">
-                    <button class="btn btn-primary mt-3" id="add">Adicionar</button>
-            </div>
+                        <label class="mt-3">Quantidade</label>
+                        <input type="number" class="form-control" value="1" min="1" id="quant">
+                        <button class="btn btn-primary mt-3" id="add">Adicionar</button>
+                </div>
+            @endif
             <div class="col-6">
                 <div class="t-contain">
                     <table id="ing_table" class="table table-striped table-borderless">
@@ -297,7 +310,7 @@
 
         $(".img_card").css("background-image", "linear-gradient(180deg, rgba(0, 0, 0, 0) 47.4%, #000000 100%), url(\"" +
             $("#imageurl").val() + "\")");
-    
+
         if ($("#imageurl").val() === "") {
             $("#item-card").addClass("visually-hidden");
             $("#card-info").removeClass("visually-hidden");
@@ -397,6 +410,8 @@
                     data: null,
                     width: "30%",
                     render: function(data, type, row, meta) {
+                        if (!{{ $canWrite ? 1 : 0 }}) return "";
+
                         return '<div  style="display: flex; align-items: center">\
                                 <i onClick="editModal(\'' + row.ingredient + '\', ' + row.quantity + ', ' + row.id + ')" class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i>\
                                 <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\

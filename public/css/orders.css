@@ -81,7 +81,7 @@
 }
 
 .scroll-card {
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     height: 650px;
     /* width: auto - 14px; */

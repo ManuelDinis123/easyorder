@@ -61,13 +61,12 @@
 @endcomponent
 
 {{-- Item Details --}}
-@component('components.modal_builder',
-    [
-        'modal_id' => 'ingredientsModal',
-        'hasHeader' => true,
-        'modalTitle' => 'Detalhes:',
-        'hasBody' => true,
-        'rawBody' => '<span class="headers-details"><i class="fa-solid fa-utensils"></i> Acompanhamentos:</span>
+@component('components.modal_builder', [
+    'modal_id' => 'ingredientsModal',
+    'hasHeader' => true,
+    'modalTitle' => 'Detalhes:',
+    'hasBody' => true,
+    'rawBody' => '<span class="headers-details"><i class="fa-solid fa-utensils"></i> Acompanhamentos:</span>
                 <ul class="list-group list-group-flush" id="ing_list"></ul>
                 <hr>
                 <span class="headers-details"><i class="fa-solid fa-exclamation"></i> Nota:</span>
@@ -76,9 +75,9 @@
                         <label class="note-text"></label>
                     </div>
                 </div>',
-        'hasFooter' => true,
-        'buttons' => [['label' => 'Sair', 'id' => 'closeMdl', 'class' => 'btn', 'dismiss' => true]],
-    ])
+    'hasFooter' => true,
+    'buttons' => [['label' => 'Sair', 'id' => 'closeMdl', 'class' => 'btn', 'dismiss' => true]],
+])
 @endcomponent
 
 @section('content')
@@ -155,18 +154,20 @@
                 </table>
             </div>
             @if (!$closed && !$isCancelled)
+                @if (session()->get("type.write_orders") || session()->get("type.owner") || session()->get("type.admin"))
                 <div class="row">
                     <div class="col-6">
-                        <button class="btn btn-primary close-order mt-3" style="width: 100%" data-bs-toggle="modal"
-                            data-bs-target="#closeWarning">Fechar
+                        <button class="btn btn-primary close-order mt-3" style="width: 100%"
+                            data-bs-toggle="modal" data-bs-target="#closeWarning">Fechar
                             Pedido</button>
                     </div>
                     <div class="col-6">
-                        <button class="btn btn-danger close-order mt-3" style="width: 100%" data-bs-toggle="modal"
-                            data-bs-target="#cancelWarning">Cancelar
+                        <button class="btn btn-danger close-order mt-3" style="width: 100%"
+                            data-bs-toggle="modal" data-bs-target="#cancelWarning">Cancelar
                             Pedido</button>
                     </div>
                 </div>
+                @endif
             @endif
         </div>
     </div>
@@ -226,7 +227,7 @@
             }
         }).done((res) => {
             successToast(res.status, res.message)
-        }).fail((err)=>{
+        }).fail((err) => {
             errorToast(err.responseJSON.status, err.responseJSON.message);
         });
     }
@@ -251,7 +252,7 @@
             $("#progressLBL").text(res.progress + '% Completo');
             $("#sronly").text(res.progress + '% Complete');
 
-        }).fail((err)=>{
+        }).fail((err) => {
             errorToast(err.responseJSON.status, err.responseJSON.message);
         })
     }
@@ -302,6 +303,7 @@
                     data: null,
                     width: "30%",
                     render: function(data, type, row, meta) {
+                        if(!{{session()->get("type.write_orders")}}) return "";
                         return (!row['done']) ?
                             '<button class="btn btn-primary table-btn"' +
                             "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : '' }}" +
