@@ -42,6 +42,7 @@ Route::get('/no-access', function () {
 // Search page without reload
 Route::get('/search', [SearchController::class, 'index']);
 Route::post('/search_no_reload', [NavController::class, 'goToSearch'])->name("search_no_reload");
+Route::post('/search_confirm', [SearchController::class, 'search'])->name("search_confirm");
 
 // Page where users create a restaurant to switch account to professional
 Route::get('/novo/restaurante', [RestaurantController::class, 'index']);

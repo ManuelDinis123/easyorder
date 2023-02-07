@@ -49,7 +49,16 @@
 
         $("#searchBar").on('keypress', (e)=>{
             if (e.which == 13) {
-                console.log($("#searchBar").val());
+                $.ajax({
+                    method: "post",
+                    url:'/search_confirm',
+                    data: {
+                        "_token": "{{csrf_token()}}",
+                        query: $("#searchBar").val()
+                    }
+                }).done((res)=>{
+                    $("#container").html(res);
+                })
                 $("#inner-addon").addClass("animate-search");
                 setTimeout(() => {
                     $("#inner-addon").removeClass("animate-search");

@@ -1,21 +1,23 @@
 <link rel="stylesheet" href="{{ asset('css/search.css') }}">
 
-<div class="container">
+<div class="container" id="container">
     <div class="row">
         <div class="col-7">
             <div class="restaurants">
-                <div class="row mb-4">
-                    <div class="col-4">
-                        <img src="https://toohotel.com/wp-content/uploads/2022/09/TOO_restaurant_Panoramique_vue_Paris_nuit_v2-scaled.jpg"
-                            class="restaurant-img">
-                    </div>
-                    <div class="col-7">
-                        <h3 class="restaurant-title">Nome Restaurante</h3>
-                        <span class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua.</span>
-                    </div>
-                </div>
+                @if (isset($restaurants))
+                    @foreach ($restaurants as $res)
+                        <div class="row mb-4">
+                            <div class="col-4">
+                                <img src="{{ $res['logo_name'] ? asset('img/logos/' . $res['logo_name']) : $res['logo_url'] }}"
+                                    class="restaurant-img">
+                            </div>
+                            <div class="col-7">
+                                <h3 class="restaurant-title">{{ $res['name'] }}</h3>
+                                <span class="text-muted">{{ $res['description'] }}</span>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
         <div class="col-5">
