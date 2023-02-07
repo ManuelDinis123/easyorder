@@ -73,6 +73,7 @@ a {
 }
 
 .inner-addon{
+    transition: all 0.2s;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -104,3 +105,6 @@ a {
     object-fit: cover;
 }
 
+.animate-search {
+    transform: scale(.96);
+}

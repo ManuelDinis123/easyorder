@@ -31,7 +31,13 @@ body {
 
 .btn {
     border-radius: 50px;
+    transition: all 0.2s;
 }
+
+.btn:active {
+    transform: scale(0.96);
+}
+
 
 .datepicker table tr td, .datepicker table tr th{
     text-align:center;
