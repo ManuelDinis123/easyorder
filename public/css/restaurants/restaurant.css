@@ -63,6 +63,8 @@
 }
 
 .menu-card {
+    transition: all 0.5s !important;
+    -webkit-transition: all 0.5s;
     padding: 15px 15px;
     box-shadow: 0px 4px 14px 1px rgba(0, 0, 0, 0.45);
     border-radius: 24px;
@@ -72,6 +74,10 @@
     font-weight: 700;
 }
 
+.choosen {
+    color: #0e0e0e !important;
+}
+
 .menu-card-ico {
     transition: 0.2s all;
     cursor: pointer;
@@ -79,10 +85,12 @@
     font-size: 30px;
     margin-right: 15px;
     margin-top: 10px;
+    color: #777777;
 }
 
 .menu-card-ico:hover {
     transform: scale(1.05);
+    color: #0e0e0e;
 }
 
 .menu-card-ico:active {
@@ -104,4 +112,69 @@
     font-weight: 600;
     font-size: 20px;
     color: #ffffff;
+}
+
+.item-card {
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+}
+
+.item-card:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+.item-card:active {
+    transform: scale(0.99);
+}
+
+.menu-item {
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.menu-item:hover {
+    transform: scale(1.01);
+}
+
+.menu-item:active {
+    transform: scale(.99);
+}   
+
+.menu-item-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 80%;    
+}
+
+.menu-item-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.menu-item-description {
+    font-size: 18px !important;
+}
+
+.menu-price {
+    font-weight: bold;
+}
+
+.card-view {
+    transition: all 0.6s;
+}
+
+.list-view {
+    transition: all 0.6s;
+}
+
+.hide-view {
+    opacity: 0;
 }
