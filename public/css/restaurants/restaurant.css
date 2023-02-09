@@ -178,3 +178,7 @@
 .hide-view {
     opacity: 0;
 }
+
+body{
+    padding-bottom: 50px;
+}

@@ -29,7 +29,7 @@ class SearchController extends Controller
     {
         $keyword = $data->input('query');
 
-        $results = Restaurants::where('name', 'like', "%$keyword%")
+        $results = Restaurants::where('name', 'like', "%$keyword%")->where("isPublic", 1)
             ->get();
 
         $data = [];
