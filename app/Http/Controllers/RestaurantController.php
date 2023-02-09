@@ -274,4 +274,45 @@ class RestaurantController extends Controller
         file_put_contents(public_path() . '/img/logos/' .  $imgName, base64_decode($image));
         return $imgName;
     }
+
+    // Front-end methods
+
+    /**
+     * Goes to front-end restaurant page
+     * 
+     * @return view
+     */
+    function restaurant_page(Request $id)
+    {
+        $info = Restaurants::whereId($id->route('id'))->get()->first();
+
+        return view("frontend.restaurants.restaurant")->with("info", $info);
+    }
+
+    /**
+     * menu page
+     * 
+     * @return view
+     */
+    function menu_page(Request $id)
+    {
+        $info = Restaurants::whereId($id->route('id'))->get()->first();
+
+        $menu = Menu::where('restaurant_id', $id->route('id'))->get()->first();
+        $items_raw = MenuItems::where('menu_id', $menu->id)->get();
+
+        $items = [];
+        foreach ($items_raw as $item) {
+            $items[] = [
+                "id" => $item['id'],
+                "name" => $item['name'],
+                "description" => $item['description'],
+                "imageUrl" => $item['imageUrl'],
+                "price" => $item['price'],
+                "cost" => $item['cost']
+            ];
+        }
+
+        return view("frontend.restaurants.menu")->with("info", $info)->with("items", $items);
+    }
 }

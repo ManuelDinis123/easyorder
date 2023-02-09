@@ -117,6 +117,10 @@ Route::get('/professional/configuracoes/user', [SettingsController::class, 'inde
 Route::post('/professional/updateusersettings', [SettingsController::class, 'update'])->name("updateusersettings");
 Route::post('/professional/fileupload', [SettingsController::class, 'fileupload'])->name("fileupload");
 
+// Restaurant page front-end
+Route::get('/restaurante/{id}', [RestaurantController::class, 'restaurant_page']);
+Route::get('/restaurante/{id}/menu', [RestaurantController::class, 'menu_page']);
+
 // any other route that isn't declared goes to 404 page
 Route::get('/{any}', function () {
     abort(404, view("errors.404"));

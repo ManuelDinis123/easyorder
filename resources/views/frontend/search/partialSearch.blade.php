@@ -6,7 +6,7 @@
             <div class="restaurants">
                 @if (isset($restaurants))
                     @foreach ($restaurants as $res)
-                        <div class="row mb-4">
+                        <div class="row mb-4 restaurant" id="{{ $res['id'] }}">
                             <div class="col-4">
                                 <img src="{{ $res['logo_name'] ? asset('img/logos/' . $res['logo_name']) : $res['logo_url'] }}"
                                     class="restaurant-img">
@@ -63,3 +63,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(() => {
+        $(".restaurant").on('click', function() {
+            window.location.href = "/restaurante/" + this.id;
+        })
+    });
+</script>

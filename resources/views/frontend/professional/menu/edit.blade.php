@@ -131,7 +131,7 @@
 
 
                 <div class="img_card @if (!$imageurl) visually-hidden @endif" id="item-card">
-                    <h3 class="img-price h-no-linebreaks" id="card-price">{{ $price }}€</h3>
+                    <h3 class="img-price h-no-linebreaks" id="card-price">{{ $price+0 }}€</h3>
                     <h3 class="img-h" id="card-name">{{ $name }}</h3>
                 </div>
 

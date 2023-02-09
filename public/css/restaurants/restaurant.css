@@ -1,0 +1,107 @@
+.restaurant-logo {
+    position: absolute;
+    left: 38px;
+    top: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    width: 150px;
+    height: 150px;
+    filter: drop-shadow(0px 2.43662px 5px rgba(0, 0, 0, 0.3));
+}
+
+.restaurant-name {
+    color: white;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 61px;
+    margin-top: 170px;
+    margin-left: 200px;
+}
+
+.desc {
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 30px;
+    color: #393939;
+}
+
+.desc-container {
+    margin-left: 200px;
+    width: 850px;
+}
+
+.restauraunt-content {
+    margin-top: 350px;
+}
+
+.item {
+    transition: all 0.4s;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 30px;
+    color: #7a7a7a;
+    margin-left: 15px;
+}
+
+.item a {
+    transition: all 0.4s;
+    color: #7a7a7a;
+}
+
+.item a:hover {
+    color: black;
+}
+
+.item a:active {
+    filter: drop-shadow(0px 2.43662px 5px rgb(0, 0, 0));
+}
+
+.item-selected a {
+    font-weight: 500;
+    color: black;
+}
+
+.menu-card {
+    padding: 15px 15px;
+    box-shadow: 0px 4px 14px 1px rgba(0, 0, 0, 0.45);
+    border-radius: 24px;
+}
+
+.menu-card h1 {
+    font-weight: 700;
+}
+
+.menu-card-ico {
+    transition: 0.2s all;
+    cursor: pointer;
+    float: right;
+    font-size: 30px;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+
+.menu-card-ico:hover {
+    transform: scale(1.05);
+}
+
+.menu-card-ico:active {
+    transform: scale(0.98);
+}
+
+.item-cnts {
+    font-weight: 300;
+    font-size: 20px;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: flex-end;
+    padding-bottom: 10px;
+    color: #ffffff;
+}
+
+.item-price {
+    font-weight: 600;
+    font-size: 20px;
+    color: #ffffff;
+}
