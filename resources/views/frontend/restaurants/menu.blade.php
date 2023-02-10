@@ -39,9 +39,13 @@
                                 }
                             </style>
                             <div class="item-card" id="item{{ $item['id'] }}">
-                                <div class="row item-cnts g-0">
-                                    <div class="col-10"><span class="item-name">{{ $item['name'] }}</span></div>
-                                    <div class="col-2"><span class="item-price">{{ $item['price'] + 0 }}€</span></div>
+                                <div class="row item-cnts g-0 unselectable">
+                                    <div class="col-10">
+                                        <span class="item-name unselectable">{{ $item['name'] }}</span>
+                                    </div>
+                                    <div class="col-2">
+                                        <span class="item-price unselectable">{{ $item['price'] + 0 }}€</span>
+                                    </div>
                                 </div>
                             </div><br>
                         @endforeach
