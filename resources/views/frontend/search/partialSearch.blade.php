@@ -20,13 +20,22 @@
                 @endif
             </div>
         </div>
+        @php
+            $alltags = '';
+            if (isset($filters['tags'])) {
+                // treat a string for tags
+                foreach ($filters['tags'] as $key => $value) {
+                    $alltags .= $value . (isset($filters['tags'][$key + 1]) ? ', ' : '');
+                }
+            }
+        @endphp
         <div class="col-5">
             <div class="filters">
                 <h4>Filtros</h4>
                 <hr>
                 <label>Tags:</label>
                 <input type="text" class="form-control mt-1" name="tags" id="filter0"
-                    placeholder="Fast Food, Veggie, Healthy etc">
+                    placeholder="Fast Food, Veggie, Healthy etc" value="{{ $alltags }}">
                 <label class="mt-3">Rating:</label><br>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="1" id="filter1">
