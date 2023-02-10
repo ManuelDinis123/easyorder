@@ -15,6 +15,7 @@ class NavController extends Controller
      */
     function goToSearch(Request $filters)
     {
+        $filtersBack = []; // To send back to the view to display the previous filters
         if (isset($filters->hasFilters)) {
             // TODO: when ratings are added the filter must work here
             $tags_raw = json_decode($filters->tags);
@@ -23,6 +24,8 @@ class NavController extends Controller
             foreach ($tags_raw as $tag) {
                 $tags[] = $tag->value;
             }
+
+            $filtersBack['tags'] = $tags;
 
             $keyword = $filters->input('query');
 
@@ -55,6 +58,6 @@ class NavController extends Controller
             ];
         }
 
-        return view('frontend.search.partialSearch')->with("restaurants", $data);
+        return view('frontend.search.partialSearch')->with("restaurants", $data)->with("filters", $filtersBack);
     }
 }
