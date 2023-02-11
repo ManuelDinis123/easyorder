@@ -112,7 +112,6 @@
                 "isRemove": isRemove
             }
         }).done((res) => {
-            console.log(res);
             if (isRemove && res == "deleted") {
                 $("#" + itemID).removeClass("give-space");
                 $("#buttons" + itemID).removeClass("show-buttons");
@@ -143,6 +142,7 @@
             cartAddRemove(this.id);
             $("#item_quantity" + this.id).val(parseInt($("#item_quantity" + this.id).val()) + 1);
             $("#qnt" + this.id).text($("#item_quantity" + this.id).val() + " no cart");
+            $("#cart_total").text( parseInt($("#cart_total").text())+1 );
         })
 
         $(".menu-card-ico").on('click', function() {
@@ -158,12 +158,14 @@
             cartAddRemove(item, 1);
             $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) - 1);
             $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
+            $("#cart_total").text( parseInt($("#cart_total").text())-1 );
         });
         $(".add-btn").on('click', function() {
             var item = this.id.replace("additem", ""); // Extract the item id from the btn id
             cartAddRemove(item);
             $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) + 1);
             $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
+            $("#cart_total").text( parseInt($("#cart_total").text())+1 );
         });
     });
 </script>

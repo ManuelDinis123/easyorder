@@ -11,7 +11,7 @@
     <div class="icons-nav">
         <a href="/professional/configuracoes" class="nav-item position-relative">
             <i class="fa-solid fa-cart-shopping"></i>
-            <span class="position-absolute badge rounded-pill shp-badge">
+            <span class="position-absolute badge rounded-pill shp-badge" id="cart_total">
                 0
             </span>
         </a>
@@ -37,6 +37,21 @@
     })
 
     $(document).ready(() => {
+        $.ajax({
+            method: 'post',
+            url: '/getCartItems',
+            data: {
+                "_token": "{{ csrf_token() }}",
+            }
+        }).done((res) => {
+            var total = 0;
+            $.each(res, (key, val) => {
+                total += val.quantity;
+            })
+            $("#cart_total").text(total);
+        })
+
+
         $("#searchBar").on('click', () => {
             if (window.location.pathname == "/search") return;
 
