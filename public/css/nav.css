@@ -108,3 +108,12 @@ a {
 .animate-search {
     transform: scale(.96);
 }
+
+.shp-badge {
+    font-size: 10px !important;
+    color: #0c0c0c;
+    margin-right: 10px;
+    top: 0px;
+    left: 10px;
+    font-weight: 900 !important;
+}

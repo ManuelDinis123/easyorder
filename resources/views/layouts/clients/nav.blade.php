@@ -9,7 +9,12 @@
         <input type="text" class="nav-search" id="searchBar" placeholder="Que restaurante procura?">
     </div>
     <div class="icons-nav">
-        <a href="/professional/configuracoes" class="nav-item"><i class="fa-solid fa-cart-shopping"></i></a>
+        <a href="/professional/configuracoes" class="nav-item position-relative">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="position-absolute badge rounded-pill shp-badge">
+                0
+            </span>
+        </a>
         <i class="fa-regular fa-pipe nav-line"></i>
         <a href="/professional/configuracoes" class="nav-item"><i class="fa-solid fa-gear"></i></a>
         <a href="/professional/chat" class="nav-item"><i class="fa-solid fa-user"></i></a>
@@ -33,7 +38,7 @@
 
     $(document).ready(() => {
         $("#searchBar").on('click', () => {
-            if(window.location.pathname=="/search") return;
+            if (window.location.pathname == "/search") return;
 
             $.ajax({
                 method: 'post',
@@ -47,16 +52,16 @@
             })
         });
 
-        $("#searchBar").on('keypress', (e)=>{
+        $("#searchBar").on('keypress', (e) => {
             if (e.which == 13) {
                 $.ajax({
                     method: "post",
-                    url:'/search_confirm',
+                    url: '/search_confirm',
                     data: {
-                        "_token": "{{csrf_token()}}",
+                        "_token": "{{ csrf_token() }}",
                         query: $("#searchBar").val()
                     }
-                }).done((res)=>{
+                }).done((res) => {
                     $("#container").html(res);
                 })
                 $("#inner-addon").addClass("animate-search");
