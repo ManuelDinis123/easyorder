@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\invite;
 use App\Models\Restaurants;
+use App\Models\Shoppingcart;
 use App\Models\Types;
 use App\Models\Users;
 use App\Models\UserAuth;
@@ -161,6 +162,10 @@ class AuthController extends Controller
         $logged = Users::whereId(session()->get('user.id'))->update([
             "logged_in" => 0
         ]);
+
+        if(session()->get('shoppingCart')){
+            Shoppingcart::whereId(session()->get('shoppingCart'))->delete();
+        }
 
         session()->flush();
 

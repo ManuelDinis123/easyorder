@@ -57,13 +57,15 @@
                                 </div>
                                 <div class="mt-2 buttons-contain" id="buttons{{ $item['id'] }}">
                                     <span>
-                                        <button class="btn btn-num cart-btns rem-btns" id="remove{{ $item['id'] }}">-</button>
+                                        <button class="btn btn-num cart-btns rem-btns"
+                                            id="remove{{ $item['id'] }}">-</button>
                                     </span>
                                     <span>
                                         <button class="btn btn-mid cart-btns">1 no cart</button>
                                     </span>
                                     <span>
-                                        <button class="btn btn-num cart-btns" style="margin-left: 20px;">+</button>
+                                        <button class="btn btn-num cart-btns add-btn" style="margin-left: 20px;"
+                                            id="additem{{ $item['id'] }}">+</button>
                                     </span>
                                 </div>
                             </div>
@@ -99,10 +101,29 @@
         $("#" + view).removeClass("hide-view visually-hidden");
     }
 
+    function cartAddRemove(itemID, isRemove = 0) {
+        $.ajax({
+            method: 'post',
+            url: '/addToCart',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "item_id": itemID,
+                "isRemove": isRemove
+            }
+        }).done((res) => {
+            console.log(res);
+            if (isRemove && res == "deleted") {
+                $("#" + itemID).removeClass("give-space");
+                $("#buttons" + itemID).removeClass("show-buttons");
+            }
+        })
+    }
+
     $(document).ready(() => {
         $(".menu_card").on('click', function() {
             $("#" + this.id).addClass("give-space");
             $("#buttons" + this.id).addClass("show-buttons");
+            cartAddRemove(this.id);
         })
 
         $(".menu-card-ico").on('click', function() {
@@ -115,8 +136,11 @@
 
         $(".rem-btns").on('click', function() {
             var item = this.id.replace("remove", ""); // Extract the item id from the btn id
-            $("#" + item).removeClass("give-space");
-            $("#buttons" + item).removeClass("show-buttons");
+            cartAddRemove(item, 1);
+        });
+        $(".add-btn").on('click', function() {
+            var item = this.id.replace("additem", ""); // Extract the item id from the btn id
+            cartAddRemove(item);
         });
     });
 </script>

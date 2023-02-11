@@ -3,6 +3,7 @@
 use App\Helpers\AppHelper;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NavController;
@@ -120,6 +121,9 @@ Route::post('/professional/fileupload', [SettingsController::class, 'fileupload'
 // Restaurant page front-end
 Route::get('/restaurante/{id}', [RestaurantController::class, 'restaurant_page']);
 Route::get('/restaurante/{id}/menu', [RestaurantController::class, 'menu_page']);
+
+// Shopping Cart routes
+Route::post('/addToCart', [CartController::class, 'addToCart'])->name("addToCart");
 
 // any other route that isn't declared goes to 404 page
 Route::get('/{any}', function () {
