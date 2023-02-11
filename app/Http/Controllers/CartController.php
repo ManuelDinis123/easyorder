@@ -29,6 +29,35 @@ class CartController extends Controller
         return response()->json(["title" => "Sucesso", "message" => "Adicionado ao carrinho com sucesso!"], 200);
     }
 
+    /**
+     * Get all items in card
+     * 
+     * @return Array
+     */
+    function get(Request $data)
+    {
+        if (!session()->get('shoppingCart')) {
+            return "no items found...";
+        }
+
+        if (isset($data->restaurantID)) {
+            $res = CartItems::select("menu_item.id", "menu_item.name", "menu_item.price", "cart_items.quantity")
+                ->join("menu_item", "menu_item.id", "=", "cart_items.item_id")
+                ->join("menu", "menu.id", "=", "menu_item.menu_id")
+                ->where("cart_items.cart_id", session()->get('shoppingCart'))
+                ->where("menu.restaurant_id", $data->restaurantID)
+                ->get();
+        } else {
+            $res = CartItems::select("menu_item.id", "menu_item.name", "menu_item.price", "cart_items.quantity")
+                ->join("menu_item", "menu_item.id", "=", "cart_items.item_id")
+                ->join("menu", "menu.id", "=", "menu_item.menu_id")
+                ->where("cart_items.cart_id", session()->get('shoppingCart'))
+                ->get();
+        }
+
+        return response()->json($res, 200);
+    }
+
     // Create a cart
     function createCart($userID)
     {

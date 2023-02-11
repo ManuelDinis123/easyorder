@@ -309,7 +309,7 @@ class RestaurantController extends Controller
                 "description" => $item['description'],
                 "imageUrl" => $item['imageUrl'],
                 "price" => $item['price'],
-                "cost" => $item['cost']
+                "cost" => $item['cost'],                
             ];
         }
 

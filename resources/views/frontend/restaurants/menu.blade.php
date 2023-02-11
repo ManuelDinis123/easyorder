@@ -61,7 +61,8 @@
                                             id="remove{{ $item['id'] }}">-</button>
                                     </span>
                                     <span>
-                                        <button class="btn btn-mid cart-btns">1 no cart</button>
+                                        <button class="btn btn-mid cart-btns" id="qnt{{ $item['id'] }}">1 no cart</button>
+                                        <input type="hidden" id="item_quantity{{ $item['id'] }}" value="0">
                                     </span>
                                     <span>
                                         <button class="btn btn-num cart-btns add-btn" style="margin-left: 20px;"
@@ -120,10 +121,28 @@
     }
 
     $(document).ready(() => {
+        $.ajax({
+            method: 'post',
+            url: '/getCartItems',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "restaurantID": "{{ $info['id'] }}",
+            }
+        }).done((res) => {
+            $.each(res, (key, val) => {
+                $("#" + val.id).addClass("give-space");
+                $("#buttons" + val.id).addClass("show-buttons");
+                $("#qnt" + val.id).text(val.quantity + " no cart");
+                $("#item_quantity" + val.id).val(val.quantity);
+            })
+        })
+
         $(".menu_card").on('click', function() {
             $("#" + this.id).addClass("give-space");
             $("#buttons" + this.id).addClass("show-buttons");
             cartAddRemove(this.id);
+            $("#item_quantity" + this.id).val(parseInt($("#item_quantity" + this.id).val()) + 1);
+            $("#qnt" + this.id).text($("#item_quantity" + this.id).val() + " no cart");
         })
 
         $(".menu-card-ico").on('click', function() {
@@ -137,10 +156,14 @@
         $(".rem-btns").on('click', function() {
             var item = this.id.replace("remove", ""); // Extract the item id from the btn id
             cartAddRemove(item, 1);
+            $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) - 1);
+            $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
         });
         $(".add-btn").on('click', function() {
             var item = this.id.replace("additem", ""); // Extract the item id from the btn id
             cartAddRemove(item);
+            $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) + 1);
+            $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
         });
     });
 </script>
