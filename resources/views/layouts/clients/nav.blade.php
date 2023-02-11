@@ -31,7 +31,7 @@
     $(window).on('load', () => {
         $("#loading").fadeOut(500, function() {
             // fadeOut complete. Remove the loading div
-            $("#loading").remove(); //makes page more lightweight 
+            $("#loading").remove(); //makes page more lightweight
             $("#content").removeClass("visually-hidden");
         });
     })

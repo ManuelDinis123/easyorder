@@ -28,26 +28,46 @@
             </div>
             <div class="menu-card-body">
                 <div class="card-view" id="card_view">
-                    <div class="row">
+                    <div class="row g-0">
                         @foreach ($items as $item)
                             <style>
-                                #item{{ $item['id'] }} {
+                                .item{{ $item['id'] }} {
+                                    height: 216px;
+                                    transition: all 0.5s;
+                                    -webkit-transition: all 0.5s;
+                                    position: relative;
                                     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 47.4%, #000000 100%), url("{{ $item['imageUrl'] }}");
                                     background-size: cover;
                                     background-position: center;
                                     border-radius: 31px;
+                                    z-index: 2;
                                 }
                             </style>
-                            <div class="item-card" id="item{{ $item['id'] }}">
-                                <div class="row item-cnts g-0 unselectable">
-                                    <div class="col-10">
-                                        <span class="item-name unselectable">{{ $item['name'] }}</span>
-                                    </div>
-                                    <div class="col-2">
-                                        <span class="item-price unselectable">{{ $item['price'] + 0 }}€</span>
+                            <div class="item-card">
+                                <div id="{{ $item['id'] }}" class="item{{ $item['id'] }} menu_card"
+                                    style="padding:0px 10px; margin-bottom:24px;">
+                                    <div class="row item-cnts g-0 unselectable">
+                                        <div class="col-10">
+                                            <span class="item-name unselectable">{{ $item['name'] }}</span>
+                                        </div>
+                                        <div class="col-2">
+                                            <span class="item-price unselectable">{{ $item['price'] + 0 }}€</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div><br>
+                                <div class="mt-2 buttons-contain" id="buttons{{ $item['id'] }}">
+                                    <span>
+                                        <button class="btn btn-num cart-btns rem-btns" id="remove{{ $item['id'] }}">-</button>
+                                    </span>
+                                    <span>
+                                        <button class="btn btn-mid cart-btns">1 no cart</button>
+                                    </span>
+                                    <span>
+                                        <button class="btn btn-num cart-btns" style="margin-left: 20px;">+</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <br>
                         @endforeach
                     </div>
                 </div>
@@ -80,6 +100,11 @@
     }
 
     $(document).ready(() => {
+        $(".menu_card").on('click', function() {
+            $("#" + this.id).addClass("give-space");
+            $("#buttons" + this.id).addClass("show-buttons");
+        })
+
         $(".menu-card-ico").on('click', function() {
             if (this.id == "crd-view") {
                 changeTab("crd-view", "card_view", "li-view", "list_view");
@@ -87,5 +112,11 @@
                 changeTab("li-view", "list_view", "crd-view", "card_view");
             }
         })
+
+        $(".rem-btns").on('click', function() {
+            var item = this.id.replace("remove", ""); // Extract the item id from the btn id
+            $("#" + item).removeClass("give-space");
+            $("#buttons" + item).removeClass("show-buttons");
+        });
     });
 </script>
