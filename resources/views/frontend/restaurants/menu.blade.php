@@ -77,13 +77,26 @@
                 <div class="list-view hide-view visually-hidden" id="list_view">
                     <div class="list-item">
                         @foreach ($items as $item)
-                            <li class="menu-item">
-                                <div class="menu-item-info">
-                                    <div class="menu-item-name">{{ $item['name'] }}</div>
-                                    <div class="menu-item-description text-muted">{{ $item['description'] }}</div>
+                            <div class="row">
+                                <div class="col-sm-11">
+                                    <li class="menu-item unselectable" id="li-{{ $item['id'] }}">
+                                        <div class="menu-item-info">
+                                            <div class="menu-item-name">{{ $item['name'] }}<span
+                                                    class="quantity-list visually-hidden" id="qntli{{ $item['id'] }}"> x
+                                                    1</span>
+                                            </div>
+                                            <div class="menu-item-description text-muted">{{ $item['description'] }}</div>
+                                        </div>
+                                        <span class="menu-price">{{ $item['price'] }}€</span>
+                                    </li>
                                 </div>
-                                <span class="menu-price">{{ $item['price'] }}€</span>
-                            </li>
+                                <div class="col-sm-1">
+                                    <div class="button-container hide-btn-list" id="btncontain{{ $item['id'] }}">
+                                        <button type="button" class="btn btn-dark li-btn-remove rmlibtn"
+                                            id="buttonlirem{{ $item['id'] }}"><i class="fa-solid fa-minus"></i></button>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -115,6 +128,8 @@
             if (isRemove && res == "deleted") {
                 $("#" + itemID).removeClass("give-space");
                 $("#buttons" + itemID).removeClass("show-buttons");
+                $("#btncontain" + itemID).addClass("hide-btn-list");
+                $("#qntli" + itemID).addClass("visually-hidden");
             }
         })
     }
@@ -136,13 +151,42 @@
             })
         })
 
+        $(".menu-item").on('click', function() {
+            var item = this.id.replace("li-", "");
+
+            $("#" + item).addClass("give-space");
+            $("#buttons" + item).addClass("show-buttons");
+
+            $("#btncontain" + item).removeClass("hide-btn-list");
+            $("#qntli" + item).removeClass("visually-hidden");
+            cartAddRemove(item);
+            $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) + 1);
+            $("#qntli" + item).text(" x " + $("#item_quantity" + item).val());
+
+            $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
+            $("#cart_total").text(parseInt($("#cart_total").text()) + 1);
+        })
+
+        $(".rmlibtn").on('click', function() {
+            var item = this.id.replace("buttonlirem", "");
+            cartAddRemove(item, 1);
+            $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) - 1);
+            $("#qntli" + item).text(" x " + $("#item_quantity" + item).val());
+
+            $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
+            $("#cart_total").text(parseInt($("#cart_total").text()) - 1);
+        })
+
         $(".menu_card").on('click', function() {
+            $("#btncontain" + this.id).removeClass("hide-btn-list");
+            $("#qntli" + this.id).removeClass("visually-hidden");
             $("#" + this.id).addClass("give-space");
             $("#buttons" + this.id).addClass("show-buttons");
             cartAddRemove(this.id);
             $("#item_quantity" + this.id).val(parseInt($("#item_quantity" + this.id).val()) + 1);
             $("#qnt" + this.id).text($("#item_quantity" + this.id).val() + " no cart");
-            $("#cart_total").text( parseInt($("#cart_total").text())+1 );
+            $("#qntli" + this.id).text(" x " + $("#item_quantity" + this.id).val());
+            $("#cart_total").text(parseInt($("#cart_total").text()) + 1);
         })
 
         $(".menu-card-ico").on('click', function() {
@@ -158,14 +202,16 @@
             cartAddRemove(item, 1);
             $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) - 1);
             $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
-            $("#cart_total").text( parseInt($("#cart_total").text())-1 );
+            $("#qntli" + item).text(" x " + $("#item_quantity" + item).val());
+            $("#cart_total").text(parseInt($("#cart_total").text()) - 1);
         });
         $(".add-btn").on('click', function() {
             var item = this.id.replace("additem", ""); // Extract the item id from the btn id
             cartAddRemove(item);
             $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) + 1);
             $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
-            $("#cart_total").text( parseInt($("#cart_total").text())+1 );
+            $("#qntli" + item).text(" x " + $("#item_quantity" + item).val());
+            $("#cart_total").text(parseInt($("#cart_total").text()) + 1);
         });
     });
 </script>
