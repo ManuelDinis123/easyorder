@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AppHelper;
 use App\Models\CartItems;
 use App\Models\MenuItems;
 use App\Models\Shoppingcart;
@@ -19,6 +20,8 @@ class CartController extends Controller
      */
     function index()
     {
+        if(!AppHelper::hasLogin()) return redirect("/");
+
         // Get which restaurants are associated with items in cart
         $restaurants = CartItems::select("restaurants.id", "restaurants.name")
             ->join("menu_item", "menu_item.id", "=", "cart_items.item_id")

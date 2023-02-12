@@ -153,7 +153,7 @@
         })
 
         $(".menu-item").on('click', function() {
-            var item = this.id.replace("li-", "");            
+            var item = this.id.replace("li-", "");
             $("#" + item).addClass("give-space");
             $("#buttons" + item).addClass("show-buttons");
 

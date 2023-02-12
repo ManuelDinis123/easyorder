@@ -284,6 +284,8 @@ class RestaurantController extends Controller
      */
     function restaurant_page(Request $id)
     {
+        if(!AppHelper::hasLogin()) return redirect("/");
+
         $info = Restaurants::whereId($id->route('id'))->get()->first();
 
         return view("frontend.restaurants.restaurant")->with("info", $info);

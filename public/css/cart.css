@@ -45,6 +45,12 @@
     top: 50px;
     font-weight: 700;
 }
+.item-info h4{
+    position: absolute;
+    left: 59vw;
+    top: 50px;
+    font-weight: 600;
+}
 .item-info h3 span{
     font-weight: 400 !important;
 }
@@ -86,4 +92,21 @@
     font-size: 20px;
     left: 59vw;
     top: 75px;
+}
+
+.minus-btn {
+    position: absolute;
+    left: 50px;
+    top: 50px;
+}
+.plus-btn {
+    position: absolute;
+    left: 50px;
+    top: 50px;
+}
+
+.btnss {
+    position: absolute;
+    left: 260px;
+    top: 130px;
 }
