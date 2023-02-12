@@ -126,6 +126,7 @@
             }
         }).done((res) => {
             if (isRemove && res == "deleted") {
+                $("#remove"+itemID).attr("disabled", "disabled");
                 $("#" + itemID).removeClass("give-space");
                 $("#buttons" + itemID).removeClass("show-buttons");
                 $("#btncontain" + itemID).addClass("hide-btn-list");
@@ -152,8 +153,7 @@
         })
 
         $(".menu-item").on('click', function() {
-            var item = this.id.replace("li-", "");
-
+            var item = this.id.replace("li-", "");            
             $("#" + item).addClass("give-space");
             $("#buttons" + item).addClass("show-buttons");
 
@@ -169,8 +169,12 @@
 
         $(".rmlibtn").on('click', function() {
             var item = this.id.replace("buttonlirem", "");
-            cartAddRemove(item, 1);
             $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) - 1);
+            if($("#item_quantity"+item).val()<0) {
+                $("#item_quantity" + item).val(0);
+                return;
+            }
+            cartAddRemove(item, 1);
             $("#qntli" + item).text(" x " + $("#item_quantity" + item).val());
 
             $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
@@ -179,6 +183,7 @@
 
         $(".menu_card").on('click', function() {
             $("#btncontain" + this.id).removeClass("hide-btn-list");
+            $("#remove"+this.id).removeAttr("disabled", "");
             $("#qntli" + this.id).removeClass("visually-hidden");
             $("#" + this.id).addClass("give-space");
             $("#buttons" + this.id).addClass("show-buttons");
@@ -199,14 +204,19 @@
 
         $(".rem-btns").on('click', function() {
             var item = this.id.replace("remove", ""); // Extract the item id from the btn id
-            cartAddRemove(item, 1);
             $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) - 1);
+            if($("#item_quantity"+item).val()<0) {
+                $("#item_quantity" + item).val(0);
+                return;
+            }
+            cartAddRemove(item, 1);
             $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
             $("#qntli" + item).text(" x " + $("#item_quantity" + item).val());
             $("#cart_total").text(parseInt($("#cart_total").text()) - 1);
         });
         $(".add-btn").on('click', function() {
             var item = this.id.replace("additem", ""); // Extract the item id from the btn id
+            $("#remove"+item).removeAttr("disabled", "");
             cartAddRemove(item);
             $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) + 1);
             $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
