@@ -3,12 +3,62 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartItems;
+use App\Models\MenuItems;
 use App\Models\Shoppingcart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
+
+    /**
+     * Shopping cart overview page
+     * 
+     * @return view
+     */
+    function index()
+    {
+        // Get which restaurants are associated with items in cart
+        $restaurants = CartItems::select("restaurants.id", "restaurants.name")
+            ->join("menu_item", "menu_item.id", "=", "cart_items.item_id")
+            ->join("menu", "menu.id", "=", "menu_item.menu_id")
+            ->join("restaurants", "restaurants.id", "=", "menu.restaurant_id")
+            ->where("cart_items.cart_id", session()->get("shoppingCart"))
+            ->distinct()
+            ->get();
+
+        $final_data = [];
+        foreach ($restaurants as $restaurant) {
+            $final_data[$restaurant['id']] = ["id" => $restaurant['id'], "name" => $restaurant['name'], "items" => []];
+        }
+
+        // Get items in cart
+        $items = CartItems::select(DB::raw("restaurants.id as res_id"), "cart_items.item_id", "cart_items.quantity", "menu_item.name", "menu_item.price", "menu_item.description", "menu_item.imageUrl")
+            ->join("menu_item", "menu_item.id", "=", "cart_items.item_id")
+            ->join("menu", "menu.id", "=", "menu_item.menu_id")
+            ->join("restaurants", "restaurants.id", "=", "menu.restaurant_id")
+            ->where("cart_items.cart_id", session()->get("shoppingCart"))
+            ->get();
+
+        $count = 0;
+        foreach ($items as $item) {
+            $count += $item['quantity'];
+            $final_data[$item['res_id']]['items'] += [
+                $item['item_id'] => [
+                    "item_id" => $item['item_id'],
+                    "name" => $item['name'],
+                    "quantity" => $item['quantity'],
+                    "price" => $item['price'],
+                    "description" => $item['description'],
+                    "imageUrl" => $item['imageUrl'],
+                ]
+            ];
+        }        
+
+        return view("frontend.cart.overview")->with("cart", $final_data)->with('count', $count);
+    }
+
     /**
      * Creates a cart for user or adds stuff to the cart
      * 

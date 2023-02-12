@@ -123,6 +123,7 @@ Route::get('/restaurante/{id}', [RestaurantController::class, 'restaurant_page']
 Route::get('/restaurante/{id}/menu', [RestaurantController::class, 'menu_page']);
 
 // Shopping Cart routes
+Route::get('/carinho', [CartController::class, 'index']);
 Route::post('/addToCart', [CartController::class, 'addToCart'])->name("addToCart");
 Route::post('/getCartItems', [CartController::class, 'get'])->name("getCartItems");
 

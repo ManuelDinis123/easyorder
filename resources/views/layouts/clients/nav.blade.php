@@ -9,15 +9,15 @@
         <input type="text" class="nav-search" id="searchBar" placeholder="Que restaurante procura?">
     </div>
     <div class="icons-nav">
-        <a href="/professional/configuracoes" class="nav-item position-relative">
+        <a href="/carrinho" class="nav-item position-relative">
             <i class="fa-solid fa-cart-shopping"></i>
             <span class="position-absolute badge rounded-pill shp-badge" id="cart_total">
                 0
             </span>
         </a>
         <i class="fa-regular fa-pipe nav-line"></i>
-        <a href="/professional/configuracoes" class="nav-item"><i class="fa-solid fa-gear"></i></a>
-        <a href="/professional/chat" class="nav-item"><i class="fa-solid fa-user"></i></a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-gear"></i></a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-user"></i></a>
     </div>
 </header>
 

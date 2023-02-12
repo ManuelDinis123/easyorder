@@ -1,0 +1,89 @@
+.overview-header {
+    padding: 20px 20px;
+}
+.oh-h1 {
+    font-weight: 700;
+}
+
+.oh-h1 span {
+    font-weight: 400 !important;
+    font-size: 27px;
+}
+
+.item-card-container {
+    display: flex;
+    justify-content: center;
+}
+.item {
+    position: relative;
+    margin-bottom: 10px;
+    width: 1326px;
+    height: 198px;
+}
+
+.item-info{
+    width: 76vw;
+    height: 198px;
+    background: #EFEFEF;
+    box-shadow: 0px 3px 13px rgba(0, 0, 0, 0.233);
+    border-radius: 108px;
+}
+
+.item-img {
+    object-fit: cover;
+    border-radius: 50%;
+    height: 198px;
+    width: 198px;
+    position: absolute;
+    left: 0px;
+    z-index: 1;
+}
+
+.item-info h3{
+    position: absolute;
+    left: 260px;
+    top: 50px;
+    font-weight: 700;
+}
+.item-info h3 span{
+    font-weight: 400 !important;
+}
+
+.total-price {
+    position: absolute;
+    left: 260px;
+    top: 90px;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.total-price span {
+    font-weight: 700;
+}
+
+.card-btns{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 64px;
+}
+
+.card-btns button{
+    font-size: 18px;
+    width: 300px !important;
+    margin: 5px;
+}
+
+.btn-light {
+    background-color: #ebebeb;
+}
+
+.btn-light:hover {
+    background-color: #d8d8d8;
+}
+
+.description {
+    position: absolute;
+    font-size: 20px;
+    left: 59vw;
+    top: 75px;
+}
