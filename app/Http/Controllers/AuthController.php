@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CartItems;
 use App\Models\invite;
 use App\Models\Restaurants;
 use App\Models\Shoppingcart;
@@ -164,6 +165,7 @@ class AuthController extends Controller
         ]);
 
         if(session()->get('shoppingCart')){
+            CartItems::where("cart_id", session()->get('shoppingCart'))->delete();
             Shoppingcart::whereId(session()->get('shoppingCart'))->delete();
         }
 

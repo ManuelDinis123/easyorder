@@ -237,4 +237,7 @@ class OrdersController extends Controller
         if (session()->get("restaurant.id") != $order->restaurant_id) return 0;
         return 1;
     }
+
+    // Methods for client
+
 }

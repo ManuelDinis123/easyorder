@@ -126,6 +126,10 @@ Route::get('/restaurante/{id}/menu', [RestaurantController::class, 'menu_page'])
 Route::get('/carinho', [CartController::class, 'index']);
 Route::post('/addToCart', [CartController::class, 'addToCart'])->name("addToCart");
 Route::post('/getCartItems', [CartController::class, 'get'])->name("getCartItems");
+Route::post('/getnote', [CartController::class, 'getNote'])->name("getnote");
+Route::post('/addnote', [CartController::class, 'addNotes'])->name("addnote");
+Route::post('/addside', [CartController::class, 'addSides'])->name("addside");
+Route::post('/getsides', [CartController::class, 'getSides'])->name("getsides");
 
 // any other route that isn't declared goes to 404 page
 Route::get('/{any}', function () {
