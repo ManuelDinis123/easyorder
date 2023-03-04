@@ -133,14 +133,14 @@ class CartController extends Controller
     function addItems($isRemove, $cartID, $itemID)
     {
         if ($isRemove) {
-            $exists = CartItems::where("item_id", $itemID)->get()->first();
+            $exists = CartItems::where("item_id", $itemID)->where("cart_id", $cartID)->get()->first();
             if (($exists->quantity - 1) == 0) {
-                $remove = CartItems::where("item_id", $itemID)->delete();
+                $remove = CartItems::where("item_id", $itemID)->where("cart_id", $cartID)->delete();
                 if (!$remove) return 0;
 
                 return "deleted";
             } else {
-                $remove = CartItems::whereId($exists->id)->update([
+                $remove = CartItems::whereId($exists->id)->where("cart_id", $cartID)->update([
                     "quantity" => ($exists->quantity - 1)
                 ]);
                 if (!$remove) return 0;
@@ -149,7 +149,7 @@ class CartController extends Controller
             }
         }
 
-        $exists = CartItems::where("item_id", $itemID)->get()->first();
+        $exists = CartItems::where("item_id", $itemID)->where("cart_id", $cartID)->get()->first();
 
         if (is_null($exists)) {
             $addition = CartItems::create([
@@ -159,7 +159,7 @@ class CartController extends Controller
                 "note" => ""
             ]);
         } else {
-            $addition = CartItems::whereId($exists->id)->update([
+            $addition = CartItems::whereId($exists->id)->where("cart_id", $cartID)->update([
                 "quantity" => ($exists->quantity + 1)
             ]);
         }

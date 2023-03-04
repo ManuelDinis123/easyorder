@@ -130,6 +130,7 @@ Route::post('/getnote', [CartController::class, 'getNote'])->name("getnote");
 Route::post('/addnote', [CartController::class, 'addNotes'])->name("addnote");
 Route::post('/addside', [CartController::class, 'addSides'])->name("addside");
 Route::post('/getsides', [CartController::class, 'getSides'])->name("getsides");
+Route::post('/createorder', [OrdersController::class, 'create_order'])->name("createorder");
 
 // any other route that isn't declared goes to 404 page
 Route::get('/{any}', function () {

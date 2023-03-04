@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Models\CartItems;
 use App\Models\Ingredients;
 use App\Models\MenuItems;
 use App\Models\OrderItems;
@@ -239,5 +240,16 @@ class OrdersController extends Controller
     }
 
     // Methods for client
+
+    /**
+     * Creates an order for client
+     * 
+     * @return Response
+     */
+    function create_order() {
+        $orderItems = CartItems::where('cart_id', session()->get("shoppingcart"))->get();
+        Log::info($orderItems);
+        return "worky";
+    }
 
 }

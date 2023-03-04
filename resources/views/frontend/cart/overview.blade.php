@@ -73,7 +73,21 @@
         @endforeach
     @endforeach
 
+    <button class="btn btn-dark form-control" style="margin-bottom:20px; height: 50px" id="confirmOrder">Confirmar Pedido</button>
+
     <script>
+        $("#confirmOrder").on('click', ()=>{
+            $.ajax({
+                method: "post",
+                url: "/createorder",
+                data: {
+                    "_token": "{{csrf_token()}}"
+                }
+            }).done(res=>{
+                console.log(res);
+            })
+        });
+
         function addRemoveAcompanhamentos(id, cart_item_id, remove) {
             // Turn text to the number value of quantity
             var quantity_before = $("#acp_" + id).text();
