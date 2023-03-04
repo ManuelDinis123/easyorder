@@ -226,7 +226,10 @@
                 "id": {{ $id }},
             }
         }).done((res) => {
-            successToast(res.status, res.message)
+            successToast(res.status, res.message);
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
         }).fail((err) => {
             errorToast(err.responseJSON.status, err.responseJSON.message);
         });

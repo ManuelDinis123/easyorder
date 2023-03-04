@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Helpers\AppHelper;
 use App\Models\CartItems;
 use App\Models\Ingredients;
+use App\Models\Menu;
 use App\Models\MenuItems;
 use App\Models\OrderItems;
 use App\Models\Orders;
+use App\Models\OrderSides;
+use App\Models\SideDishes;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -57,7 +61,7 @@ class OrdersController extends Controller
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
         }
-        if(!$this->can_view_order($id->route('id'))) return redirect("/professional/encomendas");
+        if (!$this->can_view_order($id->route('id'))) return redirect("/professional/encomendas");
 
         // Get data from the menu item
         $order_details = Orders::select(
@@ -233,7 +237,7 @@ class OrdersController extends Controller
 
     // Check if an order is from the restaurant that the user is associated with
     function can_view_order($id)
-    {        
+    {
         $order = Orders::whereId($id)->get()->first();
         if (session()->get("restaurant.id") != $order->restaurant_id) return 0;
         return 1;
@@ -246,10 +250,61 @@ class OrdersController extends Controller
      * 
      * @return Response
      */
-    function create_order() {
-        $orderItems = CartItems::where('cart_id', session()->get("shoppingcart"))->get();
-        Log::info($orderItems);
-        return "worky";
-    }
+    function create_order(Request $r)
+    {
+        $deadline = new DateTime($r->deadline);
+        $formatted_deadline = $deadline->format("Y-m-d H:i:s");
 
+        $orderItems = CartItems::where('cart_id', session()->get("shoppingCart"))->get();
+
+        // Get all orders items and put them in an array associated with the restaurant they come from
+        $sortedItems = [];
+        foreach ($orderItems as $item) {
+            $mi = MenuItems::whereId($item->item_id)->get()->first();
+            $menu = Menu::whereId($mi->menu_id)->get()->first();
+            $sortedItems[$menu->restaurant_id][] = [
+                "id" => $item->id,
+                "item_id" => $item->item_id,
+                "quantity" => $item->quantity,
+                "cart_id" => $item->cart_id,
+                "note" => $item->note,
+            ];
+        }
+
+        // Make the order for each restaurant
+        foreach ($sortedItems as $key=>$s) {
+            $order = Orders::create([
+                "ordered_at" => date("Y-m-d H:i:s"),
+                "ordered_by" => session()->get("user.id"),
+                "restaurant_id" => $key,
+                "progress" => 0,
+                "closed" => 0,
+                "deadline" => strval($formatted_deadline),
+                "isCancelled" => 0,
+            ]);
+            foreach($s as $details) {
+                $orderItms = OrderItems::create([
+                    'order_id' => $order->id,
+                    'menu_item_id' => $details['item_id'],
+                    'quantity' => $details['quantity'],
+                    'note' => $details['note'],
+                    'done' => 0,
+                ]);
+                $sides = SideDishes::where("cart_item_id", $details['id'])->get();
+                if($sides){
+                    foreach($sides as $side){
+                        OrderSides::create([
+                            "order_item_id"=>$orderItms->id,
+                            "side_id"=>$side['side_id'],
+                            "quantity"=>$side['quantity'],
+                        ]);
+                    }
+                }
+            }
+        }
+
+        AppHelper::clearCart();
+
+        return response()->json(["title"=>"Sucesso", "message"=>"Pedido efetuado com sucesso"]);
+    }
 }

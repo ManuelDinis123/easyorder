@@ -106,6 +106,8 @@
 @stop
 
 <script>
+    // TODO: Refactor this code (it's so bad!!)
+
     function changeTab(id, view, idrem, viewrem) {
         if (!$("#" + view).hasClass("hide-view visually-hidden")) return;
 

@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Models\CartItems;
+use App\Models\SideDishes;
 use App\Models\Types;
 use Illuminate\Support\Facades\Log;
 
@@ -25,7 +27,7 @@ class AppHelper
      */
     public static function checkAuth()
     {
-        return session()->get('authenticated') && (session()->get('user')['isProfessional']&&session()->get('user')['active']);
+        return session()->get('authenticated') && (session()->get('user')['isProfessional'] && session()->get('user')['active']);
     }
 
     /**
@@ -79,5 +81,19 @@ class AppHelper
             }
         }
         return false;
+    }
+
+    /**
+     * Clears shopping cart
+     * 
+     * @return Boolean
+     */
+    public static function clearCart()
+    {
+        $ci = CartItems::where('cart_id', session()->get('shoppingCart'))->get();
+        foreach ($ci as $i) {
+            SideDishes::where("cart_item_id", $i->id)->delete();
+        }
+        CartItems::where("cart_id", session()->get("shoppingCart"))->delete();
     }
 }

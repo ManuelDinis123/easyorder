@@ -25,9 +25,7 @@
     'hasBody' => true,
     'rawBody' => '<ul class="list-group list-group-flush" id="acomp_list"></ul>',
     'hasFooter' => true,
-    'buttons' => [
-        ['label' => 'Fechar', 'id' => 'closeMdl2', 'class' => 'btn btn-dark', 'dismiss' => true],
-    ],
+    'buttons' => [['label' => 'Fechar', 'id' => 'closeMdl2', 'class' => 'btn btn-dark', 'dismiss' => true]],
 ])
 @endcomponent
 
@@ -73,18 +71,39 @@
         @endforeach
     @endforeach
 
-    <button class="btn btn-dark form-control" style="margin-bottom:20px; height: 50px" id="confirmOrder">Confirmar Pedido</button>
+    <div class="container">
+        <label class="dpe_lbl">Data para entrega:</label>
+        <input class="form-control dpe" type="datetime-local" id="deadline" name="deadline">
+    </div>
+
+    <button class="btn btn-dark form-control mt-5" {{ count($cart) <= 0 ? 'disabled' : '' }}
+        style="margin-bottom:20px; height: 50px" id="confirmOrder">Confirmar
+        Pedido</button>
 
     <script>
-        $("#confirmOrder").on('click', ()=>{
+        var today = new Date().toISOString().slice(0, 16);
+        document.getElementsByName("deadline")[0].min = today;
+
+        // TODO: Later this should redirect to payment page and the confirm should be done there
+        $("#confirmOrder").on('click', () => {
+
+            var isInvalid = animateErr(["deadline"]);
+            if (isInvalid) return;
+
             $.ajax({
                 method: "post",
                 url: "/createorder",
                 data: {
-                    "_token": "{{csrf_token()}}"
+                    "_token": "{{ csrf_token() }}",
+                    "deadline": $("#deadline").val()
                 }
-            }).done(res=>{
-                console.log(res);
+            }).done(res => {
+                successToast(res.title, res.message);
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 1000);
+            }).fail(err => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
             })
         });
 
@@ -97,7 +116,9 @@
             var new_quantity;
             if (remove) {
                 new_quantity = quantity_before - 1;
-                if (new_quantity == 0) $("#rmAC_" + id).attr("disabled", "disabled");
+                if (new_quantity == 0) {
+                    $("#rmAC_" + id).attr("disabled", "disabled");
+                };
             } else {
                 $("#rmAC_" + id).removeAttr("disabled");
                 new_quantity = quantity_before + 1;
@@ -110,8 +131,8 @@
                 "side_id": id
             }
 
-            if($("#idfor_" + id).val()!='none') {
-                data_ajax["sdID"] = $("#idfor_"+id).val();
+            if ($("#idfor_" + id).val() != 'none') {
+                data_ajax["sdID"] = $("#idfor_" + id).val();
             }
 
             $.ajax({
@@ -196,14 +217,17 @@
                     $.each(res, (key, val) => {
                         $("#acomp_list").append(
                             '<li class="list-group-item d-flex justify-content-between align-items-center">\
-                                    <div><span>' + val["ingredient"] + '</span><span class="fw-bold" id="acp_' + val[
-                            "id"] +
-                            '"> x ' + (val["quantity"]==null?0:val["quantity"]) + '</span></div>' +
+                                            <div><span>' + val["ingredient"] + '</span><span class="fw-bold" id="acp_' +
+                            val[
+                                "id"] +
+                            '"> x ' + (val["quantity"] == null ? 0 : val["quantity"]) +
+                            '</span></div>' +
                             '\
-                                    <div><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' + cart_item_id +
+                                            <div><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' +
+                            cart_item_id +
                             ', 0)" class="btn btn-dark" style="margin-right:6px"><i class="fa-solid fa-plus"></i></button><button class="btn btn-dark" onclick="addRemoveAcompanhamentos(' +
                             val["id"] + ', ' + cart_item_id + ', 1)" id="rmAC_' + val["id"] + '" disabled><i class="fa-solid fa-minus"></i></button></div>\
-                                    <input type="hidden" id="idfor_' + val["id"] + '" value="none"></li>'
+                                            <input type="hidden" id="idfor_' + val["id"] + '" value="none"></li>'
                         );
                     })
                 } else {

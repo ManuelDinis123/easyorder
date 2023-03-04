@@ -110,3 +110,12 @@
     left: 260px;
     top: 130px;
 }
+
+.dpe_lbl {
+    font-weight: 700;
+    font-size: 25px;
+}
+.dpe {
+    margin-top: 5px;
+    font-size: 20px;
+}
