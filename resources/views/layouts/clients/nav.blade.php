@@ -16,8 +16,28 @@
             </span>
         </a>
         <i class="fa-regular fa-pipe nav-line"></i>
-        <a href="#" class="nav-item"><i class="fa-solid fa-gear"></i></a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-user"></i></a>
+        <div class="dropdown">
+            <a href="#" class="nav-item" id="userDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fa-solid fa-user"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> Perfil</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fa-regular fa-gear"></i> Opções</a></li>
+                @if (!session()->get('user.isProfessional'))
+                    <li><a class="dropdown-item" href="/novo/restaurante"><i class="fa-regular fa-user-tie"></i> Mudar para
+                            Pro</a></li>
+                @else
+                    <li><a class="dropdown-item" href="/professional"><i class="fa-solid fa-table-columns"></i> Ir para
+                            Pro</a></li>
+                @endif
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li id="logout"><a class="dropdown-item" href="#"><i
+                            class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+            </ul>
+        </div>
     </div>
 </header>
 
@@ -37,6 +57,18 @@
     })
 
     $(document).ready(() => {
+        $("#logout").on('click', () => {
+            $.ajax({
+                method: 'post',
+                url: '/logout',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                }
+            }).done(res => {
+                window.location.replace(res);
+            })
+        })
+
         $.ajax({
             method: 'post',
             url: '/getCartItems',
