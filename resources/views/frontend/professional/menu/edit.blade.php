@@ -58,7 +58,6 @@
     'inputs' => [
         ['label' => 'Nome:', 'id' => 'ingredient_name_edit', 'type' => 'text'],
         ['label' => 'Quantidade:', 'id' => 'edit_quant', 'type' => 'number'],
-        ['label' => 'Quantidade:', 'id' => 'edit_quant', 'type' => 'number'],
         ['label' => '', 'id' => 'id_for_edit', 'type' => 'hidden'],
     ],
     'select' => [
@@ -307,7 +306,7 @@
 
         $("#editModal").modal('toggle');
 
-        $("#edit_default").attr('checked', isDefault ? true : false);
+        $("#edit_default").prop('checked', isDefault ? true : false);
 
         $("#id_for_edit").val(id);
     }

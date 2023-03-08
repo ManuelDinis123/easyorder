@@ -83,6 +83,7 @@ Route::get('/professional/encomendas', [OrdersController::class, 'index']);
 Route::get('/professional/encomendas/{id}', [OrdersController::class, 'edit']);
 Route::post('/professional/getorders', [OrdersController::class, 'get'])->name("getorders");
 Route::post('/professional/getorderitems', [OrdersController::class, 'get_items_from_order'])->name("getorderitems");
+Route::post('/professional/getordersides', [OrdersController::class, 'get_sides'])->name("getordersides");
 Route::post('/professional/changeordersitemstatus', [OrdersController::class, 'change_status'])->name("changeordersitemstatus");
 Route::post('/professional/close_order', [OrdersController::class, 'close_order'])->name("close_order");
 Route::post('/professional/cancel_order', [OrdersController::class, 'cancel_order'])->name("cancel_order");

@@ -135,11 +135,23 @@ class CartController extends Controller
         if ($isRemove) {
             $exists = CartItems::where("item_id", $itemID)->where("cart_id", $cartID)->get()->first();
             if (($exists->quantity - 1) == 0) {
+                $sideDishes = Ingredients::where('menu_item_id', $itemID)->get();
+                SideDishes::where('cart_item_id', $exists->id)->delete();
                 $remove = CartItems::where("item_id", $itemID)->where("cart_id", $cartID)->delete();
                 if (!$remove) return 0;
 
+
                 return "deleted";
             } else {
+                $sideDishes = Ingredients::where('menu_item_id', $itemID)->get();
+                foreach ($sideDishes as $sd) {
+                    $sdQuant = SideDishes::where('side_id', $sd->id)->where('cart_item_id', $exists->id)->get()->first();
+                    if ($sdQuant) {
+                        SideDishes::where('cart_item_id', $exists->id)->where('side_id', $sd->id)->update([
+                            "quantity" => ($sdQuant->quantity - $sd->quantity)
+                        ]);
+                    }
+                }
                 $remove = CartItems::whereId($exists->id)->where("cart_id", $cartID)->update([
                     "quantity" => ($exists->quantity - 1)
                 ]);
@@ -158,7 +170,28 @@ class CartController extends Controller
                 "cart_id" => $cartID,
                 "note" => ""
             ]);
+
+            // Check for default selected side dishes
+            $sideDishes = Ingredients::where('menu_item_id', $itemID)->get();
+            foreach ($sideDishes as $side) {
+                if ($side->default) {
+                    SideDishes::create([
+                        "side_id" => $side->id,
+                        "quantity" => $side->quantity,
+                        "cart_item_id" => $addition->id,
+                    ]);
+                }
+            }
         } else {
+            $sideDishes = Ingredients::where('menu_item_id', $itemID)->get();
+            foreach ($sideDishes as $sd) {
+                $sdQuant = SideDishes::where('side_id', $sd->id)->where('cart_item_id', $exists->id)->get()->first();
+                if ($sdQuant) {
+                    SideDishes::where('cart_item_id', $exists->id)->where('side_id', $sd->id)->update([
+                        "quantity" => ($sdQuant->quantity + $sd->quantity)
+                    ]);
+                }
+            }
             $addition = CartItems::whereId($exists->id)->where("cart_id", $cartID)->update([
                 "quantity" => ($exists->quantity + 1)
             ]);
@@ -205,18 +238,22 @@ class CartController extends Controller
      */
     function addSides(Request $data)
     {
-        if($data->quantity == 0) {
-            SideDishes::whereId($data->sdID)->delete();
+        // Check if item is already added
+        $exists = SideDishes::where('side_id', $data->side_id)
+            ->where('cart_item_id', $data->cart_item_id)->get()->first();
+
+        if ($data->quantity == 0) {
+            SideDishes::whereId($exists->id)->delete();
             return response("removed", 200);
         }
 
-        if (isset($data->sdID)) {
-            SideDishes::whereId($data->sdID)->update([
+        if ($exists) {
+            SideDishes::whereId($exists->id)->update([
                 "side_id" => $data->side_id,
                 "quantity" => $data->quantity,
                 "cart_item_id" => $data->cart_item_id,
             ]);
-            $side = SideDishes::whereId($data->sdID)->get()->first();
+            $side = SideDishes::whereId($exists->id)->get()->first();
         } else {
             $side = SideDishes::create([
                 "side_id" => $data->side_id,
@@ -230,7 +267,8 @@ class CartController extends Controller
         return response()->json(["id" => $side->id, "quantity" => $side->quantity], 200);
     }
 
-    function getSides(Request $data) {
+    function getSides(Request $data)
+    {
 
         $cart_id = session()->get("shoppingCart");
 
@@ -240,15 +278,15 @@ class CartController extends Controller
             "side_dishes.quantity",
             "menu_item_ingredients.quantity_type",
         )
-        ->leftJoin('side_dishes', 'side_dishes.side_id', '=', 'menu_item_ingredients.id')
-        ->leftJoin('cart_items', 'cart_items.id', '=', 'side_dishes.cart_item_id')
-        ->where(function ($query) use ($cart_id) {
-            $query->where('cart_items.cart_id', $cart_id)
-                ->orWhereNull('cart_items.cart_id');
-        })
-        ->where('menu_item_ingredients.menu_item_id', $data->id)
-        ->get();
-    
+            ->leftJoin('side_dishes', 'side_dishes.side_id', '=', 'menu_item_ingredients.id')
+            ->leftJoin('cart_items', 'cart_items.id', '=', 'side_dishes.cart_item_id')
+            ->where(function ($query) use ($cart_id) {
+                $query->where('cart_items.cart_id', $cart_id)
+                    ->orWhereNull('cart_items.cart_id');
+            })
+            ->where('menu_item_ingredients.menu_item_id', $data->id)
+            ->get();
+
 
         return response()->json($ingredients, 200);
     }

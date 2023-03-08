@@ -189,7 +189,7 @@
         $("#ing_list span").remove();
         $.ajax({
             method: "post",
-            url: '/professional/getingredients',
+            url: '/professional/getordersides',
             data: {
                 "_token": "{{ csrf_token() }}",
                 "id": id

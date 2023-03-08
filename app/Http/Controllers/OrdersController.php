@@ -209,6 +209,30 @@ class OrdersController extends Controller
         return response()->json(["status" => "Sucesso", "message" => "Pedido cancelado com sucesso"], 200);
     }
 
+    /**
+     * Get choosen side dishes from an item
+     * 
+     * 
+     * @return Array
+     */
+    function get_sides(Request $id)
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
+        }
+
+        $sides = OrderItems::select('menu_item_ingredients.ingredient', 'order_items_sides.quantity')
+            ->join('order_items_sides', 'order_items_sides.order_item_id', '=', 'order_items.id')
+            ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'order_items_sides.side_id')
+            ->where('order_items.menu_item_id', $id->id)
+            ->get();
+
+        Log::info($sides);
+
+        return response()->json($sides, 200);
+    }
+
 
     /**
      * Calculate the progress of a given order
@@ -272,7 +296,7 @@ class OrdersController extends Controller
         }
 
         // Make the order for each restaurant
-        foreach ($sortedItems as $key=>$s) {
+        foreach ($sortedItems as $key => $s) {
             $order = Orders::create([
                 "ordered_at" => date("Y-m-d H:i:s"),
                 "ordered_by" => session()->get("user.id"),
@@ -282,7 +306,7 @@ class OrdersController extends Controller
                 "deadline" => strval($formatted_deadline),
                 "isCancelled" => 0,
             ]);
-            foreach($s as $details) {
+            foreach ($s as $details) {
                 $orderItms = OrderItems::create([
                     'order_id' => $order->id,
                     'menu_item_id' => $details['item_id'],
@@ -291,12 +315,12 @@ class OrdersController extends Controller
                     'done' => 0,
                 ]);
                 $sides = SideDishes::where("cart_item_id", $details['id'])->get();
-                if($sides){
-                    foreach($sides as $side){
+                if ($sides) {
+                    foreach ($sides as $side) {
                         OrderSides::create([
-                            "order_item_id"=>$orderItms->id,
-                            "side_id"=>$side['side_id'],
-                            "quantity"=>$side['quantity'],
+                            "order_item_id" => $orderItms->id,
+                            "side_id" => $side['side_id'],
+                            "quantity" => $side['quantity'],
                         ]);
                     }
                 }
@@ -305,6 +329,6 @@ class OrdersController extends Controller
 
         AppHelper::clearCart();
 
-        return response()->json(["title"=>"Sucesso", "message"=>"Pedido efetuado com sucesso"]);
+        return response()->json(["title" => "Sucesso", "message" => "Pedido efetuado com sucesso"]);
     }
 }

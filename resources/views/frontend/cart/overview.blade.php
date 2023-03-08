@@ -217,17 +217,18 @@
                     $.each(res, (key, val) => {
                         $("#acomp_list").append(
                             '<li class="list-group-item d-flex justify-content-between align-items-center">\
-                                            <div><span>' + val["ingredient"] + '</span><span class="fw-bold" id="acp_' +
+                            <div><span class="text-muted">'+val['quantity_type']+'</span><br />\
+                                <span>' + val["ingredient"] + '</span><span class="fw-bold" id="acp_' +
                             val[
                                 "id"] +
                             '"> x ' + (val["quantity"] == null ? 0 : val["quantity"]) +
                             '</span></div>' +
                             '\
-                                            <div><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' +
+                            <div><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' +
                             cart_item_id +
                             ', 0)" class="btn btn-dark" style="margin-right:6px"><i class="fa-solid fa-plus"></i></button><button class="btn btn-dark" onclick="addRemoveAcompanhamentos(' +
-                            val["id"] + ', ' + cart_item_id + ', 1)" id="rmAC_' + val["id"] + '" disabled><i class="fa-solid fa-minus"></i></button></div>\
-                                            <input type="hidden" id="idfor_' + val["id"] + '" value="none"></li>'
+                            val["id"] + ', ' + cart_item_id + ', 1)" id="rmAC_' + val["id"] + '" '+(val["quantity"] == null ? "disabled" : "")+'><i class="fa-solid fa-minus"></i></button></div>\
+                            <input type="hidden" id="idfor_' + val["id"] + '" value="none"></li>'
                         );
                     })
                 } else {
