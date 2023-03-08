@@ -58,8 +58,21 @@
     'inputs' => [
         ['label' => 'Nome:', 'id' => 'ingredient_name_edit', 'type' => 'text'],
         ['label' => 'Quantidade:', 'id' => 'edit_quant', 'type' => 'number'],
+        ['label' => 'Quantidade:', 'id' => 'edit_quant', 'type' => 'number'],
         ['label' => '', 'id' => 'id_for_edit', 'type' => 'hidden'],
     ],
+    'select' => [
+        'configs' => [
+            'id' => 'edit_typeQ',
+            'label' => 'Tipo de Quantidade:',
+            'default' => 'Selecione um tipo',
+        ],
+        'options' => [['value' => 'numeric', 'label' => 'Numerico'], ['value' => 'dose', 'label' => 'Dose']],
+    ],
+    'rawBody' => '<div class="form-check form-switch mt-3">
+        <label class="form-check-label" for="edit_default">Escolhido por Padrão</label>
+        <input class="form-check-input" type="checkbox" id="edit_default">
+        </div>',
     'hasFooter' => true,
     'buttons' => [
         ['label' => 'Cancelar', 'id' => 'closeMdl', 'class' => 'btn btn-danger', 'dismiss' => true],
@@ -131,7 +144,7 @@
 
 
                 <div class="img_card @if (!$imageurl) visually-hidden @endif" id="item-card">
-                    <h3 class="img-price h-no-linebreaks" id="card-price">{{ $price+0 }}€</h3>
+                    <h3 class="img-price h-no-linebreaks" id="card-price">{{ $price + 0 }}€</h3>
                     <h3 class="img-h" id="card-name">{{ $name }}</h3>
                 </div>
 
@@ -162,6 +175,19 @@
 
                         <label class="mt-3">Quantidade</label>
                         <input type="number" class="form-control" value="1" min="1" id="quant">
+
+                        <label class="mt-3">Tipo de Quantidade</label>
+                        <select id="quantType" class="form-select">
+                            <option disabled selected>Selecione um Tipo</option>
+                            <option value="numeric">Numerico</option>
+                            <option value="dose">Dose</option>
+                        </select>
+
+                        <div class="form-check form-switch mt-3">
+                            <label class="form-check-label" for="choosenDFT">Escolhido por padrão</label>
+                            <input class="form-check-input" type="checkbox" id="choosenDFT">
+                        </div>
+
                         <button class="btn btn-primary mt-3" id="add">Adicionar</button>
                 </div>
             @endif
@@ -171,6 +197,8 @@
                         <thead>
                             <th>Acompanhamento</th>
                             <th>Quantidade</th>
+                            <th>Tipo de Quantidade</th>
+                            <th>Escolhido por Padrão</th>
                             <th></th>
                         </thead>
                     </table>
@@ -241,7 +269,7 @@
 
     // inserts ingredients on the DB
     function add_ing() {
-        var map = ["ingredient", "quant"];
+        var map = ["ingredient", "quant", "quantType"];
         var invalid = animateErr(map);
 
         if (!invalid) {
@@ -252,6 +280,8 @@
                     "_token": $('#token').val(),
                     "ingredient": $('#ingredient').val(),
                     "quantity": $('#quant').val(),
+                    "quantityType": $('#quantType').val(),
+                    "default": $('#choosenDFT').is(':checked') ? '1' : '0',
                     "id": <?= $id ?>,
                 }
             }).done((res) => {
@@ -259,6 +289,7 @@
                 $("#ing_table").DataTable().ajax.reload(null, false);
                 $("#ingredient").val("");
                 $("#quant").val(1);
+                $("#quantType").val(0);
             }).fail((err) => {
                 errorToast(err.responseJSON.title, err.responseJSON.message);
             });
@@ -266,19 +297,23 @@
     }
 
     // Opens the edit modal
-    function editModal(name, quant, id) {
+    function editModal(name, quant, quantType, id, isDefault) {
 
         $("#ingredient_name_edit").val(name);
 
         $("#edit_quant").val(quant);
 
+        $("#edit_typeQ").val(quantType);
+
         $("#editModal").modal('toggle');
+
+        $("#edit_default").attr('checked', isDefault ? true : false);
 
         $("#id_for_edit").val(id);
     }
 
     function edit_ingredients() {
-        var map = ["ingredient_name_edit", "edit_quant"];
+        var map = ["ingredient_name_edit", "edit_quant", "edit_typeQ"];
         var invalid = animateErr(map);
 
         if (!invalid) {
@@ -291,6 +326,8 @@
                     "ingid": $("#id_for_edit").val(),
                     "ingredient": $("#ingredient_name_edit").val(),
                     "quantity": $("#edit_quant").val(),
+                    "quantityType": $("#edit_typeQ").val(),
+                    "default": $("#edit_default").is(":checked") ? 1 : 0,
                 }
             }).done((res) => {
                 successToast(res.title, res.message);
@@ -407,13 +444,34 @@
                     className: "dt-center"
                 },
                 {
+                    data: "quantity_type",
+                    width: "10%",
+                    className: "dt-center",
+                    render: function(data, type, row, meta) {
+                        return "<label>" + (data == 'numeric' ? 'Numerico' : 'Dose') +
+                            "</label>"
+                    }
+                },
+                {
+                    data: "default",
+                    width: "10%",
+                    className: "dt-center",
+                    render: function(data, type, row, meta) {
+                        return "<div class=\"form-check form-switch\">\
+                                <input class=\"form-check-input\" type=\"checkbox\" disabled " + (data ? 'checked' :
+                            '') + ">\
+                                </div>"
+                    }
+                },
+                {
                     data: null,
                     width: "30%",
                     render: function(data, type, row, meta) {
                         if (!{{ $canWrite ? 1 : 0 }}) return "";
 
                         return '<div  style="display: flex; align-items: center">\
-                                <i onClick="editModal(\'' + row.ingredient + '\', ' + row.quantity + ', ' + row.id + ')" class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i>\
+                                <i onClick="editModal(\'' + row.ingredient + '\', ' + row.quantity + ', \'' + row
+                            .quantity_type + '\', ' + row.id + ', ' + row.default+')" class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i>\
                                 <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\
                                 </div>';
                     }

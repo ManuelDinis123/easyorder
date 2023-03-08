@@ -40,7 +40,7 @@ class MenuController extends Controller
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
         }
-        if(!$this->is_item_of_restaurant($id->route('id'))) return redirect("/professional/ementa");
+        if (!$this->is_item_of_restaurant($id->route('id'))) return redirect("/professional/ementa");
 
         // Get data from the menu item
         $item = MenuItems::where("id", $id->route('id'))->get()->first();
@@ -279,12 +279,14 @@ class MenuController extends Controller
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }
 
-        if (AppHelper::hasEmpty([$data->ingredient, $data->quantity])) return response()->json(["title" => "Erro", "message" => "Preencha todos os campos"], 400);
+        if (AppHelper::hasEmpty([$data->ingredient, $data->quantity, $data->quantityType])) return response()->json(["title" => "Erro", "message" => "Preencha todos os campos"], 400);
 
         $ingredients = Ingredients::create([
             "ingredient" => $data->ingredient,
             "menu_item_id" => $data->id,
-            "quantity" => $data->quantity
+            "quantity" => $data->quantity,
+            "quantity_type" => $data->quantityType,
+            "default" => $data->default,
         ]);
 
         if (!$ingredients) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao inserir o ingredient"], 500);
@@ -311,7 +313,9 @@ class MenuController extends Controller
         $ingredients = Ingredients::whereId($data->ingid)->update([
             "ingredient" => $data->ingredient,
             "menu_item_id" => $data->id,
-            "quantity" => $data->quantity
+            "quantity" => $data->quantity,
+            "quantity_type" => $data->quantityType,
+            "default" => $data->default
         ]);
 
         if (!$ingredients) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao editar o ingredient"], 500);
@@ -395,10 +399,11 @@ class MenuController extends Controller
     }
 
     // Check if an item is from the restaurant that the user is associated with
-    function is_item_of_restaurant($item_id){
+    function is_item_of_restaurant($item_id)
+    {
         $menuid = MenuItems::whereId($item_id)->get()->first();
         $menu = Menu::whereId($menuid->menu_id)->get()->first();
-        if(session()->get("restaurant.id") != $menu->restaurant_id) return 0;        
+        if (session()->get("restaurant.id") != $menu->restaurant_id) return 0;
         return 1;
     }
 }
