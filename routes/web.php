@@ -11,6 +11,7 @@ use App\Http\Controllers\OptionsController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\PermsController;
 use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StatsController;
@@ -122,6 +123,8 @@ Route::post('/professional/fileupload', [SettingsController::class, 'fileupload'
 // Restaurant page front-end
 Route::get('/restaurante/{id}', [RestaurantController::class, 'restaurant_page']);
 Route::get('/restaurante/{id}/menu', [RestaurantController::class, 'menu_page']);
+Route::get('/restaurante/{id}/reviews', [RestaurantController::class, 'reviews_page']);
+Route::post('/review/add', [ReviewsController::class, 'add'])->name("addreviews");
 
 // Shopping Cart routes
 Route::get('/carinho', [CartController::class, 'index']);

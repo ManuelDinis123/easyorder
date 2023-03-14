@@ -1,0 +1,111 @@
+.overview {
+    background: #ffffff;
+    box-shadow: 0px 4px 9px 3px rgba(0, 0, 0, 0.25);
+    border-radius: 39px;
+    padding: 20px 20px;
+    padding-bottom: 50px;
+    height: fit-content;
+}
+
+.ovHeader h2 {
+    font-size: 32px;
+}
+.ovHeader span i {
+    font-size: 24px;
+}
+
+.rv-container {
+    display: flex;
+    justify-content: center;
+}
+
+.review_form {
+    width: 50%;
+}
+
+.f-stars i {
+    color: #b9b9b9;
+    font-size: 35px;
+    cursor: pointer;
+    transition: all 0.2s ease;    
+}
+
+.f-stars i.star-active {
+    color: #ff9c1a;
+}
+
+.f-stars:hover i,
+.f-stars:hover i ~ i {
+    color: #ffa023;
+}
+
+.f-stars:hover i:hover ~ i {
+    color: #b9b9b9;
+}
+
+.stars-empty i {
+    filter: drop-shadow(0px 0px 10px rgba(165, 2, 2, 0.849)) !important;
+}
+
+.r-item {
+    background: #ffffff;
+    box-shadow: 0px 4px 9px 3px rgba(0, 0, 0, 0.432);
+    border-radius: 30px;
+    padding: 40px 20px;
+}
+
+.r-pfp {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.pfp-r-container{
+    display: flex;
+    justify-content: center;
+}
+
+.r-d-contain{
+    margin-top: 40px;
+}
+
+.arc {
+    display: flex;
+    justify-content: center;
+}
+
+.r-interactions {
+    float: right;
+    font-size: 24px;
+}
+
+.r-interactions i {
+    margin-right: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #979797;
+}
+
+.r-actions {
+    float: right;
+    font-size: 20px;
+}
+
+.r-actions i {
+    margin-right: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.r-actions .fa-pen-to-square {
+    color: #1C46B2;
+}
+
+.r-actions .fa-trash-can {
+    color: rgba(165, 2, 2, 0.719);
+}
+
+.r-interactions i:hover {
+    color: rgb(15, 15, 15);
+}

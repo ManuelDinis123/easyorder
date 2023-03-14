@@ -31,6 +31,8 @@
     <span class="item {{ $selected == 'publication' ? 'item-selected' : '' }}"><a href="#">Publicações</a></span>
     <span class="item {{ $selected == 'menu' ? 'item-selected' : '' }}"><a
             href="/restaurante/{{ $info['id'] }}/menu">Ementa</a></span>
-    <span class="item {{ $selected == 'reviews' ? 'item-selected' : '' }}"><a href="#">Reviews</a></span>
+    <span class="item {{ $selected == 'reviews' ? 'item-selected' : '' }}"><a href="/restaurante/{{ $info['id'] }}/reviews">Reviews</a></span>
     <hr>
 </div>
+
+<input type="hidden" id="restaurant_id" value="{{$info['id']}}">

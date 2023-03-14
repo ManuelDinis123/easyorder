@@ -6,8 +6,10 @@ use App\Helpers\AppHelper;
 use App\Models\ConnectRestaurantType;
 use App\Models\Menu;
 use App\Models\MenuItems;
+use App\Models\Orders;
 use App\Models\Restaurants;
 use App\Models\RestaurantType;
+use App\Models\Reviews;
 use App\Models\Types;
 use App\Models\UserRestaurant;
 use App\Models\Users;
@@ -284,7 +286,7 @@ class RestaurantController extends Controller
      */
     function restaurant_page(Request $id)
     {
-        if(!AppHelper::hasLogin()) return redirect("/");
+        if (!AppHelper::hasLogin()) return redirect("/");
 
         $info = Restaurants::whereId($id->route('id'))->get()->first();
 
@@ -298,6 +300,8 @@ class RestaurantController extends Controller
      */
     function menu_page(Request $id)
     {
+        if (!AppHelper::hasLogin()) return redirect("/");
+
         $info = Restaurants::whereId($id->route('id'))->get()->first();
 
         $menu = Menu::where('restaurant_id', $id->route('id'))->get()->first();
@@ -311,10 +315,48 @@ class RestaurantController extends Controller
                 "description" => $item['description'],
                 "imageUrl" => $item['imageUrl'],
                 "price" => $item['price'],
-                "cost" => $item['cost'],                
+                "cost" => $item['cost'],
             ];
         }
 
         return view("frontend.restaurants.menu")->with("info", $info)->with("items", $items);
+    }
+
+    /**
+     * Goes to the reviews page
+     * 
+     * @return view
+     */
+    function reviews_page(Request $id)
+    {
+        if (!AppHelper::hasLogin()) return redirect("/");
+
+        $info = Restaurants::whereId($id->route('id'))->get()->first();
+
+        // Get all reviews
+        $reviews = Reviews::where("restaurant_id", $id->route('id'))
+            ->join("users", 'users.id', '=', 'reviews.written_by')
+            ->get();
+
+        // Check if user has ordered from this restaurant, if not they will not be able to order from it.
+        $canReview = Orders::where("ordered_by", session()->get("user.id"))
+            ->where("restaurant_id", $info->id)
+            ->get()
+            ->count();
+
+        // If user can't review then theres no need to show him his reviews since he shouldn't have any
+        if ($canReview > 0) {
+            // Get all user reviews
+            $myreviews = Reviews::select("reviews.title", "reviews.review", "users.pfp", "users.first_name", "users.last_name", "reviews.written_at", "reviews.stars", "reviews.id")
+                ->where("restaurant_id", $id->route('id'))
+                ->join("users", 'users.id', '=', 'reviews.written_by')
+                ->where("users.id", session()->get("user.id"))
+                ->get();
+        }
+
+        return view("frontend.restaurants.reviews")->with("info", $info)
+            ->with("reviews", $reviews)
+            ->with("myreviews", isset($myreviews) ? $myreviews : [])
+            ->with("canReview", $canReview);
     }
 }

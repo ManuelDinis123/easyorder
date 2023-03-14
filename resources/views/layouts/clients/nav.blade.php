@@ -25,7 +25,8 @@
                 <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> Perfil</a></li>
                 <li><a class="dropdown-item" href="#"><i class="fa-regular fa-gear"></i> Opções</a></li>
                 @if (!session()->get('user.isProfessional'))
-                    <li><a class="dropdown-item" href="/novo/restaurante"><i class="fa-regular fa-user-tie"></i> Mudar para
+                    <li><a class="dropdown-item" href="/novo/restaurante"><i class="fa-regular fa-user-tie"></i> Mudar
+                            para
                             Pro</a></li>
                 @else
                     <li><a class="dropdown-item" href="/professional"><i class="fa-solid fa-table-columns"></i> Ir para
@@ -77,9 +78,11 @@
             }
         }).done((res) => {
             var total = 0;
-            $.each(res, (key, val) => {
-                total += val.quantity;
-            })
+            if (res != 'no items found...') {
+                $.each(res, (key, val) => {
+                    total += val.quantity;
+                })
+            }
             $("#cart_total").text(total);
         })
 

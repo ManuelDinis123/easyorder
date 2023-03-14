@@ -146,6 +146,7 @@
                 "restaurantID": "{{ $info['id'] }}",
             }
         }).done((res) => {
+            if(res=="no items found...") return;
             $.each(res, (key, val) => {
                 $("#" + val.id).addClass("give-space");
                 $("#buttons" + val.id).addClass("show-buttons");
