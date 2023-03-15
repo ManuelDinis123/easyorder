@@ -3,7 +3,7 @@
     box-shadow: 0px 4px 9px 3px rgba(0, 0, 0, 0.25);
     border-radius: 39px;
     padding: 20px 20px;
-    padding-bottom: 50px;
+    padding-bottom: 15px;
     height: fit-content;
 }
 
@@ -31,6 +31,10 @@
 }
 
 .f-stars i.star-active {
+    color: #ff9c1a;
+}
+
+.rw-st {
     color: #ff9c1a;
 }
 
@@ -108,4 +112,9 @@
 
 .r-interactions i:hover {
     color: rgb(15, 15, 15);
+}
+
+.progress {
+    border-radius: 15px;
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.445);
 }

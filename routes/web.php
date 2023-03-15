@@ -125,6 +125,7 @@ Route::get('/restaurante/{id}', [RestaurantController::class, 'restaurant_page']
 Route::get('/restaurante/{id}/menu', [RestaurantController::class, 'menu_page']);
 Route::get('/restaurante/{id}/reviews', [RestaurantController::class, 'reviews_page']);
 Route::post('/review/add', [ReviewsController::class, 'add'])->name("addreviews");
+Route::post('/review/remove', [ReviewsController::class, 'deleteReview'])->name("removereviews");
 
 // Shopping Cart routes
 Route::get('/carinho', [CartController::class, 'index']);

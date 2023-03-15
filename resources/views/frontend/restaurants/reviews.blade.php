@@ -8,14 +8,59 @@
     <div class="container">
         <div class="overview">
             <div class="ovHeader">
-                <h2 style="float: left">Reviews</h2>
-                <span style="float: right">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                </span>
+                <div class="row">
+                    <div class="col-6">
+                        <h2 style="float: left">Reviews</h2>
+                    </div>
+                    <div class="col-6">
+                        <span style="float: right">
+                            @for ($i = 0; $i < $stats['avg']; $i++)
+                                <i class="fa-solid fa-star rw-st"></i>
+                            @endfor
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label>5 estrelas</label>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-label="Basic example"
+                                style="width: {{ isset($stats['stars'][5]) ? $stats['stars'][5] : 0 }}%; background-color: #38B945"
+                                aria-valuenow="{{ isset($stats['stars'][5]) ? $stats['stars'][5] : 0 }}" aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                        </div>
+                        <label class="mt-3">4 estrelas</label>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-label="Basic example"
+                                style="width: {{ isset($stats['stars'][4]) ? $stats['stars'][4] : 0 }}%; background-color: #9CCC37"
+                                aria-valuenow="{{ isset($stats['stars'][4]) ? $stats['stars'][4] : 0 }}" aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                        </div>
+                        <label class="mt-3">3 estrelas</label>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-label="Basic example"
+                                style="width: {{ isset($stats['stars'][3]) ? $stats['stars'][3] : 0 }}%; background-color: #FFD600"
+                                aria-valuenow="{{ isset($stats['stars'][3]) ? $stats['stars'][3] : 0 }}" aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                        </div>
+                        <label class="mt-3">2 estrelas</label>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-label="Basic example"
+                                style="width: {{ isset($stats['stars'][2]) ? $stats['stars'][2] : 0 }}%; background-color: #FF450B"
+                                aria-valuenow="{{ isset($stats['stars'][2]) ? $stats['stars'][2] : 0 }}" aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                        </div>
+                        <label class="mt-3">1 estrela</label>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-label="Basic example"
+                                style="width: {{ isset($stats['stars'][1]) ? $stats['stars'][1] : 0 }}%; background-color: #FD1919"
+                                aria-valuenow="{{ isset($stats['stars'][1]) ? $stats['stars'][1] : 0 }}" aria-valuemin="0"
+                                aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-3">{{ $label }}</h4>
             </div>
         </div>
         <br /><br />
@@ -52,7 +97,7 @@
                 <div class="arc">
                     <div>
                         @foreach ($myreviews as $mr)
-                            <div class="r-item" id="mr_{{$mr['id']}}">
+                            <div class="r-item" id="mr_{{ $mr['id'] }}">
                                 <img src="{{ asset('img/pfp/' . $mr['pfp']) }}"
                                     onerror="this.src = '{{ asset('img/pfp/defaultpfp.png') }}';" class="r-pfp"
                                     id="userIco">
@@ -60,7 +105,7 @@
                                 <br />
                                 <div class="allr-stars mt-3">
                                     @for ($i = 0; $i < $mr['stars']; $i++)
-                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star rw-st"></i>
                                     @endfor
                                     <span style="float: right">{{ $mr['written_at'] }}</span>
                                 </div>
@@ -95,7 +140,7 @@
                                 <br />
                                 <div class="allr-stars mt-3">
                                     @for ($i = 0; $i < $r['stars']; $i++)
-                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star rw-st"></i>
                                     @endfor
                                     <span style="float: right">{{ $r['written_at'] }}</span>
                                 </div>
@@ -159,7 +204,19 @@
         })
 
         function deleteReview(id) {
-            $("#mr_"+id).remove();
+            $.ajax({
+                method: "post",
+                url: "/review/remove",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "id": id
+                }
+            }).done(res => {
+                successToast(res.title, res.message);
+                $("#mr_" + id).remove();
+            }).fail(err => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
+            });
         }
 
         $.each(stars, (index1, star) => {

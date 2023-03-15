@@ -44,4 +44,18 @@ class ReviewsController extends Controller
 
         return response()->json(["title" => "Sucesso", "message" => "Critica enviada!"], 200);
     }
+
+    /**
+     * Delete user review
+     * 
+     * 
+     * @return Response
+     */
+    function deleteReview(Request $request) {
+        $action = Reviews::whereId($request->id)->delete();
+
+        if(!$action) return response()->json(["title" => "Erro", "message" => "Erro ao apagar review"], 500);
+
+        return response()->json(["title" => "Sucesso", "message" => "Critica removida com sucesso!"], 200);
+    }
 }
