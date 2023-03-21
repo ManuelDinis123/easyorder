@@ -1,0 +1,87 @@
+body {
+    padding-bottom: 100px;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+}
+
+.title h2 {
+    color: #1c46b2;
+}
+
+.toCenter{
+    display: flex;
+    justify-content: center;
+}
+
+.content-container {
+    display: flex;
+    justify-content: center;
+}
+
+.profit {
+    width: 70vw;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    background: #ffffff;
+    box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.25);
+    border-radius: 24px;
+}
+
+.gain {
+    background: #ffffff;
+    box-shadow: 0px 4px 9px 3px rgba(0, 0, 0, 0.25);
+    border-radius: 39px;
+    padding: 20px 20px;
+    padding-bottom: 35px;
+    height: fit-content;
+    font-size: 20px;
+}
+
+.square-info {
+    width: 26px;
+    height: 26px;
+    background-color: #1C46B2;
+}
+
+.silbl{
+    margin-left: 5px;
+}
+
+.tab-selected {
+    font-weight: 800;
+}
+
+.reviews-stats {
+    background: #ffffff;
+    box-shadow: 0px 4px 9px 3px rgba(0, 0, 0, 0.25);
+    border-radius: 39px;
+    padding: 20px 20px;
+    padding-bottom: 35px;
+    height: fit-content;
+    font-size: 20px;
+}
+
+.rv-head{
+    color: #1c46b2;
+}
+
+.rw-st {
+    color: #ff9c1a;
+}
+
+.separation-sm {
+    display: none;
+}
+
+@media only screen and (max-width: 767px) {
+    .separation-sm {
+        display: block;
+    }
+}
+
+.section {
+    transition: 0.3s all;
+}

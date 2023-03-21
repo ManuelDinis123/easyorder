@@ -22,41 +22,18 @@
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <label>5 estrelas</label>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-label="Basic example"
-                                style="width: {{ isset($stats['stars'][5]) ? $stats['stars'][5] : 0 }}%; background-color: #38B945"
-                                aria-valuenow="{{ isset($stats['stars'][5]) ? $stats['stars'][5] : 0 }}" aria-valuemin="0"
-                                aria-valuemax="100"></div>
-                        </div>
-                        <label class="mt-3">4 estrelas</label>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-label="Basic example"
-                                style="width: {{ isset($stats['stars'][4]) ? $stats['stars'][4] : 0 }}%; background-color: #9CCC37"
-                                aria-valuenow="{{ isset($stats['stars'][4]) ? $stats['stars'][4] : 0 }}" aria-valuemin="0"
-                                aria-valuemax="100"></div>
-                        </div>
-                        <label class="mt-3">3 estrelas</label>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-label="Basic example"
-                                style="width: {{ isset($stats['stars'][3]) ? $stats['stars'][3] : 0 }}%; background-color: #FFD600"
-                                aria-valuenow="{{ isset($stats['stars'][3]) ? $stats['stars'][3] : 0 }}" aria-valuemin="0"
-                                aria-valuemax="100"></div>
-                        </div>
-                        <label class="mt-3">2 estrelas</label>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-label="Basic example"
-                                style="width: {{ isset($stats['stars'][2]) ? $stats['stars'][2] : 0 }}%; background-color: #FF450B"
-                                aria-valuenow="{{ isset($stats['stars'][2]) ? $stats['stars'][2] : 0 }}" aria-valuemin="0"
-                                aria-valuemax="100"></div>
-                        </div>
-                        <label class="mt-3">1 estrela</label>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-label="Basic example"
-                                style="width: {{ isset($stats['stars'][1]) ? $stats['stars'][1] : 0 }}%; background-color: #FD1919"
-                                aria-valuenow="{{ isset($stats['stars'][1]) ? $stats['stars'][1] : 0 }}" aria-valuemin="0"
-                                aria-valuemax="100"></div>
-                        </div>
+                        @php
+                            $color_map = ['#FD1919', '#FF450B', '#FFD600', '#9CCC37', '#38B945'];
+                        @endphp
+                        @for ($i = 4; $i >= 0; $i--)
+                            <label class="{{ $i != 4 ? 'mt-3' : '' }}">{{ $i + 1 }} estrelas</label>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-label="Basic example"
+                                    style="width: {{ isset($stats['stars'][$i + 1]) ? $stats['stars'][$i + 1] : 0 }}%; background-color: {{ $color_map[$i] }}"
+                                    aria-valuenow="{{ isset($stats['stars'][$i + 1]) ? $stats['stars'][$i + 1] : 0 }}"
+                                    aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        @endfor
                     </div>
                 </div>
 

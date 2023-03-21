@@ -3,8 +3,11 @@
 namespace App\Helpers;
 
 use App\Models\CartItems;
+use App\Models\Reviews;
 use App\Models\SideDishes;
 use App\Models\Types;
+use DateTime;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AppHelper
@@ -95,5 +98,61 @@ class AppHelper
             SideDishes::where("cart_item_id", $i->id)->delete();
         }
         CartItems::where("cart_id", session()->get("shoppingCart"))->delete();
+    }
+
+    /**
+     * Calculates the avg Reviews of a given restaurant
+     * 
+     * @param Int id
+     * @param Array timestamp
+     * @return Array
+     */
+    public static function calculateReviewAvg($id, $timestamp = ["time" => null, "which" => null])
+    {
+        if ($timestamp["time"] != null) {
+            if ($timestamp["time"] == "week") {
+                // Get the start and end dates of the current week
+                $startDate = new DateTime('monday ' . $timestamp['which'] . ' week');
+                $endDate = new DateTime('sunday ' . $timestamp['which'] . ' week');
+            } else if ($timestamp["time"] == "month") {
+                $startDate = new DateTime('first day of ' . $timestamp['which'] . ' month');
+                $endDate = new DateTime('last day of ' . $timestamp['which'] . ' month');
+            }
+            // Format the dates as strings in the format expected by whereBetween
+            $startDateStr = $startDate->format('Y-m-d');
+            $endDateStr = $endDate->format('Y-m-d');
+        }
+
+        // Average stars from the restaurant
+        $avg_query = Reviews::where('restaurant_id', $id)
+            ->selectRaw('ROUND(SUM(stars) / COUNT(id)) as avg');
+
+        if ($timestamp['time'] != null) {
+            $avg_query->whereBetween('reviews.written_at', [$startDateStr, $endDateStr]);
+        }
+
+        $avg = $avg_query->value('avg');
+
+        $totalItems = Reviews::where('restaurant_id',  $id)
+            ->count();
+
+        // Get how many 5, 4, 3, 2, 1 stars reviews exist
+        $srQ = Reviews::where('restaurant_id', $id)
+            ->select('stars', DB::raw('round((COUNT(stars) / ' . $totalItems . ')*100) as count'));
+
+        if ($timestamp['time'] != null) {
+            $srQ->whereBetween('reviews.written_at', [$startDateStr, $endDateStr]);
+        }
+
+        $starReviews = $srQ->groupBy('stars')->get();
+
+        $stats = ["stars" => [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0,], "avg" => 0];
+        foreach ($starReviews as $sr) {
+            $stats['stars'][$sr['stars']] = $sr['count'];
+        }
+
+        $stats['avg'] = $avg;
+
+        return $stats;
     }
 }

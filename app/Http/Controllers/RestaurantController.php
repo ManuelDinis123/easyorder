@@ -354,26 +354,7 @@ class RestaurantController extends Controller
                 ->get();
         }
 
-        // Average stars from the restaurant
-        $avg = Reviews::where('restaurant_id', $id->route('id'))
-            ->selectRaw('ROUND(SUM(stars) / COUNT(id)) as avg')
-            ->value('avg');
-
-        $totalItems = Reviews::where('restaurant_id',  $id->route('id'))
-            ->count();
-
-        // Get how many 5, 4, 3, 2, 1 stars reviews exist
-        $starReviews = Reviews::where('restaurant_id', $id->route('id'))
-            ->select('stars', DB::raw('round((COUNT(stars) / ' . $totalItems . ')*100) as count'))
-            ->groupBy('stars')
-            ->get();
-
-        $stats = [];
-        foreach ($starReviews as $sr) {
-            $stats['stars'][$sr['stars']] = $sr['count'];
-        }
-
-        $stats['avg'] = $avg;
+        $stats = AppHelper::calculateReviewAvg($id->route('id'));
 
         // Decide if label should be Positivo / Maioritariamente Positivo / Indiferente / Maioritariamente Negativo / Negativo
         $label = ($stats['avg'] == 5 ? 'Positivo' : ($stats['avg'] == 4 ? 'Maioritariamente Positivo' : ($stats['avg'] == 3 ? 'Indiferente' : ($stats['avg'] == 2 ? 'Maioritariamente Negativo' : 'Negativo'))));

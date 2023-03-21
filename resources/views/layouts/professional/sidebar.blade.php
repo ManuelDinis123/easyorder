@@ -13,7 +13,6 @@
         </div>
         <div class="ms-auto icons-nav">
             <a href="/professional/configuracoes" class="aIco"><i class="fa-regular fa-gear n-icons"></i></a>
-            <a href="/professional/chat" class="aIco"><i class="fa-regular fa-message-lines n-icons"></i></a>
             {{-- Notifications --}}
             <div class="dpDown">
                 <i class="fa-regular fa-bell n-icons" id="bellIco" aria-expanded="false"></i>
