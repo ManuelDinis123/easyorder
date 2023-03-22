@@ -117,6 +117,9 @@ class AppHelper
             } else if ($timestamp["time"] == "month") {
                 $startDate = new DateTime('first day of ' . $timestamp['which'] . ' month');
                 $endDate = new DateTime('last day of ' . $timestamp['which'] . ' month');
+            } else {
+                $startDate = new DateTime('first day of January ' . $timestamp['which'] . ' year');
+                $endDate = new DateTime('last day of December ' . $timestamp['which'] . ' year');
             }
             // Format the dates as strings in the format expected by whereBetween
             $startDateStr = $startDate->format('Y-m-d');

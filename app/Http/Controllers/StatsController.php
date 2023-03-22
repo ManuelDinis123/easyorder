@@ -28,8 +28,8 @@ class StatsController extends Controller
         $last_month_days = $this::get_profit("last", "monthly");
         $this_month_days = $this::get_profit("this", "monthly");
         // Yearly
-        // $last_year_days = $this::get_profit("last", "yearly");
-        // $this_year_days = $this::get_profit("this", "yearly");
+        $last_year_days = $this::get_profit("last", "yearly");
+        $this_year_days = $this::get_profit("this", "yearly");
 
         // 2. Get the review avg
         // Daily
@@ -38,30 +38,56 @@ class StatsController extends Controller
         // Month
         $thisStatsMONTH = AppHelper::calculateReviewAvg(session()->get('restaurant.id'), ["time" => "month", "which" => "this"]);
         $lastStatsMONTH = AppHelper::calculateReviewAvg(session()->get('restaurant.id'), ["time" => "month", "which" => "last"]);
+        // Year
+        $thisStatsYEAR = AppHelper::calculateReviewAvg(session()->get('restaurant.id'), ["time" => "year", "which" => "this"]);
+        $lastStatsYEAR = AppHelper::calculateReviewAvg(session()->get('restaurant.id'), ["time" => "year", "which" => "last"]);
 
-        
         // 3. Get gain
+        // Daily
         $thisGain = $this::get_lucro("this");
         $lastGain = $this::get_lucro("last");
+        // Month
+        $thisGainMONTH = $this::get_lucro("this", "month");
+        $lastGainMONTH = $this::get_lucro("last", "month");
+        // Year
+        $thisGainYEAR = $this::get_lucro("this", "year");
+        $lastGainYEAR = $this::get_lucro("last", "year");
 
+        // TODO: Refactor this. Create 3 arrays for the week, month and year info
         return view("frontend/professional/stats/stats")
             ->with("lastPerDay", $last_week_days)
             ->with("thisPerDay", $this_week_days)
             ->with("lastPerMonth", $last_month_days)
             ->with("thisPerMonth", $this_month_days)
+            ->with("lastPerYear", $last_year_days)
+            ->with("thisPerYear", $this_year_days)
             ->with('lastRev', $lastStats)
             ->with('thisRev', $thisStats)
             ->with('lastRevMonth', $lastStatsMONTH)
             ->with('thisRevMonth', $thisStatsMONTH)
+            ->with('lastRevYear', $lastStatsYEAR)
+            ->with('thisRevYear', $thisStatsYEAR)
             ->with('thisGain', $thisGain)
-            ->with('lastGain', $lastGain);
+            ->with('lastGain', $lastGain)
+            ->with('thisGainMonth', $thisGainMONTH)
+            ->with('lastGainMonth', $lastGainMONTH)
+            ->with('thisGainYear', $thisGainYEAR)
+            ->with('lastGainYear', $lastGainYEAR);
     }
 
-    static function get_lucro($week)
+    static function get_lucro($week, $timeline = "daily")
     {
         // Get the start and end dates of the current week
-        $startDate = new DateTime('monday ' . $week . ' week');
-        $endDate = new DateTime('sunday ' . $week . ' week');
+        if ($timeline == "daily") {
+            $startDate = new DateTime('monday ' . $week . ' week');
+            $endDate = new DateTime('sunday ' . $week . ' week');
+        } else if ($timeline == "month") {
+            $startDate = new DateTime('first day of ' . $week . ' month');
+            $endDate = new DateTime('last day of ' . $week . ' month');
+        } else {
+            $startDate = new DateTime('first day of January ' . $week . ' year');
+            $endDate = new DateTime('last day of December ' . $week . ' year');
+        }
 
         // Format the dates as strings in the format expected by whereBetween
         $startDateStr = $startDate->format('Y-m-d');
@@ -142,12 +168,16 @@ class StatsController extends Controller
                 "Domingo",
             ];
         } else if ($timing == "monthly") {
-            // ? 31 is the max month length. But it doesn't mean the final array will have 31 days for every month.
-            // ? When the month doesn't have more days it will stop iterating the array that is being created here.
+            // 31 is the max month length. But it doesn't mean the final array will have 31 days for every month.
+            // When the month doesn't have more days it will stop iterating the array that is being created here.
             for ($i = 0; $i < 31; $i++) {
                 $days_map[] = $i + 1;
             }
         } else {
+            $days_map = range(1, 31);
+            $months_map = range(1, 12);
+            $aux_day = 0;
+            $aux_month = 0;
         }
         $aux = 0;
         while ($startDate <= $endDate) {
@@ -160,12 +190,24 @@ class StatsController extends Controller
                 }
             }
 
-            // Add the current date to the array
-            $dates[$startDate->format('Y-m-d')] = [
-                'date' => $startDate->format('Y-m-d'),
-                'day' => $days_map[$aux],
-                'total_price' => $priceForThisDate
-            ];
+            if ($timing != "yearly") {
+                // Add the current date to the array
+                $dates[$startDate->format('Y-m-d')] = [
+                    'date' => $startDate->format('Y-m-d'),
+                    'day' => $days_map[$aux],
+                    'total_price' => $priceForThisDate
+                ];
+            } else {
+                if ($startDate->format('m') != $aux_month) {
+                    $dates[$startDate->format('Y-m')] = [];
+                    $aux_month = $startDate->format('m');
+                }
+                $dates[$startDate->format('Y-m')][] = [
+                    'date' => $startDate->format('Y-m-d'),
+                    'day' => $days_map[$aux_day],
+                    'total_price' => $priceForThisDate
+                ];
+            }
 
             // Increment the date by one day
             $startDate->modify('+1 day');
@@ -192,6 +234,10 @@ class StatsController extends Controller
                 }
             }
             $dates = $dates_aux;
+        } else if ($timing == "yearly") {
+            foreach ($dates as $key => $val) {
+                $dates[$key] =  ["total_price" => array_sum(array_column($val, 'total_price'))];
+            }
         }
 
         return $dates;
