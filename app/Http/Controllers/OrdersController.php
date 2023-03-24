@@ -226,9 +226,8 @@ class OrdersController extends Controller
             ->join('order_items_sides', 'order_items_sides.order_item_id', '=', 'order_items.id')
             ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'order_items_sides.side_id')
             ->where('order_items.menu_item_id', $id->id)
+            ->where('order_items.order_id', $id->order_id)
             ->get();
-
-        Log::info($sides);
 
         return response()->json($sides, 200);
     }

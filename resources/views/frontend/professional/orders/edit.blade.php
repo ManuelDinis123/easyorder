@@ -192,7 +192,8 @@
             url: '/professional/getordersides',
             data: {
                 "_token": "{{ csrf_token() }}",
-                "id": id
+                "id": id,
+                "order_id": {{ $id }}
             },
         }).done((res) => {
             if (res.length != 0) {
