@@ -255,7 +255,7 @@ class OrdersController extends Controller
         // calculate the percentage
         $percentage = $done != 0 ? ($done / count($order_items)) * 100 : 0;
 
-        return $percentage;
+        return round($percentage);
     }
 
     // Check if an order is from the restaurant that the user is associated with

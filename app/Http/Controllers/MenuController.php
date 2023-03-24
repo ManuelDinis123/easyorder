@@ -285,6 +285,7 @@ class MenuController extends Controller
             "ingredient" => $data->ingredient,
             "menu_item_id" => $data->id,
             "quantity" => $data->quantity,
+            "price" => $data->price,
             "quantity_type" => $data->quantityType,
             "default" => $data->default,
         ]);
@@ -314,6 +315,7 @@ class MenuController extends Controller
             "ingredient" => $data->ingredient,
             "menu_item_id" => $data->id,
             "quantity" => $data->quantity,
+            "price" => $data->price,
             "quantity_type" => $data->quantityType,
             "default" => $data->default
         ]);

@@ -58,6 +58,7 @@
     'inputs' => [
         ['label' => 'Nome:', 'id' => 'ingredient_name_edit', 'type' => 'text'],
         ['label' => 'Quantidade:', 'id' => 'edit_quant', 'type' => 'number'],
+        ['label' => 'Preço:', 'id' => 'edit_price', 'type' => 'number'],
         ['label' => '', 'id' => 'id_for_edit', 'type' => 'hidden'],
     ],
     'select' => [
@@ -172,8 +173,12 @@
                         <label>Nome:</label>
                         <input type="text" class="form-control" placeholder="nome" id="ingredient">
 
-                        <label class="mt-3">Quantidade</label>
+                        <label class="mt-3" style="padding-right: 10px">Quantidade</label><br />
+                        <span class="text-muted">Apenas funcional se escolhido por padrão</span>
                         <input type="number" class="form-control" value="1" min="1" id="quant">
+
+                        <label class="mt-3">Preço</label>
+                        <input type="number" class="form-control" value="0" min="1" id="ing_price">
 
                         <label class="mt-3">Tipo de Quantidade</label>
                         <select id="quantType" class="form-select">
@@ -196,6 +201,7 @@
                         <thead>
                             <th>Acompanhamento</th>
                             <th>Quantidade</th>
+                            <th>Preço</th>
                             <th>Tipo de Quantidade</th>
                             <th>Escolhido por Padrão</th>
                             <th></th>
@@ -279,6 +285,7 @@
                     "_token": $('#token').val(),
                     "ingredient": $('#ingredient').val(),
                     "quantity": $('#quant').val(),
+                    "price": $('#ing_price').val(),
                     "quantityType": $('#quantType').val(),
                     "default": $('#choosenDFT').is(':checked') ? '1' : '0',
                     "id": <?= $id ?>,
@@ -296,13 +303,15 @@
     }
 
     // Opens the edit modal
-    function editModal(name, quant, quantType, id, isDefault) {
+    function editModal(name, quant, quantType, id, isDefault, price) {
 
         $("#ingredient_name_edit").val(name);
 
         $("#edit_quant").val(quant);
 
         $("#edit_typeQ").val(quantType);
+
+        $("#edit_price").val(price);
 
         $("#editModal").modal('toggle');
 
@@ -325,6 +334,7 @@
                     "ingid": $("#id_for_edit").val(),
                     "ingredient": $("#ingredient_name_edit").val(),
                     "quantity": $("#edit_quant").val(),
+                    "price": $("#edit_price").val(),
                     "quantityType": $("#edit_typeQ").val(),
                     "default": $("#edit_default").is(":checked") ? 1 : 0,
                 }
@@ -443,6 +453,14 @@
                     className: "dt-center"
                 },
                 {
+                    data: "price",
+                    width: "10%",
+                    className: "dt-center",
+                    render: function(data, type, row, meta) {
+                        return "<label>" + data + "€</label>"
+                    }
+                },
+                {
                     data: "quantity_type",
                     width: "10%",
                     className: "dt-center",
@@ -470,7 +488,8 @@
 
                         return '<div  style="display: flex; align-items: center">\
                                 <i onClick="editModal(\'' + row.ingredient + '\', ' + row.quantity + ', \'' + row
-                            .quantity_type + '\', ' + row.id + ', ' + row.default+')" class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i>\
+                            .quantity_type + '\', ' + row.id + ', ' + row.default+', ' + row
+                            .price + ')" class="fa-sharp fa-solid fa-pen" style="color:#1C46B2; cursor:pointer; margin-right:3px;"></i>\
                                 <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\
                                 </div>';
                     }
