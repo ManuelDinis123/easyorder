@@ -98,7 +98,7 @@ class StatsController extends Controller
             ->where('orders.restaurant_id', '=', session()->get("restaurant.id"))
             ->where('orders.closed', '=', 1)
             ->whereBetween('orders.deadline', [$startDateStr, $endDateStr])
-            ->selectRaw('SUM(menu_item.price) - SUM(menu_item.cost) as lucro')
+            ->selectRaw('SUM((menu_item.price * order_items.quantity)) - SUM(menu_item.cost) as lucro')
             ->get()->first();
 
         $avgRendimento = Orders::join('order_items', 'order_items.order_id', '=', 'orders.id')
@@ -106,7 +106,7 @@ class StatsController extends Controller
             ->where('orders.restaurant_id', '=', session()->get("restaurant.id"))
             ->where('orders.closed', '=', 1)
             ->whereBetween('orders.deadline', [$startDateStr, $endDateStr])
-            ->selectRaw('round(SUM(menu_item.price) / 7) as avgLucro')
+            ->selectRaw('round(SUM((menu_item.price * order_items.quantity)) / 7) as avgLucro')
             ->get()->first();
 
         $avgCost = Orders::join('order_items', 'order_items.order_id', '=', 'orders.id')
@@ -114,7 +114,7 @@ class StatsController extends Controller
             ->where('orders.restaurant_id', '=', session()->get("restaurant.id"))
             ->where('orders.closed', '=', 1)
             ->whereBetween('orders.deadline', [$startDateStr, $endDateStr])
-            ->selectRaw('round(SUM(menu_item.cost) / 7) as avgCost')
+            ->selectRaw('round(SUM((menu_item.cost * order_items.quantity)) / 7) as avgCost')
             ->get()->first();
 
         $allData = [
@@ -139,7 +139,7 @@ class StatsController extends Controller
         $startDateStr = $startDate->format('Y-m-d');
         $endDateStr = $endDate->format('Y-m-d');
 
-        $profitperday_raw = Orders::select(DB::raw('DATE(orders.deadline) as date, sum(menu_item.price) as total_price'))
+        $profitperday_raw = Orders::select(DB::raw('DATE(orders.deadline) as date, sum((menu_item.price * order_items.quantity)) as total_price'))
             ->join('order_items', 'order_items.order_id', '=', 'orders.id')
             ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')
             ->where('orders.restaurant_id', '=', session()->get("restaurant.id"))
