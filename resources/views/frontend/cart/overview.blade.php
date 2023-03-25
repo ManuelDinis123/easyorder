@@ -50,10 +50,10 @@
                                 id="ttlPrice{{ $item['item_id'] }}">{{ $item['price'] * $item['quantity'] }}€</span></span>
                         <div class="btnss">
                             <button class="btn btn-dark" class="minus-btn qntbtns"
-                                onclick="cartAddRemove({{ $item['item_id'] }}, 1)"><i
+                                onclick="cartAddRemove({{ $item['item_id'] }}, 1, {{ $item['cart_item_id'] }})"><i
                                     class="fa-solid fa-minus"></i></button>
                             <button class="btn btn-dark" class="plus-btn qntbtns"
-                                onclick="cartAddRemove({{ $item['item_id'] }}, 0)"><i
+                                onclick="cartAddRemove({{ $item['item_id'] }}, 0, {{ $item['cart_item_id'] }})"><i
                                     class="fa-solid fa-plus"></i></button>
                         </div>
                         <h4>{{ $items['name'] }}</h4>
@@ -61,7 +61,8 @@
                     </div>
                 </div>
                 <input type="hidden" id="hidden{{ $item['item_id'] }}" value="{{ $item['quantity'] }}">
-                <input type="hidden" id="base_price{{ $item['item_id'] }}" value="{{ $item['price'] }}">
+                <input type="hidden" id="base_price{{ $item['item_id'] }}" value="{{ $item['default_price'] }}">
+                <input type="hidden" id="sidePrices{{ $item['item_id'] }}" value="{{ $item['side_prices']['price'] }}">
             </div>
             <div class="card-btns" id="btns_for_{{ $item['item_id'] }}">
                 <button class="btn btn-dark" onclick="noteMDL({{ $item['cart_item_id'] }})">Deixar Nota</button>
@@ -107,23 +108,33 @@
             })
         });
 
-        function addRemoveAcompanhamentos(id, cart_item_id, remove) {
+        function addRemoveAcompanhamentos(id, cart_item_id, remove, price = 0, itmID) {
             // Turn text to the number value of quantity
             var quantity_before = $("#acp_" + id).text();
             quantity_before = quantity_before.replace("x ", "")
             quantity_before = parseInt(quantity_before);
 
+            // Add to price
+            var price_b = $("#ttlPrice" + itmID).text();
+            price_b = price_b.replace('€', '');
+
+            console.log("price ", price);            
+
             var new_quantity;
             if (remove) {
+                $("#ttlPrice" + itmID).text(((parseInt(price_b) - price) + '€'));
+                $("#sidePrices" + itmID).val(parseInt($("#sidePrices"+itmID).val())-price);
                 new_quantity = quantity_before - 1;
                 if (new_quantity == 0) {
                     $("#rmAC_" + id).attr("disabled", "disabled");
                 };
             } else {
+                $("#ttlPrice" + itmID).text(((parseInt(price_b) + price) + '€'));
+                $("#sidePrices" + itmID).val(parseInt($("#sidePrices"+itmID).val())+price);
                 $("#rmAC_" + id).removeAttr("disabled");
                 new_quantity = quantity_before + 1;
             }
-
+            console.log("sidePrices Hidden Input ", $("#sidePrices"+itmID).val());
             var data_ajax = {
                 "_token": "{{ csrf_token() }}",
                 "quantity": new_quantity,
@@ -134,17 +145,14 @@
             if ($("#idfor_" + id).val() != 'none') {
                 data_ajax["sdID"] = $("#idfor_" + id).val();
             }
-
             $.ajax({
                 method: "post",
                 url: "/addside",
                 data: data_ajax
             }).done((res) => {
-                console.log(res)
                 $("#acp_" + id).text(" x " + new_quantity);
                 $("#idfor_" + id).val(res.id);
             }).fail((err) => {
-                console.log(err)
             })
         }
 
@@ -165,14 +173,15 @@
 
         }
 
-        function cartAddRemove(itemID, isRemove = 0) {
+        function cartAddRemove(itemID, isRemove = 0, cid) {
             $.ajax({
                 method: 'post',
                 url: '/addToCart',
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "item_id": itemID,
-                    "isRemove": isRemove
+                    "isRemove": isRemove,
+                    "cart_item_id": cid
                 }
             }).done((res) => {
                 if (isRemove && res == "deleted") {
@@ -189,7 +198,8 @@
                 var quantity = (isRemove ? quantity - 1 : quantity + 1);
                 $("#hidden" + itemID).val(quantity);
                 $("#quantity_for_" + itemID).text("x " + quantity);
-                $("#ttlPrice" + itemID).text((parseInt($("#base_price" + itemID).val()) * quantity) + "€");
+                $("#sidePrices"+itemID).val(res.to_add.price);
+                $("#ttlPrice" + itemID).text(((parseInt($("#base_price" + itemID).val()) * quantity)+parseInt($("#sidePrices"+itemID).val())) + "€");
 
                 $("#cart_total").text((isRemove ? parseInt($("#cart_total").text()) - 1 : parseInt($("#cart_total")
                     .text()) + 1));
@@ -212,23 +222,23 @@
                     "cart_item_id": cart_item_id,
                 },
             }).done((res) => {
-                console.log(res)
                 if (res.length != 0) {
                     $.each(res, (key, val) => {
                         $("#acomp_list").append(
                             '<li class="list-group-item d-flex justify-content-between align-items-center">\
-                            <div><span class="text-muted">'+val['quantity_type']+'</span><br />\
-                                <span>' + val["ingredient"] + '</span><span class="fw-bold" id="acp_' +
-                            val[
-                                "id"] +
-                            '"> x ' + (val["quantity"] == null ? 0 : val["quantity"]) +
-                            '</span></div>' +
-                            '\
-                            <div><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' +
+                                <div><span class="text-muted">' + val['quantity_type'] + '</span><br />\
+                                    <span>' + val["ingredient"] + '</span><span class="fw-bold" id="acp_' +
+                            val["id"] + '"> x ' + (val["quantity"] == null ? 0 : val["quantity"]) +
+                            '</span></div>' + '\
+                                <div><label class="price_sides">' + val["price"] +
+                            '€</label><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' +
                             cart_item_id +
-                            ', 0)" class="btn btn-dark" style="margin-right:6px"><i class="fa-solid fa-plus"></i></button><button class="btn btn-dark" onclick="addRemoveAcompanhamentos(' +
-                            val["id"] + ', ' + cart_item_id + ', 1)" id="rmAC_' + val["id"] + '" '+(val["quantity"] == null ? "disabled" : "")+'><i class="fa-solid fa-minus"></i></button></div>\
-                            <input type="hidden" id="idfor_' + val["id"] + '" value="none"></li>'
+                            ', 0, ' + val['price'] + ', ' + id +
+                            ')" class="btn btn-dark" style="margin-right:6px"><i class="fa-solid fa-plus"></i></button><button class="btn btn-dark" onclick="addRemoveAcompanhamentos(' +
+                            val["id"] + ', ' + cart_item_id + ', 1, ' + val['price'] + ', ' + id +
+                            ')" id="rmAC_' + val["id"] + '" ' + (val["quantity"] == null ? "disabled" :
+                                "") + '><i class="fa-solid fa-minus"></i></button></div>\
+                                <input type="hidden" id="idfor_' + val["id"] + '" value="none"></li>'
                         );
                     })
                 } else {

@@ -39,15 +39,23 @@ class CartController extends Controller
         }
 
         // Get items in cart
-        $items = CartItems::select(DB::raw("restaurants.id as res_id"), DB::raw("cart_items.id as cart_item_id"), "cart_items.note", "cart_items.item_id", "cart_items.quantity", "menu_item.name", "menu_item.price", "menu_item.description", "menu_item.imageUrl")
+        $items = CartItems::select(DB::raw("restaurants.id as res_id"), DB::raw("cart_items.id as cart_item_id"), "cart_items.note", "cart_items.item_id", "cart_items.quantity", "menu_item.name", DB::raw('(menu_item.price + COALESCE(SUM(menu_item_ingredients.price * menu_item_ingredients.quantity), 0)) as price'), DB::raw("menu_item.price as default_price"), "menu_item.description", "menu_item.imageUrl")
             ->join("menu_item", "menu_item.id", "=", "cart_items.item_id")
+            ->leftJoin('menu_item_ingredients', function ($join) {
+                $join->on('menu_item_ingredients.menu_item_id', '=', 'menu_item.id')
+                    ->join('side_dishes', 'side_dishes.side_id', '=', 'menu_item_ingredients.id');
+            })
             ->join("menu", "menu.id", "=", "menu_item.menu_id")
             ->join("restaurants", "restaurants.id", "=", "menu.restaurant_id")
             ->where("cart_items.cart_id", session()->get("shoppingCart"))
+            ->groupBy('menu_item.id')
             ->get();
 
         $count = 0;
         foreach ($items as $item) {
+            $prices = SideDishes::select(DB::raw('sum(menu_item_ingredients.price * side_dishes.quantity) as price'))
+                    ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'side_dishes.side_id')
+                    ->where('side_dishes.cart_item_id', $item['cart_item_id'])->get()->first();
             $count += $item['quantity'];
             $final_data[$item['res_id']]['items'] += [
                 $item['item_id'] => [
@@ -57,8 +65,10 @@ class CartController extends Controller
                     "name" => $item['name'],
                     "quantity" => $item['quantity'],
                     "price" => $item['price'],
+                    "default_price" => $item['default_price'],
                     "description" => $item['description'],
                     "imageUrl" => $item['imageUrl'],
+                    "side_prices" => $prices ? $prices : 0
                 ]
             ];
         }
@@ -83,7 +93,12 @@ class CartController extends Controller
 
         if ($addition == "deleted") return "deleted";
 
-        return response()->json(["title" => "Sucesso", "message" => "Adicionado ao carrinho com sucesso!"], 200);
+        // Get total price of side items
+        $prices = SideDishes::select(DB::raw('sum(menu_item_ingredients.price * side_dishes.quantity) as price'))
+                    ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'side_dishes.side_id')
+                    ->where('side_dishes.cart_item_id', $data->cart_item_id)->get()->first();
+
+        return response()->json(["title" => "Sucesso", "message" => "Adicionado ao carrinho com sucesso!", "to_add" => $prices], 200);
     }
 
     /**
@@ -147,9 +162,11 @@ class CartController extends Controller
                 foreach ($sideDishes as $sd) {
                     $sdQuant = SideDishes::where('side_id', $sd->id)->where('cart_item_id', $exists->id)->get()->first();
                     if ($sdQuant) {
-                        SideDishes::where('cart_item_id', $exists->id)->where('side_id', $sd->id)->update([
-                            "quantity" => ($sdQuant->quantity - $sd->quantity)
-                        ]);
+                        if (($sdQuant->quantity - $sd->quantity) != 0) {
+                            SideDishes::where('cart_item_id', $exists->id)->where('side_id', $sd->id)->update([
+                                "quantity" => ($sdQuant->quantity - $sd->quantity)
+                            ]);
+                        }
                     }
                 }
                 $remove = CartItems::whereId($exists->id)->where("cart_id", $cartID)->update([
@@ -277,6 +294,7 @@ class CartController extends Controller
             "menu_item_ingredients.ingredient",
             "side_dishes.quantity",
             "menu_item_ingredients.quantity_type",
+            "menu_item_ingredients.price",
         )
             ->leftJoin('side_dishes', 'side_dishes.side_id', '=', 'menu_item_ingredients.id')
             ->leftJoin('cart_items', 'cart_items.id', '=', 'side_dishes.cart_item_id')

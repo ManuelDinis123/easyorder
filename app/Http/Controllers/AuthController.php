@@ -6,6 +6,7 @@ use App\Models\CartItems;
 use App\Models\invite;
 use App\Models\Restaurants;
 use App\Models\Shoppingcart;
+use App\Models\SideDishes;
 use App\Models\Types;
 use App\Models\Users;
 use App\Models\UserAuth;
@@ -165,6 +166,8 @@ class AuthController extends Controller
         ]);
 
         if(session()->get('shoppingCart')){
+            SideDishes::join('cart_items', 'cart_items.id', '=', "side_dishes.cart_item_id")
+            ->where("cart_id", session()->get('shoppingCart'))->delete();
             CartItems::where("cart_id", session()->get('shoppingCart'))->delete();
             Shoppingcart::whereId(session()->get('shoppingCart'))->delete();
         }
