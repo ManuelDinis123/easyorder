@@ -79,18 +79,29 @@ class OrdersController extends Controller
             ->toArray();
 
         // Get order items
-        $items = OrderItems::where("order_id", $order_details["id"])
+        $items = OrderItems::select(
+            "menu_item.id",
+            "menu_item.name",
+            "menu_item.price",
+            "menu_item.cost",
+            "menu_item.description",
+            "menu_item.imageUrl",
+            "order_items.note",
+            "order_items.quantity",
+            DB::raw("COALESCE(SUM(menu_item_ingredients.price * order_items_sides.quantity)) as 'side_price'")
+        )
+            ->where("order_id", $order_details["id"])
+            ->join('order_items_sides', 'order_items_sides.order_item_id', '=', 'order_items.id')
             ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')
+            ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'order_items_sides.side_id')
+            ->groupBy("order_items.id")
             ->get()
             ->toArray();
 
         // Calculate total price
-        $prices = array_column($items, 'price');
-        $quantities = array_column($items, 'quantity');
-
         $total_price = [];
-        for ($i = 0; $i < count($prices); $i++) {
-            array_push($total_price, $prices[$i] * $quantities[$i]);
+        for ($i = 0; $i < count($items); $i++) {
+            array_push($total_price, ($items[$i]["price"] * $items[$i]["quantity"])+$items[$i]['side_price']);
         }
 
         return view("frontend/professional/orders/edit")

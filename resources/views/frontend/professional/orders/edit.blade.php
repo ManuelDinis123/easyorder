@@ -116,7 +116,7 @@
                                     <div class="item-gradient">
                                         <label class="food-card-label">{{ $item['name'] }}</label>
                                         <label class="food-card-quantity"> x {{ $item['quantity'] }}</label>
-                                        <label class="food-card-price">{{ $item['price'] * $item['quantity'] }}€</label>
+                                        <label class="food-card-price">{{ ($item['price'] * $item['quantity'])+$item['side_price'] }}€</label>
                                     </div>
                                 </div>
                             </div>
