@@ -5,11 +5,11 @@
 
 <style>
     .card-contain {
-        width: 27vw;
         height: 202px;
         border-radius: 14px;
         cursor: pointer;
-        overflow: hidden
+        overflow: hidden;
+        margin-right:5px;
     }
 
     .item-card {
@@ -82,12 +82,12 @@
 
 @section('content')
     <div class="row">
-        <div class="col-6">
+        <div class="col-lg-6 col-md-6 col-sm-12">
             <span>Pedido de</span>
             <h3 style="font-weight: 700">{{ $first_name . ' ' . $last_name }}</h3>
         </div>
-        <div class="col-6">
-            <div style="float: right; margin-right:70px">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <div style="float: right; margin-right:70px" class="dataentrega">
                 <span>Data de entrega</span>
                 <div class="deadline-contain">
                     @if ($deadline >= date('Y-m-d h:i:s'))
@@ -104,7 +104,7 @@
     </div>
     <hr>
     <div class="row edit-contain">
-        <div class="col-4">
+        <div class="col-lg-4 col-md-6 col-sm-12">
             <div class="items-list">
                 <div class="pt-2 item-card-content">
                     <div class="scroll-card">
@@ -116,7 +116,8 @@
                                     <div class="item-gradient">
                                         <label class="food-card-label">{{ $item['name'] }}</label>
                                         <label class="food-card-quantity"> x {{ $item['quantity'] }}</label>
-                                        <label class="food-card-price">{{ ($item['price'] * $item['quantity'])+$item['side_price'] }}€</label>
+                                        <label
+                                            class="food-card-price">{{ $item['price'] * $item['quantity'] + $item['side_price'] }}€</label>
                                     </div>
                                 </div>
                             </div>
@@ -129,7 +130,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-7">
+        <div class="separation mt-5"></div>
+        <div class="col-lg-7 col-md-6 col-sm-12">
             {{-- Progress --}}
             <h2>Progresso:</h2>
             <label id="progressLBL" class="percentage-lbl">{{ $progress }}% Completo</label>
@@ -154,19 +156,19 @@
                 </table>
             </div>
             @if (!$closed && !$isCancelled)
-                @if (session()->get("type.write_orders") || session()->get("type.owner") || session()->get("type.admin"))
-                <div class="row">
-                    <div class="col-6">
-                        <button class="btn btn-primary close-order mt-3" style="width: 100%"
-                            data-bs-toggle="modal" data-bs-target="#closeWarning">Fechar
-                            Pedido</button>
+                @if (session()->get('type.write_orders') || session()->get('type.owner') || session()->get('type.admin'))
+                    <div class="row">
+                        <div class="col-6">
+                            <button class="btn btn-primary close-order mt-3" style="width: 100%" data-bs-toggle="modal"
+                                data-bs-target="#closeWarning">Fechar
+                                Pedido</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-danger close-order mt-3" style="width: 100%" data-bs-toggle="modal"
+                                data-bs-target="#cancelWarning">Cancelar
+                                Pedido</button>
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <button class="btn btn-danger close-order mt-3" style="width: 100%"
-                            data-bs-toggle="modal" data-bs-target="#cancelWarning">Cancelar
-                            Pedido</button>
-                    </div>
-                </div>
                 @endif
             @endif
         </div>
@@ -307,7 +309,7 @@
                     data: null,
                     width: "30%",
                     render: function(data, type, row, meta) {
-                        if(!{{session()->get("type.write_orders")}}) return "";
+                        if (!{{ session()->get('type.write_orders') }}) return "";
                         return (!row['done']) ?
                             '<button class="btn btn-primary table-btn"' +
                             "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : '' }}" +

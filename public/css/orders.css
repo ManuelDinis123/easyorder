@@ -78,6 +78,7 @@
     height: 780px;
     box-shadow: 0px 3px 13px rgba(0, 0, 0, 0.233);
     border-radius: 27px;
+    padding: 15px 15px;
 }
 
 .scroll-card {
@@ -103,9 +104,6 @@
     background-color: #2a53bd;
 }
 
-.item-card-content {
-    margin-left: 24px;
-}
 
 .food-card-label {
     margin-left: 10px;
@@ -132,7 +130,6 @@
 }
 
 .item-card-footer {
-    width: 505px;
     height: 70px;
     background: #d9d9d9;
     border-radius: 26px;
@@ -245,3 +242,18 @@
     color: #dc3545;
     font-weight: 800;
 }
+
+.separation {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .separation {
+        display: block;
+    }
+
+    .dataentrega {
+        float: left !important;
+    }
+}
+

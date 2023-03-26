@@ -88,15 +88,16 @@ class OrdersController extends Controller
             "menu_item.imageUrl",
             "order_items.note",
             "order_items.quantity",
-            DB::raw("COALESCE(SUM(menu_item_ingredients.price * order_items_sides.quantity)) as 'side_price'")
+            DB::raw("COALESCE(SUM(menu_item_ingredients.price * order_items_sides.quantity), 0) as 'side_price'")
         )
             ->where("order_id", $order_details["id"])
-            ->join('order_items_sides', 'order_items_sides.order_item_id', '=', 'order_items.id')
             ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')
-            ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'order_items_sides.side_id')
+            ->leftJoin('order_items_sides', 'order_items_sides.order_item_id', '=', 'order_items.id')
+            ->leftJoin('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'order_items_sides.side_id')
             ->groupBy("order_items.id")
             ->get()
             ->toArray();
+    
 
         // Calculate total price
         $total_price = [];
