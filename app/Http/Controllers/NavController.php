@@ -21,11 +21,20 @@ class NavController extends Controller
             $tags_raw = json_decode($filters->tags);
 
             $tags = [];
-            foreach ($tags_raw as $tag) {
-                $tags[] = $tag->value;
+            if ($tags_raw) {
+                foreach ($tags_raw as $tag) {
+                    $tags[] = $tag->value;
+                }
             }
 
             $filtersBack['tags'] = $tags;
+
+            $stars = [];
+            foreach ($filters['reviews'] as $key => $rev) {
+                if ($rev) {
+                    $stars[] = $key;
+                }
+            }
 
             $keyword = $filters->input('query');
 
@@ -36,10 +45,22 @@ class NavController extends Controller
                 "restaurants.logo_url",
                 "restaurants.logo_name",
             )->join('menu_tags', 'restaurants.id', '=', 'menu_tags.id_restaurant')
-                ->where("isPublic", 1)                
-                ->where('restaurants.name', 'like', "%$keyword%")                
-                ->whereIn('menu_tags.tag', $tags)
-                ->distinct()
+                ->join('reviews', 'reviews.restaurant_id', '=', 'restaurants.id')
+                ->where("isPublic", 1)
+                ->where('restaurants.name', 'like', "%$keyword%");
+
+            if (count($tags) > 0) {
+                $results = $results->whereIn('menu_tags.tag', $tags);
+            }
+
+            if (count($stars) > 0) {
+                $results = $results->selectRaw('restaurants.*, ROUND(SUM(reviews.stars) / COUNT(reviews.id)) as avg_stars')
+                    ->groupBy('restaurants.id')
+                    ->havingRaw('ROUND(SUM(reviews.stars) / COUNT(reviews.id)) IN (' . implode(',', $stars) . ')');
+            }
+
+
+            $results = $results->distinct()
                 ->get();
         } else {
             // all restaurants by default

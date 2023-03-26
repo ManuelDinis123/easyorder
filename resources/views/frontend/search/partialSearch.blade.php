@@ -90,7 +90,8 @@
             var filterData = [];
             var map = ["tags", "c1", "c2", "c3", "c4", "c5", ];
             for (var i = 0; i < 6; i++) {
-                filterData[map[i]] = i == 0 ? $("#filter" + i).val() : $("#filter" + i).is(":checked");
+                filterData[map[i]] = i == 0 ? $("#filter" + i).val() : ($("#filter" + i).is(
+                    ":checked") ? 1 : 0);
             }
 
             $.ajax({
@@ -100,11 +101,13 @@
                     "_token": "{{ csrf_token() }}",
                     hasFilters: 1,
                     tags: filterData.tags,
-                    c1: filterData.c1,
-                    c2: filterData.c2,
-                    c3: filterData.c3,
-                    c4: filterData.c4,
-                    c5: filterData.c5,
+                    reviews: {
+                        1: filterData.c1,
+                        2: filterData.c2,
+                        3: filterData.c3,
+                        4: filterData.c4,
+                        5: filterData.c5
+                    },
                     query: $("#searchBar").val()
                 }
             }).done((res) => {
