@@ -10,6 +10,7 @@
             <button class="btn is-selected" id="ongoingbtn">Em progresso</button>
             <button class="btn not-selected" id="closedbtn">Finalizados</button>
             <button class="btn not-selected" id="cancelledbtn">Cancelados</button>
+            <button onclick="kitchenviewer()" style="float: right" class="btn btn-primary">Kitchen Viewer <i class="fa-solid fa-display"></i></button>
         </div>
     </div>
 
@@ -50,6 +51,10 @@
 @stop
 
 <script>
+    function kitchenviewer(){
+        window.location.href="/professional/encomendas/viewer";
+    }
+
     // Changes tabs
     function changeTabs(changeTo, remove) {        
         $("#" + changeTo).removeClass("visually-hidden");

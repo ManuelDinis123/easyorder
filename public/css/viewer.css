@@ -1,0 +1,51 @@
+body {
+    background-color: #3c52a3;
+    padding: 20px 20px !important;
+}
+
+/* * Back button */
+
+.back {
+    color: white;
+    font-size: 50px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.back:hover {
+    transform: scale(1.1);
+}
+
+.back:active {
+    transform: scale(0.9);
+}
+
+/* * Cards */
+
+.card {
+    background: #ffffff;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.35);
+    border-radius: 47px;
+    cursor: grab;
+    padding: 15px 20px;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.005);
+}
+
+.header h1 {
+    font-weight: 800;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.sides {
+    font-size: 25px;
+    font-weight: 500;
+    margin-left: 10px;
+}

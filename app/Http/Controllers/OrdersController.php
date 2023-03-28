@@ -278,6 +278,21 @@ class OrdersController extends Controller
         return 1;
     }
 
+
+    /**
+     * Goes to the kitchen viewer
+     * 
+     * @return View
+     */
+    function kitchen_viewer(){
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
+        }
+
+        return view("frontend/professional/orders/kitchen/viewer");
+    }
+
     // Methods for client
 
     /**

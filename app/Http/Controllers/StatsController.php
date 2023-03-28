@@ -94,24 +94,25 @@ class StatsController extends Controller
         $endDateStr = $endDate->format('Y-m-d');
 
         $lucro = Orders::join('order_items', 'order_items.order_id', '=', 'orders.id')
-            ->join('order_items_sides', 'order_items_sides.order_item_id', '=', 'order_items.id')
+            ->leftJoin('order_items_sides', 'order_items_sides.order_item_id', '=', 'order_items.id')
             ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'order_items_sides.side_id')
             ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')
             ->where('orders.restaurant_id', '=', session()->get("restaurant.id"))
             ->where('orders.closed', '=', 1)
             ->whereBetween('orders.deadline', [$startDateStr, $endDateStr])
-            ->selectRaw('(SUM((menu_item.price * order_items.quantity)) - SUM(menu_item.cost)) + SUM(menu_item_ingredients.price * order_items_sides.quantity) as lucro')
+            ->selectRaw('(SUM((menu_item.price * order_items.quantity)) - SUM(menu_item.cost)) + COALESCE(SUM(menu_item_ingredients.price * order_items_sides.quantity)) as lucro')
             ->get()->first();
 
 
+
         $avgRendimento = Orders::join('order_items', 'order_items.order_id', '=', 'orders.id')
-            ->join('order_items_sides', 'order_items_sides.order_item_id', '=', 'order_items.id')
+            ->leftJoin('order_items_sides', 'order_items_sides.order_item_id', '=', 'order_items.id')
             ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'order_items_sides.side_id')
             ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')
             ->where('orders.restaurant_id', '=', session()->get("restaurant.id"))
             ->where('orders.closed', '=', 1)
             ->whereBetween('orders.deadline', [$startDateStr, $endDateStr])
-            ->selectRaw('round((SUM((menu_item.price * order_items.quantity)) + SUM(menu_item_ingredients.price * order_items_sides.quantity)) / 7) as avgLucro')
+            ->selectRaw('round((SUM((menu_item.price * order_items.quantity)) + COALESCE(SUM(menu_item_ingredients.price * order_items_sides.quantity))) / 7) as avgLucro')
             ->get()->first();
 
         $avgCost = Orders::join('order_items', 'order_items.order_id', '=', 'orders.id')
@@ -144,16 +145,16 @@ class StatsController extends Controller
         $startDateStr = $startDate->format('Y-m-d');
         $endDateStr = $endDate->format('Y-m-d');
 
-        $profitperday_raw = Orders::select(DB::raw('DATE(orders.deadline) as date, (sum((menu_item.price * order_items.quantity))+sum(menu_item_ingredients.price*order_items_sides.quantity)) as total_price'))
+        $profitperday_raw = Orders::select(DB::raw('DATE(orders.deadline) as date, (SUM(menu_item.price * order_items.quantity) + COALESCE(side_price_sum, 0) - SUM(menu_item.cost)) as total_price'))
             ->join('order_items', 'order_items.order_id', '=', 'orders.id')
-            ->join('order_items_sides', 'order_items_sides.order_item_id', '=', 'order_items.id')
-            ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'order_items_sides.side_id')
             ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')
             ->where('orders.restaurant_id', '=', session()->get("restaurant.id"))
             ->where('orders.closed', '=', 1)
             ->whereBetween('orders.deadline', [$startDateStr, $endDateStr])
+            ->leftJoin(DB::raw('(SELECT order_item_id, SUM(menu_item_ingredients.price * order_items_sides.quantity) as side_price_sum FROM order_items_sides JOIN menu_item_ingredients ON order_items_sides.side_id = menu_item_ingredients.id GROUP BY order_item_id) as sides'), 'sides.order_item_id', '=', 'order_items.id')
             ->groupBy('orders.id', DB::raw('DATE(orders.deadline)'))
             ->get();
+
 
         $profitpDay = $profitperday_raw->groupBy('date')->map(function ($group) {
             return [

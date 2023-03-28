@@ -81,6 +81,7 @@ Route::post('/professional/deleteingredient', [MenuController::class, 'delete_in
 
 // Orders for the professional user accounts
 Route::get('/professional/encomendas', [OrdersController::class, 'index']);
+Route::get('/professional/encomendas/viewer', [OrdersController::class, 'kitchen_viewer']);
 Route::get('/professional/encomendas/{id}', [OrdersController::class, 'edit']);
 Route::post('/professional/getorders', [OrdersController::class, 'get'])->name("getorders");
 Route::post('/professional/getorderitems', [OrdersController::class, 'get_items_from_order'])->name("getorderitems");
