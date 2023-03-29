@@ -35,6 +35,24 @@ body {
     transform: scale(1.005);
 }
 
+.bounce {
+    animation: bounce-in 0.5s ease;
+}
+
+
+@keyframes bounce-in {
+    0% {
+      opacity: 0.4;
+      transform: scale(.8);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.01);
+    }
+    75% { transform: scale(.98); }
+    100% { transform: scale(1); }
+  }
+
 .header h1 {
     font-weight: 800;
 }
@@ -49,3 +67,4 @@ body {
     font-weight: 500;
     margin-left: 10px;
 }
+
