@@ -89,6 +89,7 @@ Route::post('/professional/getordersides', [OrdersController::class, 'get_sides'
 Route::post('/professional/changeordersitemstatus', [OrdersController::class, 'change_status'])->name("changeordersitemstatus");
 Route::post('/professional/close_order', [OrdersController::class, 'close_order'])->name("close_order");
 Route::post('/professional/cancel_order', [OrdersController::class, 'cancel_order'])->name("cancel_order");
+Route::post('/professional/fast_close', [OrdersController::class, 'mark_done_fast'])->name("fast_close");
 
 // Statistics for the professional user accounts
 Route::get('/professional/stats', [StatsController::class, 'index']);

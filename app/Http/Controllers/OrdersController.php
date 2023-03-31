@@ -97,12 +97,12 @@ class OrdersController extends Controller
             ->groupBy("order_items.id")
             ->get()
             ->toArray();
-    
+
 
         // Calculate total price
         $total_price = [];
         for ($i = 0; $i < count($items); $i++) {
-            array_push($total_price, ($items[$i]["price"] * $items[$i]["quantity"])+$items[$i]['side_price']);
+            array_push($total_price, ($items[$i]["price"] * $items[$i]["quantity"]) + $items[$i]['side_price']);
         }
 
         return view("frontend/professional/orders/edit")
@@ -284,13 +284,41 @@ class OrdersController extends Controller
      * 
      * @return View
      */
-    function kitchen_viewer(){
+    function kitchen_viewer()
+    {
         if (!AppHelper::checkAuth()) return redirect("/no-access");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
         }
 
         return view("frontend/professional/orders/kitchen/viewer");
+    }
+
+    /**
+     * Fast way to mark orders as done
+     * 
+     * @return View
+     */
+    function mark_done_fast(Request $id)
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'write_orders')) return response()->json(["status" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
+        }
+
+        $closeItems = OrderItems::where('order_id', $id->id)->update([
+            "done" => 1
+        ]);
+
+        $update = Orders::whereId($id->id)->update([
+            "closed" => 1
+        ]);
+
+        if (!$update) {
+            return response()->json(["status" => "Erro", "message" => "Ocorreu um erro ao fechar o pedido"], 500);
+        }
+
+        return response()->json(["status" => "Sucesso", "message" => "Pedido fechado com sucesso"], 200);
     }
 
     // Methods for client

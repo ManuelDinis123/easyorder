@@ -10,6 +10,10 @@
 <script>
     $(document).ready(() => {
         const socket = io('http://localhost:3000');
+        socket.on('connect', () => {
+            socket.emit('restaurant', {{ session()->get('restaurant.id') }});
+        })
+
 
         let ordersData = {};
         let time;
@@ -18,15 +22,21 @@
                 // $("#orders div").remove();
                 $.each(data, (key, orders) => {
                     if (ordersData[key] && data[key]) {
-                        if(Object.keys(ordersData).length > Object.keys(data).length){
-                            var removed = Object.keys(ordersData).filter(x => Object.keys(data).includes(x));
-                            $.each(removed, (k, v)=>{
-                                $("#order_"+v).remove();
-                            })
+                        if (Object.keys(ordersData).length > Object.keys(data).length) {
+                            var removed = Object.keys(ordersData).filter(x => Object.keys(data)
+                                .includes(x));
+
+                            if (Object.keys(data).length != removed.length) {
+                                $.each(removed, (k, v) => {
+                                    $("#order_" + v).remove();
+                                })
+                            }
+
                         }
                     } else {
                         $("#orders").append(
-                            "<div class='card mt-5 bounce' id='order_"+key+"'><div class='header'><h1>Pedido " +
+                            "<div class='card mt-5 bounce' id='order_" + key +
+                            "'><div class='header'><h1>Pedido " +
                             key +
                             "</h1><hr style=\"width: 200px\"></div><div class='body' id='b" +
                             key + "'></div>\
@@ -75,7 +85,22 @@
                                 left: "200%",
                                 opacity: 0
                             }, 500, function() {
-                                console.log("Pedido pronto supostamente :D")
+                                $.ajax({
+                                    method: "post",
+                                    url: "/professional/fast_close",
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        "id": this.id.replace(
+                                            "order_", "")
+                                    }
+                                }).done((res) => {
+                                    successToast(res.status, res
+                                        .message);
+                                }).fail((err) => {
+                                    errorToast(err.responseJSON
+                                        .status, err
+                                        .responseJSON.message)
+                                });
                                 $(this).remove();
                             });
                         } else { // Animate the card back to its original position
