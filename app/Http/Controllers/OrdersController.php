@@ -348,7 +348,6 @@ class OrdersController extends Controller
                 "note" => $item->note,
             ];
         }
-
         // Make the order for each restaurant
         foreach ($sortedItems as $key => $s) {
             $order = Orders::create([
@@ -360,21 +359,28 @@ class OrdersController extends Controller
                 "deadline" => strval($formatted_deadline),
                 "isCancelled" => 0,
             ]);
+            $itms = array_column($s, 'item_id');
+            Log::info($itms);
             foreach ($s as $details) {
+                $price = MenuItems::select('price', 'cost')->where('id', $details['item_id'])->get()->first();
                 $orderItms = OrderItems::create([
                     'order_id' => $order->id,
                     'menu_item_id' => $details['item_id'],
                     'quantity' => $details['quantity'],
                     'note' => $details['note'],
                     'done' => 0,
+                    'price' => $price->price,
+                    'cost' => $price->cost,
                 ]);
                 $sides = SideDishes::where("cart_item_id", $details['id'])->get();
                 if ($sides) {
                     foreach ($sides as $side) {
+                        $sidePrices = Ingredients::select('price')->whereId($side['side_id'])->get()->first();
                         OrderSides::create([
                             "order_item_id" => $orderItms->id,
                             "side_id" => $side['side_id'],
                             "quantity" => $side['quantity'],
+                            "price"=>$sidePrices->price
                         ]);
                     }
                 }
