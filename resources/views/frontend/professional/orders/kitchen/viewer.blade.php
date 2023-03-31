@@ -4,6 +4,10 @@
 
 <a href="{{ url()->previous() }}"><i class="fa-sharp fa-solid fa-arrow-left back"></i></a>
 
+<div class="loader-container" id="lc">
+    <div class="loader2"></div>
+</div>
+
 <div id="orders"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"></script>
@@ -18,54 +22,61 @@
         let ordersData = {};
         let time;
         socket.on('orders', (data) => {
+            $("#lc").remove();
             if (Object.keys(ordersData).length != Object.keys(data).length) {
-                // $("#orders div").remove();
-                $.each(data, (key, orders) => {
-                    if (ordersData[key] && data[key]) {
-                        if (Object.keys(ordersData).length > Object.keys(data).length) {
-                            var removed = Object.keys(ordersData).filter(x => Object.keys(data)
-                                .includes(x));
+                if (Object.keys(data).length == 0) {
+                    $("#orders div").remove();
+                } else {
+                    $.each(data, (key, orders) => {
+                        if (ordersData[key] && data[key]) {
+                            if (Object.keys(ordersData).length > Object.keys(data).length) {
+                                var removed = Object.keys(ordersData).filter(x => Object.keys(
+                                        data)
+                                    .includes(x));
 
-                            if (Object.keys(data).length != removed.length) {
-                                $.each(removed, (k, v) => {
-                                    $("#order_" + v).remove();
-                                })
-                            }
-
-                        }
-                    } else {
-                        $("#orders").append(
-                            "<div class='card mt-5 bounce' id='order_" + key +
-                            "'><div class='header'><h1>Pedido " +
-                            key +
-                            "</h1><hr style=\"width: 200px\"></div><div class='body' id='b" +
-                            key + "'></div>\
-                            <div class='footer' id='f" + key + "'></div></div>");
-
-                        $.each(orders, (k2, items) => {
-                            var side_items = "";
-                            $.each(Object.keys(items), (k3, okeys) => {
-                                if (okeys != "name" && okeys != "id" && okeys !=
-                                    "quantity" && okeys != "deadline") {
-                                    side_items += items[okeys]['quantity'] +
-                                        "x " +
-                                        items[okeys]['name'] + " / ";
+                                if (Object.keys(data).length != removed.length) {
+                                    $.each(removed, (k, v) => {
+                                        $("#order_" + v).remove();
+                                    })
                                 }
-                            })
-                            side_items = side_items.slice(0, -2);
-                            $("#b" + key).append("<div class=\"item\">\
-                                <span class=\"title\">" + items.quantity + "x " + items.name + ".</span>\
-                                <span class=\"sides\">" + side_items + "</span>\
-                                </div><hr style=\"width: 50vw\">");
 
-                            let time = new Date(items.deadline);
-                            $("#f" + key + " h5").remove();
-                            $("#f" + key).append(
-                                "<h5 class=\"title\" style=\"float: right\">" + time
-                                .getHours() + ":" + time.getMinutes() + "</h5>");
-                        })
-                    }
-                });
+                            }
+                        } else {
+                            $("#orders").append(
+                                "<div class='card mt-5 bounce' id='order_" + key +
+                                "'><div class='header'><h1>Pedido " +
+                                key +
+                                "</h1><hr style=\"width: 200px\"></div><div class='body' id='b" +
+                                key + "'></div>\
+                                <div class='footer' id='f" + key + "'></div></div>");
+
+                            $.each(orders, (k2, items) => {
+                                var side_items = "";
+                                $.each(Object.keys(items), (k3, okeys) => {
+                                    if (okeys != "name" && okeys != "id" &&
+                                        okeys !=
+                                        "quantity" && okeys != "deadline") {
+                                        side_items += items[okeys]['quantity'] +
+                                            "x " +
+                                            items[okeys]['name'] + " / ";
+                                    }
+                                })
+                                side_items = side_items.slice(0, -2);
+                                $("#b" + key).append("<div class=\"item\">\
+                                    <span class=\"title\">" + items.quantity + "x " + items.name + ".</span>\
+                                    <span class=\"sides\">" + side_items + "</span>\
+                                    </div><hr style=\"width: 50vw\">");
+
+                                let time = new Date(items.deadline);
+                                $("#f" + key + " h5").remove();
+                                $("#f" + key).append(
+                                    "<h5 class=\"title\" style=\"float: right\">" +
+                                    time
+                                    .getHours() + ":" + time.getMinutes() + "</h5>");
+                            })
+                        }
+                    });
+                }
                 ordersData = data;
             }
 
