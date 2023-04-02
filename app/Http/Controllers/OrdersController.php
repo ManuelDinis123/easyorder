@@ -82,13 +82,13 @@ class OrdersController extends Controller
         $items = OrderItems::select(
             "menu_item.id",
             "menu_item.name",
-            "menu_item.price",
-            "menu_item.cost",
+            "order_items.price",
+            "order_items.cost",
             "menu_item.description",
             "menu_item.imageUrl",
             "order_items.note",
             "order_items.quantity",
-            DB::raw("COALESCE(SUM(menu_item_ingredients.price * order_items_sides.quantity), 0) as 'side_price'")
+            DB::raw("COALESCE(SUM(order_items_sides.price * order_items_sides.quantity), 0) as 'side_price'")
         )
             ->where("order_id", $order_details["id"])
             ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')
@@ -311,6 +311,7 @@ class OrdersController extends Controller
         ]);
 
         $update = Orders::whereId($id->id)->update([
+            "progress" => 100,
             "closed" => 1
         ]);
 
@@ -360,7 +361,6 @@ class OrdersController extends Controller
                 "isCancelled" => 0,
             ]);
             $itms = array_column($s, 'item_id');
-            Log::info($itms);
             foreach ($s as $details) {
                 $price = MenuItems::select('price', 'cost')->where('id', $details['item_id'])->get()->first();
                 $orderItms = OrderItems::create([
