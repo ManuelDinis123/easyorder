@@ -93,6 +93,12 @@
                         <i class="fa-solid fa-burger-cheese"></i>
                         <span class="nav_name">Ementa</span>
                     </a>
+                    <a id="view_editpage_side" href="/professional/conteudo"
+                        class="nav_link {{ $file == 'editpage' ? 'active' : '' }}
+                        {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.edit_page') ? 'visually-hidden' : '') : '') : '' }}">
+                        <i class="fa-duotone fa-pen-ruler"></i>
+                        <span class="nav_name">Gerir Conteúdo</span>
+                    </a>
                     <a id="view_stats_side" href="/professional/stats"
                         class="nav_link {{ $file == 'stats' ? 'active' : '' }}
                         {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_stats') ? 'visually-hidden' : '') : '') : '' }}">
@@ -243,6 +249,7 @@
                     $("#dp").addClass('visually-hidden');
                 } else {
                     $("#view_menu_side").removeClass('visually-hidden');
+                    $("#view_editpage_side").removeClass('visually-hidden');
                     $("#view_orders_side").removeClass('visually-hidden');
                     $("#view_stats_side").removeClass('visually-hidden');
                     $("#dp").removeClass('visually-hidden');

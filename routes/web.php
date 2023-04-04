@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EditpageController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NavController;
 use App\Http\Controllers\OptionsController;
@@ -93,6 +94,10 @@ Route::post('/professional/fast_close', [OrdersController::class, 'mark_done_fas
 
 // Statistics for the professional user accounts
 Route::get('/professional/stats', [StatsController::class, 'index']);
+
+
+// Edit main page for the pro user accounts
+Route::get('/professional/conteudo', [EditpageController::class, 'index']);
 
 // User configs for the professional user account
 Route::get('/professional/admin/users', [UserConfigsController::class, 'index']);
