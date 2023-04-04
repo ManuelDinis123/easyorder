@@ -53,7 +53,6 @@ class StatsController extends Controller
         $thisGainYEAR = $this::get_lucro("this", "year");
         $lastGainYEAR = $this::get_lucro("last", "year");
 
-        // TODO: Refactor this. Create 3 arrays for the week, month and year info
         return view("frontend/professional/stats/stats")
             ->with("lastPerDay", $last_week_days)
             ->with("thisPerDay", $this_week_days)

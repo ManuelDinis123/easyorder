@@ -88,6 +88,7 @@ class AuthController extends Controller
                 "write_orders" => $typeInfo->write_orders,
                 "write_menu" => $typeInfo->write_menu,
                 "invite_users" => $typeInfo->invite_users,
+                "edit_page" => $typeInfo->edit_page,
                 "ban_users" => $typeInfo->ban_users,
                 "admin" => $typeInfo->admin,
                 "owner" => $typeInfo->owner,
@@ -194,6 +195,7 @@ class AuthController extends Controller
                 "view_orders",
                 "view_menu",
                 "view_stats",
+                "edit_page",
                 "admin",
                 "owner",
             )->whereId($type_id->type_id)->get()->first();
@@ -206,6 +208,7 @@ class AuthController extends Controller
                 "write_orders" => $type_permissions->write_orders,
                 "write_menu" => $type_permissions->write_menu,
                 "invite_users" => $type_permissions->invite_users,
+                "edit_page" => $type_permissions->edit_page,
                 "ban_users" => $type_permissions->ban_users,
                 "admin" => $type_permissions->admin,
                 "owner" => $type_permissions->owner,
@@ -223,6 +226,7 @@ class AuthController extends Controller
                 "owner" => session()->get("type.owner"),
                 "invite_users" => session()->get("type.invite_users"),
                 "ban_users" => session()->get("type.ban_users"),
+                "edit_page" => session()->get("type.edit_page"),
             ]], 200);
         } else {
             return response(0, 200);

@@ -56,6 +56,7 @@ class PermsController extends Controller
             "write_menu" => $type->write_menu,
             "view_stats" => $type->view_stats,
             "invite_users" => $type->invite_users,
+            "edit_page" => $type->edit_page,
             "ban_users" => $type->ban_users,
             "admin" => $type->admin,
         ];

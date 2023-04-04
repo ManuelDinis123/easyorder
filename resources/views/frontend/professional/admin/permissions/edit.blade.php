@@ -20,7 +20,7 @@
                     <h4 style="font-weight: 600">Permissões:</h4>
                     <hr class="mt-2">
                     @php
-                        $map = [['label' => 'Ver Pedidos', 'id' => 'view_orders', 'active' => $view_orders], ['label' => 'Editar Pedidos', 'id' => 'write_orders', 'active' => $write_orders], ['label' => 'Ver Menu', 'id' => 'view_menu', 'active' => $view_menu], ['label' => 'Editar Menu', 'id' => 'write_menu', 'active' => $write_menu], ['label' => 'Ver Estatisticas', 'id' => 'view_stats', 'active' => $view_stats], ['label' => 'Convidar Utilizadores', 'id' => 'invite_users', 'active' => $invite_users], ['label' => 'Banir Utilizadores', 'id' => 'ban_users', 'active' => $ban_users], ['label' => 'Admin', 'id' => 'admin', 'active' => $admin]];
+                        $map = [['label' => 'Ver Pedidos', 'id' => 'view_orders', 'active' => $view_orders], ['label' => 'Editar Pedidos', 'id' => 'write_orders', 'active' => $write_orders], ['label' => 'Ver Menu', 'id' => 'view_menu', 'active' => $view_menu], ['label' => 'Editar Menu', 'id' => 'write_menu', 'active' => $write_menu], ['label' => 'Ver Estatisticas', 'id' => 'view_stats', 'active' => $view_stats], ['label' => 'Editar Pagina', 'id' => 'edit_page', 'active' => $edit_page], ['label' => 'Convidar Utilizadores', 'id' => 'invite_users', 'active' => $invite_users], ['label' => 'Banir Utilizadores', 'id' => 'ban_users', 'active' => $ban_users], ['label' => 'Admin', 'id' => 'admin', 'active' => $admin]] 
                     @endphp
                     <div class="row">
                         @foreach ($map as $permission)
@@ -61,6 +61,7 @@
             "invite_users",
             "ban_users",
             "admin",
+            "edit_page"
         ]
 
         // To iterate through the checkboxes and either see if they are checked or check/uncheck them

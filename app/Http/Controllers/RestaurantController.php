@@ -282,7 +282,7 @@ class RestaurantController extends Controller
     /**
      * Goes to front-end restaurant page
      * 
-     * @return view
+     * @return \Illuminate\View the main page of the restaurants
      */
     function restaurant_page(Request $id)
     {
@@ -290,13 +290,26 @@ class RestaurantController extends Controller
 
         $info = Restaurants::whereId($id->route('id'))->get()->first();
 
-        return view("frontend.restaurants.restaurant")->with("info", $info);
+        //  Get the most popular items from a restaurant based on the count of how many times each item was ordered.
+        $popular = Menu::select("menu_item.id", "menu_item.name", "menu_item.price", "menu_item.imageUrl")
+            ->join("menu_item", "menu_item.menu_id", "menu.id")
+            ->leftJoin(DB::raw("(select menu_item_ingredients.menu_item_id, menu_item_ingredients.price from menu_item_ingredients where menu_item_ingredients.default = 1) as sides"), "sides.menu_item_id", '=', 'menu_item.id')
+            ->leftJoin(DB::raw("(select order_items.menu_item_id, count(*) as total from order_items group by order_items.menu_item_id) as times_ordered"), "times_ordered.menu_item_id", '=', 'menu_item.id')
+            ->where("restaurant_id", $id->id)
+            ->groupBy("menu_item.id")
+            ->orderBy("times_ordered.total", "desc")
+            ->limit(10)
+            ->get();
+
+        return view("frontend.restaurants.restaurant")
+            ->with("info", $info)
+            ->with("popular", $popular);
     }
 
     /**
      * menu page
      * 
-     * @return view
+     * @return \Illuminate\View view of the menu page
      */
     function menu_page(Request $id)
     {
@@ -306,14 +319,14 @@ class RestaurantController extends Controller
 
         // Get all items, add prices of default selected side dishes to the base price
         $items_raw = Menu::select('menu_item.id', 'menu_item.name', 'menu_item.description', 'menu_item.imageUrl', DB::raw('(menu_item.price + COALESCE(SUM(menu_item_ingredients.price * menu_item_ingredients.quantity), 0)) as price'), 'menu_item.cost')
-        ->join('menu_item', 'menu_item.menu_id', '=', 'menu.id')
-        ->leftJoin('menu_item_ingredients', function ($join) {
-            $join->on('menu_item_ingredients.menu_item_id', '=', 'menu_item.id')
-                 ->where('menu_item_ingredients.default', 1);
-        })
-        ->where('menu.restaurant_id', $id->route('id'))
-        ->groupBy('menu_item.id', 'menu_item.name', 'menu_item.description', 'menu_item.imageUrl', 'menu_item.price', 'menu_item.cost')
-        ->get();
+            ->join('menu_item', 'menu_item.menu_id', '=', 'menu.id')
+            ->leftJoin('menu_item_ingredients', function ($join) {
+                $join->on('menu_item_ingredients.menu_item_id', '=', 'menu_item.id')
+                    ->where('menu_item_ingredients.default', 1);
+            })
+            ->where('menu.restaurant_id', $id->route('id'))
+            ->groupBy('menu_item.id', 'menu_item.name', 'menu_item.description', 'menu_item.imageUrl', 'menu_item.price', 'menu_item.cost')
+            ->get();
 
 
         $items = [];
