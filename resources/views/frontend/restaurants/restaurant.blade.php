@@ -9,8 +9,8 @@
     @if ($plateofday)
         <div class="prato-dia mt-5">
             <div class="center">
+                <h1 class="title">Prato do Dia</h1>
             </div>
-            <h1 class="title">Prato do Dia</h1>
             <div class="center">
                 <style>
                     .pd-img {

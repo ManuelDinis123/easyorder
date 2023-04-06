@@ -111,9 +111,9 @@
                     @if (isset($cards))
                         <div class="modal-menu" id="modal_menu" style="display: inline-flex">
                             <div class="scrollable">
-                                <div class="row gx-0" style="padding-left: 0px">
+                                <div class="row" style="padding-left: 0px">
                                     @foreach ($cards as $card)
-                                        <div class="col-4 modal-card-selectable" id="modal-card-selectable{{$card['id']}}">
+                                        <div class="{{count($cards)==2?'col-6':'col-4'}} modal-card-selectable" id="modal-card-selectable{{$card['id']}}">
                                             <style>
                                                 .modal-card{{ $card['id'] }} {
                                                     margin: 5px 0px;
