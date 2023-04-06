@@ -2,16 +2,16 @@
 
 <div class="container" id="container">
     <div class="row">
-        <div class="col-7">
+        <div class="col-8">
             <div class="restaurants">
                 @if (isset($restaurants))
                     @foreach ($restaurants as $res)
                         <div class="row mb-4 restaurant" id="{{ $res['id'] }}">
-                            <div class="col-4">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
                                 <img src="{{ $res['logo_name'] ? asset('img/logos/' . $res['logo_name']) : $res['logo_url'] }}"
                                     class="restaurant-img">
                             </div>
-                            <div class="col-7">
+                            <div class="col-lg-7 col-md-6 col-sm-12">
                                 <h3 class="restaurant-title">{{ $res['name'] }}</h3>
                                 <span class="text-muted">{{ $res['description'] }}</span>
                             </div>
@@ -29,7 +29,7 @@
                 }
             }
         @endphp
-        <div class="col-5">
+        <div class="col-4">
             <div class="filters">
                 <h4>Filtros</h4>
                 <hr>

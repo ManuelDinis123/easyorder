@@ -98,6 +98,7 @@ Route::get('/professional/stats', [StatsController::class, 'index']);
 
 // Edit main page for the pro user accounts
 Route::get('/professional/conteudo', [EditpageController::class, 'index']);
+Route::post('/professional/conteudo/set', [EditpageController::class, 'setPlateOfDay'])->name("set_plate_of_day");
 
 // User configs for the professional user account
 Route::get('/professional/admin/users', [UserConfigsController::class, 'index']);

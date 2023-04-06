@@ -6,28 +6,44 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 
-    <div class="prato-dia mt-5">
-        <div class="center">
+    @if ($plateofday)
+        <div class="prato-dia mt-5">
+            <div class="center">
+            </div>
             <h1 class="title">Prato do Dia</h1>
-        </div>
-        <div class="center">
-            <div class="pd-img">
-                <div class="row pd-itm-cn g-0 unselectable">
-                    <div class="col-8">
-                        <span class="unselectable pd-itm">Bife</span><br>
-                        <span class="unselectable pd-itm" style="font-weight: 300; font-size: 30px">Descrição do
-                            Bife</span>
-                    </div>
-                    <div class="col-4">
-                        <span class="unselectable pd-itm" style="float: right">15€</span>
+            <div class="center">
+                <style>
+                    .pd-img {
+                        padding: 20px 20px;
+                        background-size: cover;
+                        background-position: center;
+                        background-image: linear-gradient(180deg,
+                                rgba(0, 0, 0, 0) 64.06%,
+                                #000000 100%),
+                            url("{{ $plateofday['imageUrl'] }}");
+                        width: 90%;
+                        height: 553px;
+                        border-radius: 10px;
+                    }
+                </style>
+                <div class="pd-img">
+                    <div class="row pd-itm-cn g-0 unselectable">
+                        <div class="col-8">
+                            <span class="unselectable pd-itm">{{ $plateofday['name'] }}</span><br>
+                            <span class="unselectable pd-itm"
+                                style="font-weight: 300; font-size: 30px">{{ $plateofday['description'] }}</span>
+                        </div>
+                        <div class="col-4">
+                            <span class="unselectable pd-itm" style="float: right">{{ $plateofday['price'] + 0 }}€</span>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="center">
+                <button class="btn btn-dark pd-btn">Adicionar ao Carrinho</button>
+            </div>
         </div>
-        <div class="center">
-            <button class="btn btn-dark pd-btn">Adicionar ao Carrinho</button>
-        </div>
-    </div>
+    @endif
 
     <div class="popular-plates mt-5">
         <div>
@@ -41,7 +57,7 @@
                             background-image: linear-gradient(180deg,
                                     rgba(0, 0, 0, 0) 31.77%,
                                     #000000 100%),
-                                url("{{$item['imageUrl']}}");
+                                url("{{ $item['imageUrl'] }}");
                             background-size: cover;
                             background-position: center;
                         }
@@ -55,7 +71,8 @@
             </div>
         </div>
         <div class="center">
-            <button class="btn btn-dark pd-btn" style="width: 100%" onclick="window.location.replace('/restaurante/{{$info['id']}}/menu')">Ver Ementa Completa</button>
+            <button class="btn btn-dark pd-btn" style="width: 100%"
+                onclick="window.location.replace('/restaurante/{{ $info['id'] }}/menu')">Ver Ementa Completa</button>
         </div>
     </div>
 

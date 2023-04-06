@@ -1,0 +1,39 @@
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.pod-msg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 95%;
+}
+
+.plateofday {    
+    cursor: pointer;
+    height: 300px;
+    width: 600px;
+    border-radius: 15px;
+    margin-top: 10px;
+    box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.473);
+    transition: all 0.2s ease;
+}
+
+.plateofday:hover {    
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.473);
+}
+
+.plateofday:active { 
+    transform: scale(1);
+    box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.473);
+}
+
+.fa-x {
+    margin-left: 10px;
+    margin-top: 10px;
+    color: rgb(255, 255, 255);
+    font-weight: 800;
+    font-size: 24px;
+}

@@ -295,15 +295,22 @@ class RestaurantController extends Controller
             ->join("menu_item", "menu_item.menu_id", "menu.id")
             ->leftJoin(DB::raw("(select menu_item_ingredients.menu_item_id, menu_item_ingredients.price from menu_item_ingredients where menu_item_ingredients.default = 1) as sides"), "sides.menu_item_id", '=', 'menu_item.id')
             ->leftJoin(DB::raw("(select order_items.menu_item_id, count(*) as total from order_items group by order_items.menu_item_id) as times_ordered"), "times_ordered.menu_item_id", '=', 'menu_item.id')
-            ->where("restaurant_id", $id->id)
+            ->where("restaurant_id", $id->route('id'))
             ->groupBy("menu_item.id")
             ->orderBy("times_ordered.total", "desc")
             ->limit(10)
             ->get();
 
+        $plateofday = Restaurants::select("restaurants.plate_of_day", "menu_item.name", "menu_item.imageUrl", "menu_item.price", "menu_item.description")
+        ->join("menu_item", "menu_item.id", "=", "restaurants.plate_of_day")
+        ->where("restaurants.id", $id->route('id'))
+        ->get()
+        ->first();
+
         return view("frontend.restaurants.restaurant")
             ->with("info", $info)
-            ->with("popular", $popular);
+            ->with("popular", $popular)
+            ->with("plateofday", $plateofday);
     }
 
     /**
