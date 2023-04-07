@@ -12,38 +12,6 @@
             <i class="fa-light fa-bars hToggle" id="header-toggle"></i>
         </div>
         <div class="ms-auto icons-nav">
-            <a href="/professional/configuracoes" class="aIco"><i class="fa-regular fa-gear n-icons"></i></a>
-            {{-- Notifications --}}
-            <div class="dpDown">
-                <i class="fa-regular fa-bell n-icons" id="bellIco" aria-expanded="false"></i>
-                <div class="custom-dpdown custom-dpdown-open hide-dpDown" style="min-width: 200px;" id="bellDp">
-                    <div class="custom-dpdown-header">
-                        <span class="custom-dpdown-title">Notificações</span>
-                    </div>
-                    <div class="custom-dpdown-body">
-                        <span class="custom-dpdown-item-container">
-                            <a class="custom-dpdown-item" href="#">
-                                <label class="text-muted" style="font-size: 10px">Janeiro 15 2023</label>
-                                <label style="font-weight: 600">Dummy Text</label>
-                            </a>
-                        </span>
-                        <hr class="custom-dpdown-separation">
-                        <span class="custom-dpdown-item-container">
-                            <a class="custom-dpdown-item" href="#">
-                                <label class="text-muted" style="font-size: 10px">Janeiro 15 2023</label>
-                                <label style="font-weight: 600">Dummy Text</label>
-                            </a>
-                        </span>
-                        <hr class="custom-dpdown-separation">
-                        <span class="custom-dpdown-item-container">
-                            <a class="custom-dpdown-item" href="#">
-                                <label class="text-muted" style="font-size: 10px">Janeiro 15 2023</label>
-                                <label style="font-weight: 600">Dummy Text</label>
-                            </a>
-                        </span>
-                    </div>
-                </div>
-            </div>
             {{-- Custom User Dropdown --}}
             <div class="dpDown">
                 <img src="{{ asset('img/pfp/' . session()->get('user.pfp')) }}"
