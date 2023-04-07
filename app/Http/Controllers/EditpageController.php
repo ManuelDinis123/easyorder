@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
 use App\Models\MenuItems;
+use App\Models\Posts;
 use App\Models\Restaurants;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
@@ -39,6 +40,14 @@ class EditpageController extends Controller
             ];
         }
 
+        $posts = Posts::where("restaurantId", session()->get("restaurant.id"))
+            ->where("published", 1)
+            ->get();
+
+        $drafts = Posts::where("restaurantId", session()->get("restaurant.id"))
+            ->where("published", 0)
+            ->get();
+
         $plateOfDay = Restaurants::select("restaurants.plate_of_day", "menu_item.name", "menu_item.imageUrl")
             ->join("menu_item", "menu_item.id", "=", "restaurants.plate_of_day")
             ->where("restaurants.id", session()->get("restaurant.id"))
@@ -47,7 +56,9 @@ class EditpageController extends Controller
 
         return view("frontend/professional/editpage/editpage")
             ->with("menuItems", $menuItemsModal)
-            ->with("plateofday", $plateOfDay);
+            ->with("plateofday", $plateOfDay)
+            ->with("posts", $posts)
+            ->with("drafts", $drafts);
     }
 
     /**
@@ -72,5 +83,49 @@ class EditpageController extends Controller
         if (!$save) return Response()->json(["title" => "Erro", "message" => "Ocorreu um erro a guardar o prato do dia"], 500);
 
         return Response()->json(["title" => "Sucesso", "message" => "Prato do dia adicionado com sucesso"], 200);
+    }
+
+    /**
+     * Page to create a new post
+     * 
+     * @return \Illuminate\View post.blade.php
+     */
+    function postPage()
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return redirect("/professional");
+        }
+
+        return view("frontend/professional/editpage/post");
+    }
+
+    /**
+     * Save a post
+     * 
+     * @param \Illuminate\Http\Request Post title, text of the post, isPublish
+     * @return \Illuminate\Http\Response Status
+     */
+    function savePost(Request $data)
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return response("Access Denied", 401);
+        }
+
+        if (AppHelper::hasEmpty([$data->text, $data->title])) return response()->json(["title" => "Erro", "message" => "A sua publicação esta invalida!"], 400);
+
+        $text = htmlentities($data->text);
+        $res = Posts::create([
+            "title" => $data->title,
+            "body" => $text,
+            "published" => $data->isPublish,
+            "created_by" => session()->get("user.id"),
+            "restaurantId" => session()->get("restaurant.id")
+        ]);
+
+        if (!$res) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a guardar a publicação"], 500);
+
+        return response()->json(["title" => "Sucesso!", "message" => "Publicação publicada"], 200);
     }
 }

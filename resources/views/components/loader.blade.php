@@ -19,7 +19,6 @@
         top: 45%;         */
         left: 45%;
         top: 45%;
-        
     }
 
     .typewriter .slide {

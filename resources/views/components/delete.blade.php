@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{isset($dangerLBL) ? $dangerLBL : "Cancelar"}}</button>
                 <button class="btn btn-primary" @if (isset($function_name)) onclick="{{ $function_name }}()" @endif
                     @if (isset($confirm_id)) id="{{ $confirm_id }}" @endif>Confirmar</button>
             </div>
