@@ -28,7 +28,7 @@
 <div class="restauraunt-content">
     <span class="item {{ $selected == 'main' ? 'item-selected' : '' }}"><a href="/restaurante/{{ $info['id'] }}">Pagina
             Principal</a></span>
-    <span class="item {{ $selected == 'publication' ? 'item-selected' : '' }}"><a href="#">Publicações</a></span>
+    <span class="item {{ $selected == 'publication' ? 'item-selected' : '' }}"><a href="/restaurante/{{ $info['id'] }}/publicacoes">Publicações</a></span>
     <span class="item {{ $selected == 'menu' ? 'item-selected' : '' }}"><a
             href="/restaurante/{{ $info['id'] }}/menu">Ementa</a></span>
     <span class="item {{ $selected == 'reviews' ? 'item-selected' : '' }}"><a href="/restaurante/{{ $info['id'] }}/reviews">Reviews</a></span>

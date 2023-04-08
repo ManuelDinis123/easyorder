@@ -363,3 +363,18 @@ body {
     border-radius: 10px;
     background-color: #000000;
 }
+
+.post{
+    box-shadow: 0px 4px 14px 1px rgba(0, 0, 0, 0.45);
+    border-radius: 15px;
+    padding: 20px 20px;
+    margin-top: 24px;
+}
+
+.post .center h2 {
+    font-weight: 800;
+}
+
+.seeMore{
+    cursor: pointer;
+}

@@ -7,6 +7,7 @@ use App\Models\ConnectRestaurantType;
 use App\Models\Menu;
 use App\Models\MenuItems;
 use App\Models\Orders;
+use App\Models\Posts;
 use App\Models\Restaurants;
 use App\Models\RestaurantType;
 use App\Models\Reviews;
@@ -302,10 +303,10 @@ class RestaurantController extends Controller
             ->get();
 
         $plateofday = Restaurants::select("restaurants.plate_of_day", "menu_item.name", "menu_item.imageUrl", "menu_item.price", "menu_item.description")
-        ->join("menu_item", "menu_item.id", "=", "restaurants.plate_of_day")
-        ->where("restaurants.id", $id->route('id'))
-        ->get()
-        ->first();
+            ->join("menu_item", "menu_item.id", "=", "restaurants.plate_of_day")
+            ->where("restaurants.id", $id->route('id'))
+            ->get()
+            ->first();
 
         return view("frontend.restaurants.restaurant")
             ->with("info", $info)
@@ -394,5 +395,22 @@ class RestaurantController extends Controller
             ->with("canReview", $canReview)
             ->with("stats", $stats)
             ->with('label', $label);
+    }
+
+    /**
+     * Posts page
+     * 
+     * @return \Illuminate\View posts
+     */
+    function posts(Request $id)
+    {
+        if (!AppHelper::hasLogin()) return redirect("/");
+
+        $info = Restaurants::whereId($id->route('id'))->get()->first();
+        $posts = Posts::where('restaurantId', $id->route('id'))
+            ->where("published", 1)
+            ->get();
+
+        return view("frontend.restaurants.posts")->with("info", $info)->with("posts", $posts);
     }
 }

@@ -4,8 +4,6 @@
 @section('content')
     @include('components.frontend.restaurantstop', ['selected' => 'main'])
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-
     @if ($plateofday)
         <div class="prato-dia mt-5">
             <div class="center">
