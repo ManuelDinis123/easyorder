@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->text("title", 64);
-            $table->text("body");
+            $table->longText("body");
             $table->tinyInteger("published");
             $table->unsignedInteger("restaurantId");
             $table->unsignedInteger("created_by")->nullable();

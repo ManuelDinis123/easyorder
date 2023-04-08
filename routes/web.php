@@ -101,6 +101,8 @@ Route::get('/professional/conteudo', [EditpageController::class, 'index']);
 Route::get('/professional/conteudo/publicar', [EditpageController::class, 'postPage']);
 Route::post('/professional/conteudo/publicar/save', [EditpageController::class, 'savePost'])->name("savePost");
 Route::post('/professional/conteudo/set', [EditpageController::class, 'setPlateOfDay'])->name("set_plate_of_day");
+Route::post('/professional/conteudo/delete', [EditpageController::class, 'deletePost'])->name("deletePost");
+Route::post('/professional/conteudo/publicar_rascunho', [EditpageController::class, 'publishDraft'])->name("publicar_rascunho");
 
 // User configs for the professional user account
 Route::get('/professional/admin/users', [UserConfigsController::class, 'index']);

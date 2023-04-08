@@ -90,14 +90,21 @@ class EditpageController extends Controller
      * 
      * @return \Illuminate\View post.blade.php
      */
-    function postPage()
+    function postPage(Request $id)
     {
         if (!AppHelper::checkAuth()) return redirect("/no-access");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return redirect("/professional");
         }
 
-        return view("frontend/professional/editpage/post");
+        $post = null;
+        if ($id->get('id')) {
+            $post = Posts::whereId($id->get('id'))
+                ->get()
+                ->first();
+        }
+
+        return view("frontend/professional/editpage/post")->with("post", $post);
     }
 
     /**
@@ -116,6 +123,22 @@ class EditpageController extends Controller
         if (AppHelper::hasEmpty([$data->text, $data->title])) return response()->json(["title" => "Erro", "message" => "A sua publicação esta invalida!"], 400);
 
         $text = htmlentities($data->text);
+
+        if ($data->edit) {
+            $res = Posts::whereId($data->edit)
+                ->update([
+                    "title" => $data->title,
+                    "body" => $text,
+                    "published" => $data->isPublish,
+                    "created_by" => session()->get("user.id"),
+                    "restaurantId" => session()->get("restaurant.id")
+                ]);
+
+            if (!$res) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a guardar a publicação"], 500);
+
+            return response()->json(["title" => "Sucesso!", "message" => "Publicação publicada"], 200);
+        }
+
         $res = Posts::create([
             "title" => $data->title,
             "body" => $text,
@@ -125,6 +148,48 @@ class EditpageController extends Controller
         ]);
 
         if (!$res) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a guardar a publicação"], 500);
+
+        return response()->json(["title" => "Sucesso!", "message" => "Publicação publicada"], 200);
+    }
+
+    /**
+     * Delete posts
+     * 
+     * @param \Illuminate\Http\Request id
+     * @return \Illuminate\Http\Response
+     */
+    function deletePost(Request $id)
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return response("Access Denied", 401);
+        }
+
+        $res = Posts::whereId($id->id)->delete();
+
+        if (!$res) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a remover a publicação"], 500);
+
+        return response()->json(["title" => "Sucesso!", "message" => "Publicação removida"], 200);
+    }
+
+    /**
+     * Publish a drafted post
+     * 
+     * @param \Illuminate\Http\Request id
+     * @return \Illuminate\Http\Response
+     */
+    function publishDraft(Request $id)
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return response("Access Denied", 401);
+        }
+
+        $res = Posts::whereId($id->id)->update([
+            "published"=>1
+        ]);
+
+        if (!$res) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a publicar a publicação"], 500);
 
         return response()->json(["title" => "Sucesso!", "message" => "Publicação publicada"], 200);
     }

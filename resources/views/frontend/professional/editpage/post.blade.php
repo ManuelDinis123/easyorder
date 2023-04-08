@@ -44,10 +44,11 @@
 
     <div class="container">
         <div class="center">
-            <input type="text" class="form-control title-input" id="post_title" placeholder="Titulo da Publicação">
+            <input type="text" class="form-control title-input" id="post_title" placeholder="Titulo da Publicação"
+                value="{{ isset($post) ? $post['title'] : '' }}">
         </div>
         <div class="center mt-3">
-            <textarea id="postBody" class="mce-body"></textarea>
+            <textarea id="postBody" class="mce-body">{!! isset($post) ? $post['body'] : '' !!}</textarea>
         </div>
         <div class="action-btns mt-3">
             <button class="btn btn-primary" id="publish">Publicar</button>
@@ -93,7 +94,8 @@
                     "_token": "{{ csrf_token() }}",
                     "title": $("#post_title").val(),
                     "text": text,
-                    "isPublish": publish
+                    "isPublish": publish,
+                    "edit": {{ isset($post) ? $post['id'] : 0 }}
                 }
             }).done((res) => {
                 successToast(res.title, res.message);

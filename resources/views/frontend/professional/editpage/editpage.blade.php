@@ -14,6 +14,19 @@
     ])
     @endcomponent
 
+    @component('components.delete', [
+        'modal_id' => 'confirmModal',
+        'function_name' => 'removePost',
+        'hidden' => 'postID',
+    ])
+        @slot('title')
+            Tem a certeza que quer remover esta publicação?
+        @endslot
+        @slot('span')
+            Isto não pode ser revertido.
+        @endslot
+    @endcomponent
+
     <style>
         #removePlate {
             @if ($plateofday)
@@ -79,37 +92,47 @@
         <div class="allPosts mt-4" id="publishedPosts">
             @foreach ($posts as $post)
                 <div class="center mt-3">
-                    <div class="post">
-                        <i class="fa-solid fa-pen-to-square post-actions" style="color: #1C46B2;"></i>
-                        <i class="fa-solid fa-trash-can post-actions" style="color: rgba(165, 2, 2, 0.719);"></i>
+                    <div class="post" id="post_n{{ $post['id'] }}">
+                        <i class="fa-solid fa-pen-to-square post-actions"
+                            onclick="window.location.href='/professional/conteudo/publicar?id={{ $post['id'] }}'"
+                            style="color: #1C46B2;"></i>
+                        <i class="fa-solid fa-trash-can post-actions" onclick="open_delete({{ $post['id'] }})"
+                            style="color: rgba(165, 2, 2, 0.719);"></i>
                         <div class="center">
                             <h2>{{ $post['title'] }}</h2>
                         </div>
-                        <hr>                        
-                        <input type="hidden" value="0" id="expanded{{$post['id']}}">
+                        <hr>
+                        <input type="hidden" value="0" id="expanded{{ $post['id'] }}">
                         <div class="post-body visually-hidden mt-3" id="body{{ $post['id'] }}">
                             {!! html_entity_decode($post['body']) !!}
                         </div>
-                        <button id="expand{{ $post['id'] }}" onclick="expand({{ $post['id'] }})" class="btn btn-dark form-control">Expandir</button>
+                        <button id="expand{{ $post['id'] }}" onclick="expand({{ $post['id'] }})"
+                            class="btn btn-dark form-control">Expandir</button>
                     </div>
                 </div>
             @endforeach
         </div>
-        <div class="allPosts mt-4 visually-hidden" id="drafts">
+        <div class="allPosts visually-hidden mt-4" id="drafts">
             @foreach ($drafts as $draft)
-                <div class="center mt-3">
+                <div class="center mt-3" id="aDraft{{$draft['id']}}">
                     <div class="post">
-                        <i class="fa-solid fa-pen-to-square post-actions" style="color: #1C46B2;"></i>
-                        <i class="fa-solid fa-trash-can post-actions" style="color: rgba(165, 2, 2, 0.719);"></i>
+                        <i class="fa-solid fa-paper-plane post-actions" style="color: #166f17;"
+                            onclick="publishDraft({{ $draft['id'] }})"></i>
+                        <i class="fa-solid fa-pen-to-square post-actions"
+                            onclick="window.location.href='/professional/conteudo/publicar?id={{ $draft['id'] }}'"
+                            style="color: #1C46B2;"></i>
+                        <i class="fa-solid fa-trash-can post-actions" onclick="open_delete({{ $draft['id'] }})"
+                            style="color: rgba(165, 2, 2, 0.719);"></i>
                         <div class="center">
-                            <h2>{{ $draft['title'] }}</h2>
+                            <h2 id="post_title{{ $draft['id'] }}">{{ $draft['title'] }}</h2>
                         </div>
                         <hr>
-                        <input type="hidden" value="0" id="expanded{{$draft['id']}}">
+                        <input type="hidden" value="0" id="expanded{{ $draft['id'] }}">
                         <div class="post-body visually-hidden mt-3" id="body{{ $draft['id'] }}">
                             {!! html_entity_decode($draft['body']) !!}
                         </div>
-                        <button id="expand{{ $draft['id'] }}" onclick="expand({{ $draft['id'] }})" class="btn btn-dark form-control">Expandir</button>
+                        <button id="expand{{ $draft['id'] }}" onclick="expand({{ $draft['id'] }})"
+                            class="btn btn-dark form-control">Expandir</button>
                     </div>
                 </div>
             @endforeach
@@ -117,17 +140,75 @@
     </div>
 
     <script>
+        // Publish a draft
+        function publishDraft(id) {
+            $.ajax({
+                method: 'post',
+                url: '/professional/conteudo/publicar_rascunho',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'id': id
+                }
+            }).done((res) => {
+                successToast(res.title, res.message);
+                $("#publishedPosts").append(
+                    `<div class="center mt-3">\
+                    <div class="post">\
+                        <i class="fa-solid fa-pen-to-square post-actions"
+                            onclick="window.location.href='/professional/conteudo/publicar?id=` + id + `'"
+                            style="color: #1C46B2;"></i>\
+                        <i class="fa-solid fa-trash-can post-actions" onclick="open_delete(` + id + `)"\
+                            style="color: rgba(165, 2, 2, 0.719);"></i>\
+                        <div class="center">\
+                            <h2>` + $("#post_title" + id).text() + `</h2>\
+                        </div>\
+                        <hr>\
+                        <input type="hidden" value="0" id="expanded` + id + `">\                            
+                        <button id="expand` + id + `" onclick="expand(` + id + `)"\
+                            class="btn btn-dark form-control">Expandir</button>\
+                    </div>\
+                </div>`
+                );
+                $("#body" + id).clone().insertAfter("#expanded" + id);
+                $("#aDraft"+id).remove();
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
+            })
+        }
+
         // To show the body of a post
         function expand(id) {
-            if($("#expanded"+id).val()==0){
-                $("#expand"+id).text("Fechar");
-                $("#body"+id).removeClass("visually-hidden");
-                $("#expanded"+id).val(1);
+            if ($("#expanded" + id).val() == 0) {
+                $("#expand" + id).text("Fechar");
+                $("#body" + id).removeClass("visually-hidden");
+                $("#expanded" + id).val(1);
                 return;
             }
-            $("#expand"+id).text("Expandir");
-            $("#body"+id).addClass("visually-hidden");
-            $("#expanded"+id).val(0);
+            $("#expand" + id).text("Expandir");
+            $("#body" + id).addClass("visually-hidden");
+            $("#expanded" + id).val(0);
+        }
+
+        function open_delete(id) {
+            $("#confirmModal").modal("toggle");
+            $("#postID").val(id);
+        }
+
+        function removePost() {
+            $.ajax({
+                method: "post",
+                url: "/professional/conteudo/delete",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "id": $("#postID").val()
+                }
+            }).done((res) => {
+                successToast(res.title, res.message);
+                $("#confirmModal").modal("toggle");
+                $("#post_n" + $("#postID").val()).remove();
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
+            })
         }
 
         $("#changePosts").on('click', () => {
