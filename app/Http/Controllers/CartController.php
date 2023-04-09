@@ -39,7 +39,7 @@ class CartController extends Controller
         }
 
         // Get items in cart
-        $items = CartItems::select(DB::raw("restaurants.id as res_id"), DB::raw("cart_items.id as cart_item_id"), "cart_items.note", "cart_items.item_id", "cart_items.quantity", "menu_item.name", DB::raw('(menu_item.price + COALESCE(SUM(menu_item_ingredients.price * menu_item_ingredients.quantity), 0)) as price'), DB::raw("menu_item.price as default_price"), "menu_item.description", "menu_item.imageUrl")
+        $items = CartItems::select(DB::raw("restaurants.id as res_id"), DB::raw("cart_items.id as cart_item_id"), "cart_items.note", "cart_items.item_id", "cart_items.quantity", "menu_item.name", DB::raw('(menu_item.price) as price'), DB::raw("COALESCE(SUM(menu_item_ingredients.price * side_dishes.quantity), 0) as addition"), DB::raw("menu_item.price as default_price"), "menu_item.description", "menu_item.imageUrl")
             ->join("menu_item", "menu_item.id", "=", "cart_items.item_id")
             ->leftJoin('menu_item_ingredients', function ($join) {
                 $join->on('menu_item_ingredients.menu_item_id', '=', 'menu_item.id')
@@ -65,6 +65,7 @@ class CartController extends Controller
                     "name" => $item['name'],
                     "quantity" => $item['quantity'],
                     "price" => $item['price'],
+                    "addition" => $item['addition'],
                     "default_price" => $item['default_price'],
                     "description" => $item['description'],
                     "imageUrl" => $item['imageUrl'],

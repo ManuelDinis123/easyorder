@@ -47,7 +47,7 @@
                         <h3>{{ $item['name'] }} <span id="quantity_for_{{ $item['item_id'] }}">x
                                 {{ $item['quantity'] }}</span></h3>
                         <span class="total-price">Total: <span
-                                id="ttlPrice{{ $item['item_id'] }}">{{ $item['price'] * $item['quantity'] }}€</span></span>
+                                id="ttlPrice{{ $item['item_id'] }}">{{ $item['price'] * $item['quantity'] + $item['addition'] }}€</span></span>
                         <div class="btnss">
                             <button class="btn btn-dark" class="minus-btn qntbtns"
                                 onclick="cartAddRemove({{ $item['item_id'] }}, 1, {{ $item['cart_item_id'] }})"><i
@@ -85,6 +85,7 @@
 
     <form action="/checkout" method="POST">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="deadline" id="hiddenDeadline" value="">
         <button id="check_out_form" class="visually-hidden"></button>
     </form>
 
@@ -106,24 +107,9 @@
         $("#confirmOrder").on('click', () => {
             var isInvalid = animateErr(["deadline"]);
             if (isInvalid) return;
+            $("#hiddenDeadline").val($("#deadline").val());
 
             $("#check_out_form").click();
-
-            // $.ajax({
-            //     method: "post",
-            //     url: "/createorder",
-            //     data: {
-            //         "_token": "{{ csrf_token() }}",
-            //         "deadline": $("#deadline").val()
-            //     }
-            // }).done(res => {
-            //     successToast(res.title, res.message);
-            //     setTimeout(() => {
-            //         window.location.href = "/";
-            //     }, 1000);
-            // }).fail(err => {
-            //     errorToast(err.responseJSON.title, err.responseJSON.message);
-            // })
         });
 
         function addRemoveAcompanhamentos(id, cart_item_id, remove, price = 0, itmID) {
@@ -243,11 +229,12 @@
                     $.each(res, (key, val) => {
                         $("#acomp_list").append(
                             '<li class="list-group-item d-flex justify-content-between align-items-center">\
-                                                <div><span class="text-muted">' + val['quantity_type'] + '</span><br />\
-                                                    <span>' + val["ingredient"] + '</span><span class="fw-bold" id="acp_' +
+                                                    <div><span class="text-muted">' + val['quantity_type'] + '</span><br />\
+                                                        <span>' + val["ingredient"] +
+                            '</span><span class="fw-bold" id="acp_' +
                             val["id"] + '"> x ' + (val["quantity"] == null ? 0 : val["quantity"]) +
                             '</span></div>' + '\
-                                                <div><label class="price_sides">' + val["price"] +
+                                                    <div><label class="price_sides">' + val["price"] +
                             '€</label><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' +
                             cart_item_id +
                             ', 0, ' + val['price'] + ', ' + id +
@@ -255,7 +242,7 @@
                             val["id"] + ', ' + cart_item_id + ', 1, ' + val['price'] + ', ' + id +
                             ')" id="rmAC_' + val["id"] + '" ' + (val["quantity"] == null ? "disabled" :
                                 "") + '><i class="fa-solid fa-minus"></i></button></div>\
-                                                <input type="hidden" id="idfor_' + val["id"] + '" value="none"></li>'
+                                                    <input type="hidden" id="idfor_' + val["id"] + '" value="none"></li>'
                         );
                     })
                 } else {
