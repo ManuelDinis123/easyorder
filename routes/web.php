@@ -43,6 +43,8 @@ Route::get('/no-access', function () {
     return view('errors.404');
 });
 
+Route::get('/dasboard', [DashboardController::class, 'index']);
+
 // Search page without reload
 Route::get('/search', [SearchController::class, 'index']);
 Route::post('/search_no_reload', [NavController::class, 'goToSearch'])->name("search_no_reload");

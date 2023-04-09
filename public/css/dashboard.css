@@ -1,14 +1,14 @@
 .general-set-up {
     border-radius: 43px;
     background: #ffffff;
-    box-shadow: 0px 6.76454px 16.9114px 3.38227px rgba(153, 153, 153, 0.5);    
+    box-shadow: 0px 6.76454px 16.9114px 3.38227px rgba(153, 153, 153, 0.5);
     padding: 30px 30px;
 }
 
 .other-set-up {
     border-radius: 43px;
     background: #ffffff;
-    box-shadow: 0px 6.76454px 16.9114px 3.38227px rgba(153, 153, 153, 0.5);    
+    box-shadow: 0px 6.76454px 16.9114px 3.38227px rgba(153, 153, 153, 0.5);
     padding: 30px 30px;
 }
 
@@ -19,9 +19,9 @@
     background-color: white;
     cursor: pointer;
     width: 50px;
-    height: 50px;    
+    height: 50px;
     border-radius: 15px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.452) !important;    
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.452) !important;
 }
 
 .logoRestaurant {
@@ -44,7 +44,7 @@
     padding: 30px 35px;
     background-color: white;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.452) !important;
-    border-radius: 15px;    
+    border-radius: 15px;
 }
 
 .not-published-card label {
@@ -57,4 +57,77 @@
     vertical-align: middle;
     font-size: 50px;
     margin-top: 13px;
+}
+
+.dashboard-cards {
+    padding: 20px 20px;
+    box-shadow: 0px 4.70914px 10.5956px rgba(0, 0, 0, 0.25);
+    border-radius: 30px;
+}
+
+.dashboard-cards hr.blue {
+    color: #1c46b2;
+    height: 2.5px;
+    opacity: 1 !important;
+    border-radius: 5px !important;
+}
+
+.dashboard-cards .lucro1 {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    color: #555555;
+}
+.dashboard-cards .lucro1 .lucro2 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    color: #1c46b2;
+}
+
+.dashboard-cards span {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 50px;
+
+    color: #555555;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.dashboard-cards .center h4 {
+    color: #1c46b2;
+    font-weight: 600;
+}
+
+.dsb-order span {
+    color: #1c46b2;
+    line-height: normal !important;
+}
+
+.dsb-client {
+    font-weight: 400;
+    font-size: 17px !important;
+}
+
+.seeAllDsb {
+    color: #1c46b2;
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.dsb-order {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.dsb-order:hover {
+    transform: scale(1.02);
+}
+
+.progress {
+    border-radius: 50px;
 }
