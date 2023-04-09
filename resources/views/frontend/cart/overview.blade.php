@@ -77,35 +77,53 @@
         <input class="form-control dpe" type="datetime-local" id="deadline" name="deadline">
     </div>
 
+
     <button class="btn btn-dark form-control mt-5" {{ count($cart) <= 0 ? 'disabled' : '' }}
         style="margin-bottom:20px; height: 50px" id="confirmOrder">Confirmar
         Pedido</button>
+
+
+    <form action="/checkout" method="POST">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <button id="check_out_form" class="visually-hidden"></button>
+    </form>
 
     <script>
         var today = new Date().toISOString().slice(0, 16);
         document.getElementsByName("deadline")[0].min = today;
 
+        function submitForm() {
+            var deadline = document.getElementById('deadline').value;
+            if (deadline) {
+                document.getElementById('checkout-form').submit();
+            } else {
+                alert('Por favor, selecione uma data para entrega.');
+                return false;
+            }
+        }
+
         // TODO: Later this should redirect to payment page and the confirm should be done there
         $("#confirmOrder").on('click', () => {
-
             var isInvalid = animateErr(["deadline"]);
             if (isInvalid) return;
 
-            $.ajax({
-                method: "post",
-                url: "/createorder",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "deadline": $("#deadline").val()
-                }
-            }).done(res => {
-                successToast(res.title, res.message);
-                setTimeout(() => {
-                    window.location.href = "/";
-                }, 1000);
-            }).fail(err => {
-                errorToast(err.responseJSON.title, err.responseJSON.message);
-            })
+            $("#check_out_form").click();
+
+            // $.ajax({
+            //     method: "post",
+            //     url: "/createorder",
+            //     data: {
+            //         "_token": "{{ csrf_token() }}",
+            //         "deadline": $("#deadline").val()
+            //     }
+            // }).done(res => {
+            //     successToast(res.title, res.message);
+            //     setTimeout(() => {
+            //         window.location.href = "/";
+            //     }, 1000);
+            // }).fail(err => {
+            //     errorToast(err.responseJSON.title, err.responseJSON.message);
+            // })
         });
 
         function addRemoveAcompanhamentos(id, cart_item_id, remove, price = 0, itmID) {
@@ -118,23 +136,23 @@
             var price_b = $("#ttlPrice" + itmID).text();
             price_b = price_b.replace('€', '');
 
-            console.log("price ", price);            
+            console.log("price ", price);
 
             var new_quantity;
             if (remove) {
                 $("#ttlPrice" + itmID).text(((parseInt(price_b) - price) + '€'));
-                $("#sidePrices" + itmID).val(parseInt($("#sidePrices"+itmID).val())-price);
+                $("#sidePrices" + itmID).val(parseInt($("#sidePrices" + itmID).val()) - price);
                 new_quantity = quantity_before - 1;
                 if (new_quantity == 0) {
                     $("#rmAC_" + id).attr("disabled", "disabled");
                 };
             } else {
                 $("#ttlPrice" + itmID).text(((parseInt(price_b) + price) + '€'));
-                $("#sidePrices" + itmID).val(parseInt($("#sidePrices"+itmID).val())+price);
+                $("#sidePrices" + itmID).val(parseInt($("#sidePrices" + itmID).val()) + price);
                 $("#rmAC_" + id).removeAttr("disabled");
                 new_quantity = quantity_before + 1;
             }
-            console.log("sidePrices Hidden Input ", $("#sidePrices"+itmID).val());
+            console.log("sidePrices Hidden Input ", $("#sidePrices" + itmID).val());
             var data_ajax = {
                 "_token": "{{ csrf_token() }}",
                 "quantity": new_quantity,
@@ -152,8 +170,7 @@
             }).done((res) => {
                 $("#acp_" + id).text(" x " + new_quantity);
                 $("#idfor_" + id).val(res.id);
-            }).fail((err) => {
-            })
+            }).fail((err) => {})
         }
 
         function noteMDL(itemId) {
@@ -198,8 +215,9 @@
                 var quantity = (isRemove ? quantity - 1 : quantity + 1);
                 $("#hidden" + itemID).val(quantity);
                 $("#quantity_for_" + itemID).text("x " + quantity);
-                $("#sidePrices"+itemID).val(res.to_add.price);
-                $("#ttlPrice" + itemID).text(((parseInt($("#base_price" + itemID).val()) * quantity)+parseInt(($("#sidePrices"+itemID).val() ? $("#sidePrices"+itemID).val() : 0))) + "€");
+                $("#sidePrices" + itemID).val(res.to_add.price);
+                $("#ttlPrice" + itemID).text(((parseInt($("#base_price" + itemID).val()) * quantity) + parseInt(($(
+                    "#sidePrices" + itemID).val() ? $("#sidePrices" + itemID).val() : 0))) + "€");
                 $("#cart_total").text((isRemove ? parseInt($("#cart_total").text()) - 1 : parseInt($("#cart_total")
                     .text()) + 1));
 
@@ -225,11 +243,11 @@
                     $.each(res, (key, val) => {
                         $("#acomp_list").append(
                             '<li class="list-group-item d-flex justify-content-between align-items-center">\
-                                <div><span class="text-muted">' + val['quantity_type'] + '</span><br />\
-                                    <span>' + val["ingredient"] + '</span><span class="fw-bold" id="acp_' +
+                                                <div><span class="text-muted">' + val['quantity_type'] + '</span><br />\
+                                                    <span>' + val["ingredient"] + '</span><span class="fw-bold" id="acp_' +
                             val["id"] + '"> x ' + (val["quantity"] == null ? 0 : val["quantity"]) +
                             '</span></div>' + '\
-                                <div><label class="price_sides">' + val["price"] +
+                                                <div><label class="price_sides">' + val["price"] +
                             '€</label><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' +
                             cart_item_id +
                             ', 0, ' + val['price'] + ', ' + id +
@@ -237,7 +255,7 @@
                             val["id"] + ', ' + cart_item_id + ', 1, ' + val['price'] + ', ' + id +
                             ')" id="rmAC_' + val["id"] + '" ' + (val["quantity"] == null ? "disabled" :
                                 "") + '><i class="fa-solid fa-minus"></i></button></div>\
-                                <input type="hidden" id="idfor_' + val["id"] + '" value="none"></li>'
+                                                <input type="hidden" id="idfor_' + val["id"] + '" value="none"></li>'
                         );
                     })
                 } else {

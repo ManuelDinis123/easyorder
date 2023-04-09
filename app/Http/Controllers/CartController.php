@@ -54,8 +54,8 @@ class CartController extends Controller
         $count = 0;
         foreach ($items as $item) {
             $prices = SideDishes::select(DB::raw('sum(menu_item_ingredients.price * side_dishes.quantity) as price'))
-                    ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'side_dishes.side_id')
-                    ->where('side_dishes.cart_item_id', $item['cart_item_id'])->get()->first();
+                ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'side_dishes.side_id')
+                ->where('side_dishes.cart_item_id', $item['cart_item_id'])->get()->first();
             $count += $item['quantity'];
             $final_data[$item['res_id']]['items'] += [
                 $item['item_id'] => [
@@ -95,8 +95,8 @@ class CartController extends Controller
 
         // Get total price of side items
         $prices = SideDishes::select(DB::raw('sum(menu_item_ingredients.price * side_dishes.quantity) as price'))
-                    ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'side_dishes.side_id')
-                    ->where('side_dishes.cart_item_id', $data->cart_item_id)->get()->first();
+            ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'side_dishes.side_id')
+            ->where('side_dishes.cart_item_id', $data->cart_item_id)->get()->first();
 
         return response()->json(["title" => "Sucesso", "message" => "Adicionado ao carrinho com sucesso!", "to_add" => $prices], 200);
     }
@@ -133,6 +133,17 @@ class CartController extends Controller
     // Create a cart
     function createCart($userID)
     {
+        // Delete any previous left over carts from this user
+        $ids = Shoppingcart::select("id")->where("user_id", $userID)->get();
+        $cartItemsIDs = CartItems::select("id")->whereIn('cart_id', $ids)->get();
+        SideDishes::whereIn('cart_item_id', $cartItemsIDs)->delete();
+        CartItems::whereIn("cart_id", $ids)->delete();
+        Shoppingcart::where("user_id", $userID)->delete();
+
+        ShoppingCart::where("user_id", $userID)->delete();
+
+
+        // Create a new one
         $new = Shoppingcart::create([
             "user_id" => $userID
         ]);
