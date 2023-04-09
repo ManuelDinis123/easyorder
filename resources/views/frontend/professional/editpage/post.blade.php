@@ -86,7 +86,7 @@
         // Saves the post and gets whether it should be published or not
         function savePost(publish) {
             if (animateErr(["post_title"])) return;
-            const text = tinymce.get("postBody").getContent();
+            const text = tinymce.get("postBody").getContent();            
             $.ajax({
                 method: "post",
                 url: "/professional/conteudo/publicar/save",

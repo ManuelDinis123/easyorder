@@ -42,10 +42,12 @@ class EditpageController extends Controller
 
         $posts = Posts::where("restaurantId", session()->get("restaurant.id"))
             ->where("published", 1)
+            ->orderBy('id', 'desc')
             ->get();
 
         $drafts = Posts::where("restaurantId", session()->get("restaurant.id"))
             ->where("published", 0)
+            ->orderBy('id', 'desc')
             ->get();
 
         $plateOfDay = Restaurants::select("restaurants.plate_of_day", "menu_item.name", "menu_item.imageUrl")
@@ -99,7 +101,7 @@ class EditpageController extends Controller
 
         $post = null;
         if ($id->get('id')) {
-            $post = Posts::whereId($id->get('id'))
+            $post = Posts::whereId($id->get('id'))                
                 ->get()
                 ->first();
         }

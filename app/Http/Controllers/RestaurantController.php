@@ -408,6 +408,7 @@ class RestaurantController extends Controller
 
         $info = Restaurants::whereId($id->route('id'))->get()->first();
         $posts = Posts::where('restaurantId', $id->route('id'))
+            ->orderBy('id', 'desc')
             ->where("published", 1)
             ->get();
 
