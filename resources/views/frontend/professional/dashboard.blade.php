@@ -9,13 +9,13 @@
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="dashboard-cards">
                     <div class="center">
-                        <h4>Rendimento de {Este Mês} <i class="fa-solid fa-money-bill-wave"></i></h4>
+                        <h4>Rendimento de {{ $month['month'] }} <i class="fa-solid fa-money-bill-wave"></i></h4>
                     </div>
                     <hr class="blue">
-                    <span>Rendimento Bruto: {Numero}€</span><br>
-                    <span>Despesas: {Numero}€</span>
+                    <span>Rendimento Bruto: {{ $month['rendimento'] }}€</span><br>
+                    <span>Despesas: {{ $month['despesas'] }}€</span>
                     <hr>
-                    <span class="lucro1">Lucro: <span class="lucro2">{Numero}€</span> </span>
+                    <span class="lucro1">Lucro: <span class="lucro2">{{ $month['lucro'] }}€</span> </span>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-12">
@@ -46,24 +46,24 @@
                     </div>
                     <hr class="blue">
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 50%; background-color:#38B945" aria-label="Basic example" aria-valuenow="0"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" role="progressbar" style="width: 50%; background-color:#38B945"
+                            aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="progress mt-3">
-                        <div class="progress-bar" style="width: 50%; background-color:#9CCC37" role="progressbar" aria-label="Basic example" aria-valuenow="0"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" style="width: 50%; background-color:#9CCC37" role="progressbar"
+                            aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="progress mt-3">
-                        <div class="progress-bar" style="width: 50%; background-color:#FFD600" role="progressbar" aria-label="Basic example" aria-valuenow="0"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" style="width: 50%; background-color:#FFD600" role="progressbar"
+                            aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="progress mt-3">
-                        <div class="progress-bar" style="width: 50%; background-color:#FF450B" role="progressbar" aria-label="Basic example" aria-valuenow="0"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" style="width: 50%; background-color:#FF450B" role="progressbar"
+                            aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="progress mt-3">
-                        <div class="progress-bar" style="width: 50%; background-color:#FD1919" role="progressbar" aria-label="Basic example" aria-valuenow="0"
-                            aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" style="width: 50%; background-color:#FD1919" role="progressbar"
+                            aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <hr>
                     <div class="center">

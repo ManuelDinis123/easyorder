@@ -64,7 +64,6 @@ Route::post('/auth', [AuthController::class, 'auth'])->name("auth");
 Route::post('/logout', [AuthController::class, 'logout'])->name("logout");
 
 // Dashboard for the professional user accounts
-Route::get('/professional/dashboard', [DashboardController::class, 'index']);
 Route::get('/professional', [DashboardController::class, 'index']);
 
 Route::post('/update_session', [AuthController::class, 'update_session'])->name("update_session");
