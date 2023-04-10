@@ -3,6 +3,8 @@
 namespace App\Helpers;
 
 use App\Models\CartItems;
+use App\Models\Notifications;
+use App\Models\Orders;
 use App\Models\Reviews;
 use App\Models\SideDishes;
 use App\Models\Types;
@@ -157,5 +159,22 @@ class AppHelper
         $stats['avg'] = $avg;
 
         return $stats;
+    }
+
+    /**
+     * Creates a notification for user
+     * 
+     * @param Int userId
+     * @param String message
+     * @return Boolean response
+     */
+    public static function createNotification($userId, $message)
+    {
+        $notify = Notifications::create([
+            "user_id"=>$userId,
+            "message"=>$message,
+        ]);
+
+        return $notify;
     }
 }

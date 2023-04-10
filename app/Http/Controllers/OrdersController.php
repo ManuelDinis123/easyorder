@@ -7,6 +7,7 @@ use App\Models\CartItems;
 use App\Models\Ingredients;
 use App\Models\Menu;
 use App\Models\MenuItems;
+use App\Models\Notifications;
 use App\Models\OrderItems;
 use App\Models\Orders;
 use App\Models\OrderSides;
@@ -195,6 +196,12 @@ class OrdersController extends Controller
             return response()->json(["status" => "Erro", "message" => "Ocorreu um erro ao fechar o pedido"], 500);
         }
 
+        $userID = Orders::select("ordered_by", "restaurants.name")
+            ->join("restaurants", "restaurants.id", "=", "orders.restaurant_id")
+            ->where("orders.id", $id->id)
+            ->get()->first();
+        AppHelper::createNotification($userID->ordered_by, "O seu pedido ao restaurante " . $userID->name . " esta pronto!");
+
         return response()->json(["status" => "Sucesso", "message" => "Pedido fechado com sucesso"], 200);
     }
 
@@ -217,6 +224,12 @@ class OrdersController extends Controller
         if (!$update) {
             return response()->json(["status" => "Erro", "message" => "Ocorreu um erro ao cancelar o pedido"], 500);
         }
+
+        $userID = Orders::select("ordered_by", "restaurants.name")
+            ->join("restaurants", "restaurants.id", "=", "orders.restaurant_id")
+            ->where("orders.id", $id->id)
+            ->get()->first();
+        AppHelper::createNotification($userID->ordered_by, "O seu pedido ao restaurante " . $userID->name . " foi cancelado...");
 
         return response()->json(["status" => "Sucesso", "message" => "Pedido cancelado com sucesso"], 200);
     }
@@ -319,6 +332,13 @@ class OrdersController extends Controller
             return response()->json(["status" => "Erro", "message" => "Ocorreu um erro ao fechar o pedido"], 500);
         }
 
+        // Make notification for user
+        $userID = Orders::select("ordered_by", "restaurants.name")
+            ->join("restaurants", "restaurants.id", "=", "orders.restaurant_id")
+            ->where("orders.id", $id->id)
+            ->get()->first();
+        AppHelper::createNotification($userID->ordered_by, "O seu pedido ao restaurante " . $userID->name . " esta pronto!");
+
         return response()->json(["status" => "Sucesso", "message" => "Pedido fechado com sucesso"], 200);
     }
 
@@ -380,7 +400,7 @@ class OrdersController extends Controller
                             "order_item_id" => $orderItms->id,
                             "side_id" => $side['side_id'],
                             "quantity" => $side['quantity'],
-                            "price"=>$sidePrices->price
+                            "price" => $sidePrices->price
                         ]);
                     }
                 }
@@ -390,5 +410,62 @@ class OrdersController extends Controller
         AppHelper::clearCart();
 
         return response()->json(["title" => "Sucesso", "message" => "Pedido efetuado com sucesso"]);
+    }
+
+    /**
+     * Page with the pending orders by the current user
+     * 
+     * @return \Illuminate\View
+     */
+    function myOrders()
+    {
+        if (!AppHelper::hasLogin()) return redirect("/");
+
+        return view("frontend.myorders.myorders")
+            ->with("orders", $this->getOrders("pending"))
+            ->with("closed", $this->getOrders("closed"))
+            ->with("cancelled", $this->getOrders("cancelled"));
+    }
+
+    // Get orders
+    function getOrders($option)
+    {
+        $orders = Orders::select("orders.id", "orders.deadline", "restaurants.name", "orders.progress")
+            ->join("restaurants", "restaurants.id", "=", "orders.restaurant_id")
+            ->where("orders.restaurant_id", session()->get("restaurant.id"));
+
+        if ($option == "pending") {
+            $orders = $orders->where("orders.closed", 0)->where("orders.isCancelled", 0);
+        } else if ($option == "closed") {
+            $orders = $orders->where("orders.closed", 1);
+        } else {
+            $orders = $orders->where("orders.isCancelled", 1);
+        }
+
+        $orders = $orders->where("orders.ordered_by", session()->get("user.id"))
+            ->orderBy("orders.deadline", "ASC")
+            ->get();
+
+        $orders_all = [];
+        foreach ($orders as $p) {
+            $items = OrderItems::join("menu_item", "menu_item.id", "=", "order_items.menu_item_id")
+                ->where("order_id", $p['id'])
+                ->get();
+
+            $lbl = "";
+            foreach ($items as $key => $i) {
+                $lbl .= ' ' . $i['name'] . ($key == (count($items) - 1) ? '.' : ',');
+            }
+
+            $orders_all[] = [
+                "id" => $p['id'],
+                "deadline" => date("d/m/Y H:i", strtotime($p['deadline'])),
+                "restaurant" => $p['name'],
+                "progress" => $p['progress'],
+                "items" => $lbl,
+            ];
+        }
+
+        return $orders_all;
     }
 }

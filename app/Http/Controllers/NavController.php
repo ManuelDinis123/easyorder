@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notifications;
 use App\Models\Restaurants;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -80,5 +81,21 @@ class NavController extends Controller
         }
 
         return view('frontend.search.partialSearch')->with("restaurants", $data)->with("filters", $filtersBack);
+    }
+
+    /**
+     * Checks if user has any notifications and returns them if there are any
+     * 
+     * @return \Illuminate\Http\Response notification
+     */
+    function checkForNotification()
+    {
+        $notifications = Notifications::where("user_id", session()->get("user.id"))->get();
+        
+        if(!$notifications) return response("no notifications", 404);
+
+        Notifications::where("user_id", session()->get("user.id"))->delete();
+
+        return response()->json($notifications);
     }
 }

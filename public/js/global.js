@@ -1,13 +1,17 @@
-
 /**
  * Check if values in Object are empty or not
- * 
+ *
  * @requires Object
  * @returns Boolean
  */
 function objectIsEmpty(values) {
     for (const i of Object.keys(values)) {
-        if (values[i] == '' || values[i] == null || values[i] == NaN || values[i] == undefined) {
+        if (
+            values[i] == "" ||
+            values[i] == null ||
+            values[i] == NaN ||
+            values[i] == undefined
+        ) {
             return true;
         }
     }
@@ -16,46 +20,48 @@ function objectIsEmpty(values) {
 
 /**
  * Does all the logic to remove something from DB with ajax
- * 
+ *
  */
 function removeDB(url, idToDelete, hasToast = true) {
     $.ajax({
         method: "post",
         url: url,
         data: {
-            "_token": $('#token').val(),
-            "id": idToDelete
-        }
-    }).done((res) => {
-        if (!hasToast) return;
-        iziToast.success({
-            title: res.title,
-            message: res.message,
-            color: "green",
-            icon: "fa-solid fa-check"
-        }); 
-        return 1;
-    }).fail((err) => {
-        if (!hasToast) return;
-
-        iziToast.error({
-            title: err.responseJSON.title,
-            message: err.responseJSON.message,
-            color: "red",
-            icon: "fa-sharp fa-solid fa-triangle-exclamation"
-        });
-        return 0;
+            _token: $("#token").val(),
+            id: idToDelete,
+        },
     })
+        .done((res) => {
+            if (!hasToast) return;
+            iziToast.success({
+                title: res.title,
+                message: res.message,
+                color: "green",
+                icon: "fa-solid fa-check",
+            });
+            return 1;
+        })
+        .fail((err) => {
+            if (!hasToast) return;
+
+            iziToast.error({
+                title: err.responseJSON.title,
+                message: err.responseJSON.message,
+                color: "red",
+                icon: "fa-sharp fa-solid fa-triangle-exclamation",
+            });
+            return 0;
+        });
 }
 
 /**
  * Make inputs shake when not filled
- * 
+ *
  * @requires Array
  */
 function animateErr(map, checkForEmpty = true) {
     var hasEmpty = false;
-    map.forEach(id => {
+    map.forEach((id) => {
         if (!$("#" + id).val() || !checkForEmpty) {
             hasEmpty = true;
             $("#" + id).addClass("animate__animated animate__headShake");
@@ -65,13 +71,11 @@ function animateErr(map, checkForEmpty = true) {
                 $("#" + id).removeClass("wrong");
             }, 800);
         }
-
     });
     return hasEmpty;
 }
 
 // TODO: Change all toasts to these function
-
 
 /**
  * Toast for success
@@ -81,7 +85,7 @@ function successToast(title, message) {
         title: title,
         message: message,
         color: "green",
-        icon: "fa-solid fa-check"
+        icon: "fa-solid fa-check",
     });
 }
 
@@ -93,6 +97,32 @@ function errorToast(title, message) {
         title: title,
         message: message,
         color: "red",
-        icon: "fa-solid fa-circle-xmark"
+        icon: "fa-solid fa-circle-xmark",
     });
+}
+
+// Check if user has any notifications
+function checkForNotifications(csrf_token) {
+    $.ajax({
+        method: "post",
+        url: "/checkNotifications",
+        data: {
+            _token: csrf_token,
+        },
+    })
+        .done((res) => {
+            $.each(res, (key, val) => {
+                iziToast.info({
+                    title: "Notificação!",
+                    message: val.message,
+                    icon: "fa-solid fa-bell",
+                    position: "bottomLeft",
+                    transitionIn: "bounceInRight",
+                    transitionOut: "fadeOutLeft",
+                });
+            });
+        })
+        .fail((err) => {
+            console.log(err);
+        });
 }

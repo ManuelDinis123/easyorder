@@ -157,6 +157,10 @@ Route::get('/carrinho/confirmar', [StripeController::class, 'index']);
 Route::post('/checkout', [StripeController::class, 'checkout'])->name("checkout");
 Route::get('/carrinho/confirmar/sucesso', [StripeController::class, 'success'])->name('order_success');
 
+Route::get("/pedidos", [OrdersController::class, 'myOrders']);
+
+Route::post('/checkNotifications', [NavController::class, 'checkForNotification'])->name("checkNotifications");
+
 // any other route that isn't declared goes to 404 page
 Route::get('/{any}', function () {
     abort(404, view("errors.404"));

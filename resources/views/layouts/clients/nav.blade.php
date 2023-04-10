@@ -24,6 +24,7 @@
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                 <li><a class="dropdown-item" href="#"><i class="fa-regular fa-user"></i> Perfil</a></li>
                 <li><a class="dropdown-item" href="#"><i class="fa-regular fa-gear"></i> Opções</a></li>
+                <li><a class="dropdown-item" href="/pedidos"><i class="fa-solid fa-moped"></i> Os Meus Pedidos</a></li>
                 @if (!session()->get('user.isProfessional'))
                     <li><a class="dropdown-item" href="/novo/restaurante"><i class="fa-regular fa-user-tie"></i> Mudar
                             para
@@ -58,6 +59,8 @@
     })
 
     $(document).ready(() => {
+        checkForNotifications("{{ csrf_token() }}");
+
         $("#logout").on('click', () => {
             $.ajax({
                 method: 'post',

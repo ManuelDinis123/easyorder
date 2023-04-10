@@ -28,10 +28,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
 
-{{-- Global Files --}}
-<link rel="stylesheet" href="{{ asset('css/global.css') }}">
-<script src="{{ asset('js/global.js') }}"></script>
-
 {{-- Animation.style --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
@@ -53,3 +49,7 @@
 
 {{-- JQuery UI --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+
+{{-- Global Files --}}
+<link rel="stylesheet" href="{{ asset('css/global.css') }}">
+<script src="{{ asset('js/global.js') }}"></script>

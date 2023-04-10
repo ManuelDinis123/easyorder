@@ -161,6 +161,7 @@
         }
 
         $(document).ready(() => {
+            checkForNotifications("{{ csrf_token() }}");
             sidebarIsOpened = true;
             $(".hToggle").on('click', function() {
                 if (this.id == "sidebarDropDown") {

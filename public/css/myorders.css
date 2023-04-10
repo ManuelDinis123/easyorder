@@ -1,0 +1,17 @@
+.orders-card {
+    background: #FFFFFF;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.4);
+    border-radius: 31px;
+    padding: 20px 20px;
+    width: 60%;
+    font-size: 24px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.progress-bar {
+    border-radius: 50px;
+}
