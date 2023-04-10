@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\AppHelper;
+use App\Models\OrderItems;
 use App\Models\Orders;
+use App\Models\Reviews;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 
@@ -20,6 +22,8 @@ class DashboardController extends Controller
 
         $startDateStr = $startDate->format('Y-m-d') . " 00:00:00";
         $endDateStr = $endDate->format('Y-m-d') . " 23:59:59";
+
+        // Rendimento do mes
 
         $avgRendimento = Orders::select(DB::raw('round((SUM((order_items.price * order_items.quantity)) + COALESCE(side_dishes_sum, 0)) / 7) as avgLucro'))
             ->join('order_items', 'order_items.order_id', '=', 'orders.id')
@@ -69,7 +73,40 @@ class DashboardController extends Controller
             "lucro" => $lucro['lucro']
         ];
 
+        // Media das criticas
+        $reviews = AppHelper::calculateReviewAvg(session()->get("restaurant.id"));
+
+        // Pedidos pendentes
+        $pending = Orders::select("orders.id", "users.first_name", "users.last_name", "orders.deadline")
+            ->join("users", "users.id", '=', "orders.ordered_by")
+            ->where("orders.restaurant_id", session()->get("restaurant.id"))
+            ->where("orders.closed", 0)
+            ->where("orders.isCancelled", 0)
+            ->orderBy("orders.deadline", "ASC")
+            ->limit(2)
+            ->get();
+
+        $pending_orders = [];
+        foreach ($pending as $p) {
+            $items = OrderItems::join("menu_item", "menu_item.id", "=", "order_items.menu_item_id")
+                ->where("order_id", $p['id'])
+                ->get();
+            
+            $lbl="";
+            foreach($items as $key => $i){
+                $lbl .= ' '. $i['name'] . ($key==(count($items)-1)?'.':',');
+            }
+
+            $pending_orders[] = [
+                "id"=>$p['id'],
+                "name"=>$p['first_name'] . ' ' . $p['last_name'],
+                "items"=>$lbl,
+            ];
+        }
+
         return view('frontend/professional/dashboard')
-            ->with("month", $month);
+            ->with("month", $month)
+            ->with("reviews", $reviews)
+            ->with("pending", $pending_orders);
     }
 }

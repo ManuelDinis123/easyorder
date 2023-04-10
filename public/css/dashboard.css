@@ -122,7 +122,10 @@
 
 .dsb-order {
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s;    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .dsb-order:hover {
     transform: scale(1.02);

@@ -24,18 +24,17 @@
                         <h4>Pedidos Pendentes <i class="fa-regular fa-calendar-clock"></i></h4>
                     </div>
                     <hr class="blue">
-                    <div class="dsb-order">
-                        <span class="dsb-client">{Nome do Cliente}</span><br>
-                        <span>{Listagem de items no pedido}...</span>
-                    </div>
-                    <hr>
-                    <div class="dsb-order">
-                        <span class="dsb-client">{Nome do Cliente}</span><br>
-                        <span>{Listagem de items no pedido}...</span>
-                    </div>
-                    <hr>
+                    @foreach ($pending as $p)
+                        <div class="dsb-order"
+                            onclick="window.location.href = '/professional/encomendas/{{ $p['id'] }}'">
+                            <span class="dsb-client">{{ $p['name'] }}</span><br>
+                            <span>{{ $p['items'] }}</span>
+                        </div>
+                        <hr>
+                    @endforeach
                     <div class="center">
-                        <button class="btn seeAllDsb">Ver Todos</button>
+                        <button class="btn seeAllDsb" onclick="window.location.href='/professional/encomendas'">Ver
+                            Todos</button>
                     </div>
                 </div>
             </div>
@@ -45,29 +44,22 @@
                         <h4>Média das Críticas <i class="fa-solid fa-star"></i></h4>
                     </div>
                     <hr class="blue">
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 50%; background-color:#38B945"
-                            aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="progress mt-3">
-                        <div class="progress-bar" style="width: 50%; background-color:#9CCC37" role="progressbar"
-                            aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="progress mt-3">
-                        <div class="progress-bar" style="width: 50%; background-color:#FFD600" role="progressbar"
-                            aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="progress mt-3">
-                        <div class="progress-bar" style="width: 50%; background-color:#FF450B" role="progressbar"
-                            aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="progress mt-3">
-                        <div class="progress-bar" style="width: 50%; background-color:#FD1919" role="progressbar"
-                            aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
+                    @php
+                        $color_map = ['#FD1919', '#FF450B', '#FFD600', '#9CCC37', '#38B945'];
+                    @endphp
+                    @for ($i = 4; $i >= 0; $i--)
+                        <div class="progress mt-3">
+                            <div class="progress-bar" role="progressbar"
+                                style="width: {{ isset($reviews['stars'][$i + 1]) ? $reviews['stars'][$i + 1] : 0 }}%; background-color: {{ $color_map[$i] }}"
+                                aria-label="Basic example"
+                                aria-valuenow="{{ isset($reviews['stars'][$i + 1]) ? $reviews['stars'][$i + 1] : 0 }}"
+                                aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    @endfor
                     <hr>
                     <div class="center">
-                        <button class="btn seeAllDsb">Ver Críticas</button>
+                        <button class="btn seeAllDsb" onclick="window.location.href = '/professional/criticas'">Ver
+                            Críticas</button>
                     </div>
                 </div>
             </div>
