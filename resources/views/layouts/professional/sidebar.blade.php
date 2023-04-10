@@ -67,6 +67,12 @@
                         <i class="fa-duotone fa-pen-ruler"></i>
                         <span class="nav_name">Gerir Conteúdo</span>
                     </a>
+                    <a id="view_editpage_side" href="/professional/criticas"
+                        class="nav_link {{ $file == 'reviews' ? 'active' : '' }}
+                        {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_stats') ? 'visually-hidden' : '') : '') : '' }}">
+                        <i class="fa-sharp fa-solid fa-star"></i>
+                        <span class="nav_name">Ver Reviews</span>
+                    </a>
                     <a id="view_stats_side" href="/professional/stats"
                         class="nav_link {{ $file == 'stats' ? 'active' : '' }}
                         {{ !session()->get('type.owner') ? (!session()->get('type.admin') ? (!session()->get('type.view_stats') ? 'visually-hidden' : '') : '') : '' }}">

@@ -32,10 +32,19 @@
                         </div>
                         <hr>
                     @endforeach
-                    <div class="center">
-                        <button class="btn seeAllDsb" onclick="window.location.href='/professional/encomendas'">Ver
-                            Todos</button>
-                    </div>
+                    @if (
+                        !session()->get('type.owner')
+                            ? (!session()->get('type.admin')
+                                ? (!session()->get('type.view_orders')
+                                    ? false
+                                    : true)
+                                : true)
+                            : true)
+                        <div class="center">
+                            <button class="btn seeAllDsb" onclick="window.location.href='/professional/encomendas'">Ver
+                                Todos</button>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12">
@@ -56,11 +65,20 @@
                                 aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     @endfor
-                    <hr>
-                    <div class="center">
-                        <button class="btn seeAllDsb" onclick="window.location.href = '/professional/criticas'">Ver
-                            Críticas</button>
-                    </div>
+                    @if (
+                        !session()->get('type.owner')
+                            ? (!session()->get('type.admin')
+                                ? (!session()->get('type.view_stats')
+                                    ? false
+                                    : true)
+                                : true)
+                            : true)
+                        <hr>
+                        <div class="center">
+                            <button class="btn seeAllDsb" onclick="window.location.href = '/professional/criticas'">Ver
+                                Críticas</button>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
