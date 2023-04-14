@@ -1,0 +1,34 @@
+
+.review {
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3) !important;
+    padding: 15px 15px;
+    background-color: white;
+}
+
+.report-ico {
+    font-size: 26px;
+    margin-top: 2px;
+    color: #dc3545;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.report-ico:hover {
+    transform: scale(1.1);
+}
+
+.report-ico:active {
+    transform: scale(0.9);
+}
+
+.r-pfp {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.rw-st{
+    color: #ff9c1a;
+}

@@ -97,6 +97,10 @@ Route::post('/professional/fast_close', [OrdersController::class, 'mark_done_fas
 // Statistics for the professional user accounts
 Route::get('/professional/stats', [StatsController::class, 'index']);
 
+// Reviews page for pro account
+Route::get("/professional/criticas", [ReviewsController::class, 'index']);
+Route::post('/professional/criticas/reportar', [ReviewsController::class, 'report_review'])->name("reportar");
+
 
 // Edit main page for the pro user accounts
 Route::get('/professional/conteudo', [EditpageController::class, 'index']);

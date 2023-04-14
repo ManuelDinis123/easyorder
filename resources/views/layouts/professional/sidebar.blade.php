@@ -121,7 +121,7 @@
 
     @include('components.loader')
 
-    <div class="height-100 bg-light pt-3 visually-hidden" id="content">
+    <div class="height-100 pt-3 visually-hidden" id="content">
         @yield('content')
     </div>
     <script>

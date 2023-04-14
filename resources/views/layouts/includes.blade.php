@@ -1,5 +1,5 @@
 {{-- Montserrat Font --}}
-<link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
 
 {{-- JQuery --}}
 <script src="{{ mix('plugins/jquery/jquery-3.6.1.min.js') }}"></script>
