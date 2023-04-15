@@ -8,6 +8,7 @@ use App\Models\Orders;
 use App\Models\Reviews;
 use App\Models\SideDishes;
 use App\Models\Types;
+use App\Models\Users;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -103,6 +104,20 @@ class AppHelper
     }
 
     /**
+     * Checks if user is an app admin or not
+     * 
+     * @return Boolean
+     */
+    public static function app_admin()
+    {
+        $user = Users::whereId(session()->get("user.id"))->get()->first();
+        if (!$user->app_admin) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Calculates the avg Reviews of a given restaurant
      * 
      * @param Int id
@@ -171,8 +186,8 @@ class AppHelper
     public static function createNotification($userId, $message)
     {
         $notify = Notifications::create([
-            "user_id"=>$userId,
-            "message"=>$message,
+            "user_id" => $userId,
+            "message" => $message,
         ]);
 
         return $notify;

@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\AppHelper;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
@@ -164,6 +165,13 @@ Route::get('/carrinho/confirmar/sucesso', [StripeController::class, 'success'])-
 Route::get("/pedidos", [OrdersController::class, 'myOrders']);
 
 Route::post('/checkNotifications', [NavController::class, 'checkForNotification'])->name("checkNotifications");
+
+// Admin
+Route::get('/admin', [AdminController::class, 'index']);
+Route::get('/admin/dashboard', [AdminController::class, 'index']);
+Route::get('/admin/restaurantes', [AdminController::class, 'restaurant']);
+Route::get('/admin/users', [AdminController::class, 'users']);
+Route::get('/admin/denuncias', [AdminController::class, 'reports']);
 
 // any other route that isn't declared goes to 404 page
 Route::get('/{any}', function () {
