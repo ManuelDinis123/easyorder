@@ -10,6 +10,6 @@ class Reports extends Model
     use HasFactory;
 
     protected $table = "reports";
-    protected $guarded = ['id']; 
+    protected $guarded = ['id'];
     public $timestamps = false;
 }
