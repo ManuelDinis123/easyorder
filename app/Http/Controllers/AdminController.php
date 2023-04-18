@@ -148,13 +148,13 @@ class AdminController extends Controller
     function switchAppAdmin(Request $req)
     {
         if (!AppHelper::app_admin()) return redirect("/");
-        Log::info($req->user_id);
+        Log::info($req->active);
         $update = Users::whereId($req->user_id)
             ->update([
                 "app_admin" => $req->active
             ]);
         if (!$update) return response()->json(["title" => "Erro", "message" => "Erro a " . ($req->active ? "tornar o user em admin" : "remover o user de admin")], 500);
-        return response()->json(["title" => "Sucesso", "message" => "User " . ($req->active ? "tornado em admin" : "removido de admin") . " com sucesso"], 500);
+        return response()->json(["title" => "Sucesso", "message" => "User " . ($req->active ? "tornado em admin" : "removido de admin") . " com sucesso"]);
     }
 
     /**
