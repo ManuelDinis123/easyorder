@@ -39,3 +39,8 @@
     display: flex;
     justify-content: center;
 }
+
+.form-check-input:checked {
+    background-color: #080808;
+    border-color: #1a1a1a;
+}

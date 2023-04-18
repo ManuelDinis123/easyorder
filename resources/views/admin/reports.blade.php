@@ -12,8 +12,8 @@
             '<h5 class="modal-title" id="reportMsgLabel"><i class="fa-solid fa-triangle-exclamation" style="color: #e13737;"></i> Denúncia</h5>',
         'hasBody' => true,
         'rawBody' => '<div class="report-container"><span class="report-msg" id="report_msg"></span></div>
-                                  <input type="hidden" id="review_id">
-                                  <input type="hidden" id="report_id">',
+                                      <input type="hidden" id="review_id">
+                                      <input type="hidden" id="report_id">',
         'hasFooter' => true,
         'buttons' => [
             ['label' => 'Apagar esta review', 'id' => 'removeRev', 'class' => 'btn btn-danger'],
@@ -46,20 +46,30 @@
         }
 
         $("#ignore").on('click', () => {
+            ignoreORremove("/admin/denuncias/ignore");
+        })
+
+        $("#removeRev").on('click', () => {
+            ignoreORremove("/admin/denuncias/remove");
+        })
+
+        function ignoreORremove(ajaxUrl) {
             $.ajax({
                 method: "post",
-                url: "/admin/denuncias/ignore",
+                url: ajaxUrl,
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    'id': $("#report_id").val()
+                    'report_id': $("#report_id").val(),
+                    'review_id': $("#review_id").val()
                 }
-            }).done((res)=>{
+            }).done((res) => {
                 successToast(res.title, res.message);
                 $("#reportMsg").modal("toggle");
-            }).fail((err)=>{
+                $("#reports").DataTable().ajax.reload(null, false);
+            }).fail((err) => {
                 errorToast(err.responseJSON.title, err.responseJSON.message);
             })
-        })
+        }
 
         $("#reports").dataTable({
             "ordering": false,

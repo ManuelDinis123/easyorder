@@ -174,7 +174,9 @@ Route::get('/admin/users', [AdminController::class, 'users']);
 Route::get('/admin/denuncias', [AdminController::class, 'reports']);
 Route::post('/admin/denuncias/get', [AdminController::class, 'getReports'])->name("getReports");
 Route::post('/admin/denuncias/ignore', [AdminController::class, 'ignoreReport'])->name("ignoreReport");
-Route::post('/admin/denuncias/delete', [AdminController::class, 'deleteReport'])->name("deleteReport");
+Route::post('/admin/denuncias/remove', [AdminController::class, 'removeReport'])->name("removeReport");
+Route::post('/admin/users/get', [AdminController::class, 'getUsers'])->name("getUsers");
+Route::post('/admin/users/appadmin', [AdminController::class, 'switchAppAdmin'])->name("switchAppAdmin");
 
 // any other route that isn't declared goes to 404 page
 Route::get('/{any}', function () {
