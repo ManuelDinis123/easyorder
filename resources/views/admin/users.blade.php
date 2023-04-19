@@ -6,14 +6,25 @@
 @component('components.modal_builder', [
     'modal_id' => 'confirmation',
     'hasBody' => true,
-    'rawBody' => '<h3><i class="fa-solid fa-triangle-exclamation" style="color: #aa1313;"></i> Tem a certeza que quer realizar esta ação?</h3>
-                  <span class="text-muted">Isto ira a afetar a conta do user</span>
-                  <input type="hidden" id="activation">
-                  <input type="hidden" id="user_id">',
+    'rawBody' => '<h3><i class="fa-solid fa-triangle-exclamation" style="color: #aa1313;"></i> Tem a certeza que quer tornar este user em Admin?</h3>
+                  <span class="text-muted">Isto vai dar acesso á admin dashboard a este user</span>',
     'hasFooter' => true,
     'buttons' => [
         ['label' => 'Cancelar', 'id' => 'closeMdl', 'class' => 'btn btn-danger', 'dismiss' => true],
         ['label' => 'Confirmar', 'id' => 'confirm', 'class' => 'btn btn-primary'],
+    ],
+])
+@endcomponent
+
+@component('components.modal_builder', [
+    'modal_id' => 'banModal',
+    'hasBody' => true,
+    'rawBody' => '<h3><i class="fa-solid fa-triangle-exclamation" style="color: #aa1313;"></i> Tem a certeza que quer banir este user?</h3>
+                  <span class="text-muted">Ele deixara de ter acesso á plataforma</span>',
+    'hasFooter' => true,
+    'buttons' => [
+        ['label' => 'Cancelar', 'id' => 'closeBan', 'class' => 'btn btn-danger', 'dismiss' => true],
+        ['label' => 'Confirmar', 'id' => 'confirmBan', 'class' => 'btn btn-primary'],
     ],
 ])
 @endcomponent
@@ -27,36 +38,69 @@
                     <th>Email</th>
                     <th>Data de Nascimento</th>
                     <th>Pro</th>
-                    <th class="t-point2">App Admin</th>
+                    <th>App Admin</th>
+                    <th class="t-point2">Banido</th>
                 </thead>
             </table>
         </div>
     </div>
 
+    <input type="hidden" id="activation">
+    <input type="hidden" id="user_id">'
+
     <script>
-        function switches(id, isAppAdmin) {
-            $("#action").val(isAppAdmin ? "appadmin" : "active");
+        let lastSwitch = "none";
+
+        function switches(id, isAppAdmin, isBan = false) {
             $("#user_id").val(id);
-            $("#confirmation").modal("toggle");
+            $(isBan == true ? "#banModal" : "#confirmation").modal("toggle");
+            lastSwitch = ((isBan) ? "banned" : "app_admin") + id;
         }
 
         $(document).ready(() => {
             $("#confirm").on('click', () => {
+                activeApi("appadmin");
+            })
+            $("#confirmBan").on('click', () => {
+                activeApi("ban");
+            })
+
+            // Used for ajax of banning users or app admin
+            function activeApi(action) {
+                var activeID = ((action == "ban") ? "#banned" : "#app_admin") + $("#user_id").val();
+                console.log($(activeID).is(":checked"));
                 $.ajax({
                     method: "post",
-                    url: '/admin/users/appadmin',
+                    url: ((action == "ban") ? '/admin/users/ban' : '/admin/users/appadmin'),
                     data: {
                         "_token": "{{ csrf_token() }}",
                         "user_id": $("#user_id").val(),
-                        "active": $("#app_admin" + $("#user_id").val()).is(":checked") ? 1 : 0,
+                        "active": $(activeID).is(":checked") ? 1 : 0,
                     }
                 }).done((res) => {
                     successToast(res.title, res.message);
                     $("#users").DataTable().ajax.reload(null, false);
+                    $((action == "ban") ? "#banModal" : "#confirmation").modal("toggle");
+                    lastSwitch = "none";
                 }).fail((err) => {
                     errorToast(err.responseJSON.title, err.responseJSON.message);
                 });
+            }
+
+            $("#confirmation").on('hidden.bs.modal', () => {
+                revertSwitchState(lastSwitch);
             })
+            $("#banModal").on('hidden.bs.modal', () => {
+                revertSwitchState(lastSwitch);
+            })
+
+            function revertSwitchState(id) {
+                if ($("#" + id).is(":checked")) {
+                    $("#" + id).prop("checked", false)
+                    return;
+                }
+                $("#" + id).prop("checked", true)
+            }
 
             $("#users").dataTable({
                 "ordering": false,
@@ -110,10 +154,27 @@
                         width: "10%",
                         render: function(data, type, row, meta) {
                             var isCheck = data == 1 ? "checked" : ";"
+                            var disable = (row.id == "{{ session()->get('user.id') }}") ?
+                                "disabled" : "";
                             return `<div class="form-check form-switch">
                                         <input class="form-check-input" onclick="switches(` + row.id +
-                                `, 1)" type="checkbox" role="switch" id="app_admin` + row.id + `" ` +
-                                isCheck + `>
+                                `, 1)" type="checkbox" role="switch" id="app_admin` + row.id +
+                                `" ` +
+                                isCheck + ` ` + disable + `>
+                                    </div>`
+                        }
+                    },
+                    {
+                        data: "banned",
+                        width: "10%",
+                        render: function(data, type, row, meta) {
+                            var isCheck = data == 1 ? "checked" : ";"
+                            var disable = row.app_admin ? "disabled" : "";
+                            return `<div class="form-check form-switch">
+                                        <input class="form-check-input" onclick="switches(` + row.id +
+                                `, 1, true)" type="checkbox" role="switch" id="banned` + row.id +
+                                `" ` +
+                                isCheck + ` ` + disable + `>
                                     </div>`
                         }
                     },

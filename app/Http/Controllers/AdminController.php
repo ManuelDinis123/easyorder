@@ -132,7 +132,8 @@ class AdminController extends Controller
                 "birthdate",
                 "isProfessional",
                 "active",
-                "app_admin"
+                "app_admin",
+                "banned"
             ]
         )->get();
 
@@ -148,13 +149,29 @@ class AdminController extends Controller
     function switchAppAdmin(Request $req)
     {
         if (!AppHelper::app_admin()) return redirect("/");
-        Log::info($req->active);
         $update = Users::whereId($req->user_id)
             ->update([
                 "app_admin" => $req->active
             ]);
         if (!$update) return response()->json(["title" => "Erro", "message" => "Erro a " . ($req->active ? "tornar o user em admin" : "remover o user de admin")], 500);
         return response()->json(["title" => "Sucesso", "message" => "User " . ($req->active ? "tornado em admin" : "removido de admin") . " com sucesso"]);
+    }
+
+    /**
+     * Bans / Unbans users
+     * 
+     * @param \Illuminate\Http\Request UserID
+     * @return \Illuminate\Http\Response Status
+     */
+    function banUser(Request $req)
+    {
+        if (!AppHelper::app_admin()) return redirect("/");
+        $update = Users::whereId($req->user_id)
+            ->update([
+                "banned" => $req->active
+            ]);
+        if (!$update) return response()->json(["title" => "Erro", "message" => "Erro a " . ($req->active ? "banir o user" : "desbanir o user")], 500);
+        return response()->json(["title" => "Sucesso", "message" => "User " . ($req->active ? "banir o user" : "desbanir o user") . " com sucesso"]);
     }
 
     /**

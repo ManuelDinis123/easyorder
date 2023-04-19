@@ -31,13 +31,13 @@ class AuthController extends Controller
 
         if (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
             $err["message"] = "Insira um email valido";
-            return response()->json($err, 200);
+            return response()->json($err, 400);
         }
 
         $user = Users::where("email", $request->email)->get() ?? null;
-
+        
         if (!sizeof($user)) {
-            return response()->json($err, 200);
+            return response()->json($err, 400);
         }
 
         $user = $user->first(); // Gets the first object so that the properties can be accessed
@@ -47,7 +47,11 @@ class AuthController extends Controller
         $auth = $auth->first();
 
         if (!password_verify($request->password, $auth->password)) {
-            return response()->json($err, 200);
+            return response()->json($err, 400);
+        }
+
+        if ($user->banned) {
+            return response()->json(["status" => "Atenção", "message" => "Foi banido da app por tempo indefinido"], 400);
         }
 
         // All data to be stored in session
@@ -166,9 +170,9 @@ class AuthController extends Controller
             "logged_in" => 0
         ]);
 
-        if(session()->get('shoppingCart')){
+        if (session()->get('shoppingCart')) {
             SideDishes::join('cart_items', 'cart_items.id', '=', "side_dishes.cart_item_id")
-            ->where("cart_id", session()->get('shoppingCart'))->delete();
+                ->where("cart_id", session()->get('shoppingCart'))->delete();
             CartItems::where("cart_id", session()->get('shoppingCart'))->delete();
             Shoppingcart::whereId(session()->get('shoppingCart'))->delete();
         }
@@ -247,7 +251,7 @@ class AuthController extends Controller
             ->get()
             ->first();
 
-        if(!$info) return redirect("/");
+        if (!$info) return redirect("/");
 
         // Get restaurant info
         $restaurant = Restaurants::select(
