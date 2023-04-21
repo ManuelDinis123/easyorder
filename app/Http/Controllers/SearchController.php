@@ -19,6 +19,7 @@ class SearchController extends Controller
 
         // all restaurants by default
         $results = Restaurants::where("isPublic", 1)
+            ->where("active", 1)
             ->get();
 
         $data = [];
@@ -44,7 +45,7 @@ class SearchController extends Controller
     {
         $keyword = $data->input('query');
 
-        $results = Restaurants::where('name', 'like', "%$keyword%")->where("isPublic", 1)
+        $results = Restaurants::where('name', 'like', "%$keyword%")->where("isPublic", 1)->where("active", 1)
             ->get();
 
         $data = [];

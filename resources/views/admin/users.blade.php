@@ -46,7 +46,7 @@
     </div>
 
     <input type="hidden" id="activation">
-    <input type="hidden" id="user_id">'
+    <input type="hidden" id="user_id">
 
     <script>
         let lastSwitch = "none";

@@ -453,3 +453,10 @@ a {
     margin-bottom: 50px;
     margin-right: 50px;
 }
+
+.inactive-warn {      
+    position: fixed;
+    bottom: 0px;
+    right: 30%; 
+    font-size: larger;    
+}

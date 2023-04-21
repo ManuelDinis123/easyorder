@@ -18,7 +18,6 @@ class NavController extends Controller
     {
         $filtersBack = []; // To send back to the view to display the previous filters
         if (isset($filters->hasFilters)) {
-            // TODO: when ratings are added the filter must work here
             $tags_raw = json_decode($filters->tags);
 
             $tags = [];
@@ -48,6 +47,7 @@ class NavController extends Controller
             )->join('menu_tags', 'restaurants.id', '=', 'menu_tags.id_restaurant')
                 ->join('reviews', 'reviews.restaurant_id', '=', 'restaurants.id')
                 ->where("isPublic", 1)
+                ->where("active", 1)
                 ->where('restaurants.name', 'like', "%$keyword%");
 
             if (count($tags) > 0) {
@@ -65,7 +65,7 @@ class NavController extends Controller
                 ->get();
         } else {
             // all restaurants by default
-            $results = Restaurants::where("isPublic", 1)
+            $results = Restaurants::where("isPublic", 1)->where("active", 1)
                 ->get();
         }
 

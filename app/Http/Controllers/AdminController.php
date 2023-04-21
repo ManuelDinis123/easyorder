@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
 use App\Models\Reports;
+use App\Models\Restaurants;
 use App\Models\Reviews;
 use App\Models\Users;
 use Illuminate\Http\Request;
@@ -177,7 +178,7 @@ class AdminController extends Controller
     /**
      * Delete review
      * 
-     * @return \Illuminate\Http\Request
+     * @param \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
     function deleteReview(Request $id)
@@ -187,6 +188,48 @@ class AdminController extends Controller
         $res = Reviews::whereId($id->id)->remove();
 
         if (!$res) return response()->json(["title" => "Erro", "message" => "ocorreu um erro a ignorar esta denúncia"], 500);
-        return response()->join(["title" => "Sucesso", "message" => "ignorado com sucesso"]);
+        return response()->json(["title" => "Sucesso", "message" => "ignorado com sucesso"]);
+    }
+
+    /**
+     * Get all restaurants
+     * 
+     *
+     * @param \Illuminate\Http\Response
+     */
+    function getRestaurants()
+    {
+        if (!AppHelper::app_admin()) return redirect("/");
+
+        $restaurants = Restaurants::select(
+            "restaurants.id",
+            "restaurants.name",
+            "restaurants.description",
+            DB::raw("concat(users.first_name, ' ', users.last_name) as owner"),
+            "restaurants.active"
+        )
+            ->join("user_restaurant", "user_restaurant.restaurant_id", "=", "restaurants.id")
+            ->join("users", "users.id", "=", "user_restaurant.user_id")
+            ->get();
+
+        return response()->json($restaurants);
+    }
+
+    /**
+     * Switch restaurant to either active or deactivated
+     * 
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    function switchRestaurant(Request $req)
+    {
+        if (!AppHelper::app_admin()) return redirect("/");
+
+        $update = Restaurants::whereId($req->id)->update([
+            "active" => $req->active
+        ]);
+
+        if (!$update) return response()->json(["title" => "Erro", "message" => "ocorreu um erro a " . ($req->active ? "ativar" : "desativar") . " o restaurante"], 500);
+        return response()->json(["title" => "Sucesso", "message" => "restaurante " . ($req->active ? "ativado" : "desativado") . " com sucesso"]);
     }
 }

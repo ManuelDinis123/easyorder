@@ -76,7 +76,8 @@ class AuthController extends Controller
                 "name" => $restaurant->name,
                 "logo_name" => $restaurant->logo_name,
                 "logo_url" => $restaurant->logo_url,
-                "isPublic" => $restaurant->isPublic
+                "isPublic" => $restaurant->isPublic,
+                "isActive" => $restaurant->active
             ]]);
 
             // get type to put in session
