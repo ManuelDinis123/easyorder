@@ -22,7 +22,14 @@ class AdminController extends Controller
     {
         if (!AppHelper::app_admin()) return redirect("/");
 
-        return view("admin.dashboard");
+        $userCount = Users::count();
+        $restaurantCount = Restaurants::count();
+        $denunciasCount = Reports::count();
+
+        return view("admin.dashboard")
+            ->with("users", $userCount)
+            ->with("rest", $restaurantCount)
+            ->with("den", $denunciasCount);
     }
 
     /**
