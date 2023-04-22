@@ -217,9 +217,10 @@ class AdminController extends Controller
         )
             ->join("user_restaurant", "user_restaurant.restaurant_id", "=", "restaurants.id")
             ->join("users", "users.id", "=", "user_restaurant.user_id")
-            ->join("types", "types.restaurant_id", "=", "users.id")
+            ->join("types", "types.restaurant_id", "=", "restaurants.id")
             ->join("users_types", "users_types.type_id", "=", "types.id")
-            ->where("types.label", "Owner")
+            ->where("types.owner", 1)
+            ->groupBy("restaurants.id")
             ->get();
 
         return response()->json($restaurants);
