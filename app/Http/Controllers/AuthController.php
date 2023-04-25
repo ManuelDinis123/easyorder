@@ -19,6 +19,11 @@ use Illuminate\Support\Facades\Log;
 class AuthController extends Controller
 {
 
+    function index() {
+        return view("frontend.login");
+    }
+
+
     /**
      * Get the Email and Password and verify them
      * 

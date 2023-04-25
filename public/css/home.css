@@ -1,0 +1,169 @@
+body {
+    margin-bottom: 100px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.orders-today h1 {
+    font-weight: 600;
+}
+
+.scroll {
+    overflow-x: auto; /* add horizontal scrollbar when content overflows */
+}
+
+.scrollable {
+    display: inline-flex;
+    padding-bottom: 10px; /* add space between scrollbar and cards */
+    white-space: nowrap; /* prevent the items from wrapping */
+}
+
+.scroll::-webkit-scrollbar {
+    width: 12px;
+    height: 15px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    background-color: #dbdbdb;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px #000000;
+    border-radius: 10px;
+    background-color: #000000;
+}
+
+.card-label {
+    color: white;
+    height: 283px;
+    display: grid;
+    align-items: end;
+}
+
+.bold {
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.allCards {
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.allCards:hover {
+    transform: scale(1.02);
+}
+
+.allCards:active {
+    cursor: pointer;
+    transform: scale(0.98);
+}
+
+.best-rating-container {
+    padding: 0px 140px;
+}
+
+.showcase {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 91.67%, #000000 94.27%),
+        url("https://assets.vogue.com/photos/605b998c1087bb7115b724b5/16:9/w_1600,h_900,c_limit/Sona_Interiors_048.jpg");
+    border-radius: 42px;
+    width: 98%;
+    height: 801px;
+    background-size: cover;
+    background-position: center;
+}
+
+.showcase-description {
+    /* width: 662px; */
+    height: 801px;
+    background: #ffffff;
+    box-shadow: 0px 4px 11px rgba(0, 0, 0, 0.44);
+    border-radius: 42px;
+}
+
+.ball {
+    background: #b6b6b6;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    margin: 0px 2px 15px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.ball.selected {
+    pointer-events: none;
+    background: #ffffff !important;
+    height: 24px !important;
+    width: 24px !important;
+    margin: 0px 2px 14px !important;
+}
+
+.balls-container{
+    display: inline-flex;
+    width: 100%;
+    height: 91%;
+    justify-content: center;
+    align-items: flex-end;    
+}
+
+.ball:hover {
+    transform: scale(1.1);
+    background: #f3f3f3;
+}
+
+.fa-stars {
+    color: #FFFFFF;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.486));
+    font-size: 50px;
+    margin: 10px 15px;
+}
+
+.showcase-description {
+    padding: 24px 24px;;
+}
+
+.menu-showcase {
+    width: 34vw;
+    height: 474px;
+    object-fit: cover;
+    border: 2px solid #000000;
+    border-radius: 15px !important;
+}
+
+.showcase-description button {
+    height: 74px;
+    border-radius: 50px !important;
+    background-color: #000000 !important;
+}
+
+.showcase-description span {
+    color: #424242;
+    font-size: 18px;
+}
+
+
+@media (max-width: 1160px) {
+    .menu-showcase {
+        width: 32vw;
+    }
+}
+@media (max-width: 991px) {
+    .menu-showcase {
+        display: none;
+    }
+    .showcase-description{
+        height: fit-content;
+        margin-top: 14px;
+    }
+
+    .showcase-description button{
+        margin-top: 5px !important;
+    }
+}

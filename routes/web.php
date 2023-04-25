@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EditpageController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\NavController;
 use App\Http\Controllers\OptionsController;
@@ -22,14 +23,13 @@ use App\Http\Controllers\UserConfigsController;
 
 // Root of the project, redirects to login or home depending on the authentication state of the user
 Route::get('/', function () {
-    return view(session()->has("authenticated") ? 'frontend/home' : 'frontend/login');
+    return redirect(session()->has("authenticated") ? '/home' : '/login');
 });
 
 // Home page of the normal user accounts
-Route::get('/home', function () {
-    if (!AppHelper::hasLogin()) return redirect("/");
-    return view('frontend/home');
-});
+Route::get('/home', [HomeController::class, 'index']);
+
+Route::get('/login', [AuthController::class, 'index']);
 
 // Register page
 Route::get('/register', [AuthController::class, 'createAccount']);

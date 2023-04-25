@@ -31,7 +31,7 @@
                 autocomplete="off">
         </div>
 
-        <span id="forgot_pssw"><a href="#">Esqueceu-se da password?</a></span>
+        <span id="forgot_pssw"><a href="#">Esqueçeu-se da password?</a></span>
         <button id="login_btn" class="mt-3">Login</button>
         <span id="register"><a href="/register" class="mt-2">Criar nova conta</a></span>    
 
