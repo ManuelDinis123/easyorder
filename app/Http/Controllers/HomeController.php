@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Models\Menu;
 use App\Models\OrderItems;
 use App\Models\Restaurants;
 use Illuminate\Http\Request;
@@ -30,15 +31,24 @@ class HomeController extends Controller
             ->get();
 
         // Get best rating
-        $bestRating = Restaurants::select("restaurants.id", "restaurants.name", DB::raw("ROUND(SUM(reviews.stars)/COUNT(reviews.id)) as average"))
+        $bestRating = Restaurants::select("restaurants.id", "restaurants.name", "restaurants.description", DB::raw("ROUND(SUM(reviews.stars)/COUNT(reviews.id)) as average"))
             ->join("reviews", "reviews.restaurant_id", "=", "restaurants.id")
             ->groupBy("restaurants.id")
             ->orderBy("average", "desc")
             ->limit(5)
             ->get();
 
+        $max = (count($bestRating) - 1);
+        $showcase = $bestRating[rand(0, $max)];
+
+        $menuImgs = Menu::select("menu_item.imageUrl")
+            ->join("menu_item", "menu_item.menu_id", "=", "menu.id")
+            ->where("restaurant_id", $showcase->id)
+            ->get();
+
         return view('frontend/home')
             ->with("orders", $mostOrders)
-            ->with("rating", $bestRating);
+            ->with("showcase", $showcase)
+            ->with("menuImgs", $menuImgs);
     }
 }

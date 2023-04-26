@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Log;
 class AuthController extends Controller
 {
 
-    function index() {
+    function index()
+    {
         return view("frontend.login");
     }
 
@@ -40,7 +41,7 @@ class AuthController extends Controller
         }
 
         $user = Users::where("email", $request->email)->get() ?? null;
-        
+
         if (!sizeof($user)) {
             return response()->json($err, 400);
         }
@@ -390,6 +391,36 @@ class AuthController extends Controller
             "user_id" => $userID,
             "type_id" => $typeID
         ]);
+
+        $restaurantid = UserRestaurant::where("user_id", $userID,)->get()->first();
+        $restaurant = Restaurants::where("id", $restaurantid->restaurant_id)->get()->first();
+        session(["restaurant" => [
+            "id" => $restaurant->id,
+            "name" => $restaurant->name,
+            "logo_name" => $restaurant->logo_name,
+            "logo_url" => $restaurant->logo_url,
+            "isPublic" => $restaurant->isPublic,
+            "isActive" => $restaurant->active
+        ]]);
+
+        // get type to put in session
+        $typeId = UsersTypes::where('user_id', $userID,)->get()->first();
+        $typeInfo = Types::whereId($typeId->type_id)->get()->first();
+
+        session(["type" => [
+            "id" => $typeInfo->id,
+            "label" => $typeInfo->label,
+            "view_orders" => $typeInfo->view_orders,
+            "view_menu" => $typeInfo->view_menu,
+            "view_stats" => $typeInfo->view_stats,
+            "write_orders" => $typeInfo->write_orders,
+            "write_menu" => $typeInfo->write_menu,
+            "invite_users" => $typeInfo->invite_users,
+            "edit_page" => $typeInfo->edit_page,
+            "ban_users" => $typeInfo->ban_users,
+            "admin" => $typeInfo->admin,
+            "owner" => $typeInfo->owner,
+        ]]);
 
         if (!$userType) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
     }

@@ -70,18 +70,16 @@
             <div class="col-lg-6 col-md-12 col-sm-12">
                 <div class="showcase-description">
                     <div class="center">
-                        <h2>Nome do Restaurante</h2>
+                        <h2>{{ $showcase['name'] }}</h2>
                     </div>
                     <div class="center">
                         <hr style="width: 70%">
                     </div>
-                    <span>A expressão Lorem ipsum em design gráfico e
-                        editoração é um texto padrão em latim.</span><br>
-                    <div class="center mt-4">
-                        <img class="menu-showcase"
-                            src="https://www.confeiteiradesucesso.com/wp-content/uploads/2019/03/hamburguergourmet-fb.jpg"><br>
+                    <span class="center">{{ $showcase['description'] }}</span><br>
+                    <div class="center mt-2">
+                        <img class="menu-showcase" id="menuShow" src="{{ $menuImgs[0]['imageUrl'] }}"><br>
                     </div>
-                    <button class="btn btn-dark form-control mt-5">Ver Página</button>
+                    <button class="btn btn-dark form-control mt-5" onclick="window.location.href='/restaurante/{{$showcase['id']}}'">Ver Página</button>
                 </div>
             </div>
         </div>
@@ -90,7 +88,7 @@
     <script>
         let selected = 3;
 
-        let imgs = [
+        let slider = [
             "https://www.confeiteiradesucesso.com/wp-content/uploads/2019/03/hamburguergourmet-fb.jpg",
             "https://t3.ftcdn.net/jpg/03/24/73/92/360_F_324739203_keeq8udvv0P2h1MLYJ0GLSlTBagoXS48.jpg",
             "https://assets.vogue.com/photos/605b998c1087bb7115b724b5/16:9/w_1600,h_900,c_limit/Sona_Interiors_048.jpg",
@@ -101,15 +99,29 @@
         $(document).on('click', '.ball', function() {
             var imageToShow = this.id.replace("img", "");
             $("#showcase_imgs").css("background",
-                "linear-gradient(180deg, rgba(0, 0, 0, 0) 91.67%, #000000 94.27%),url(" + imgs[imageToShow -
+                "linear-gradient(180deg, rgba(0, 0, 0, 0) 91.67%, #000000 94.27%),url(" + slider[imageToShow -
                     1] + ")");
-            $("#showcase_imgs").css("background-size","cover ");
-            $("#showcase_imgs").css("background-position","center ");
+            $("#showcase_imgs").css("background-size", "cover ");
+            $("#showcase_imgs").css("background-position", "center ");
 
-            $("#img"+imageToShow).addClass("selected");            
-            $("#img"+selected).removeClass("selected");            
-            selected=imageToShow;
+            $("#img" + imageToShow).addClass("selected");
+            $("#img" + selected).removeClass("selected");
+            selected = imageToShow;
         });
+
+        // Menu showcase
+        let selectedImg = 0;
+        const menuImgs = JSON.parse(`{!! json_encode($menuImgs) !!}`);
+
+        var pic = $("#menuShow");
+        var i = 0;
+        setInterval(function() {
+            i = (i + 1) % menuImgs.length;
+            pic.fadeOut(350, function() {
+                $(this).attr("src", menuImgs[i]['imageUrl']);
+                $(this).fadeIn(1150);
+            });
+        }, 7000);
 
         function clickCard(id) {
             window.location.href = "/restaurante/" + id + "/menu";

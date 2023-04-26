@@ -116,9 +116,6 @@
     @if (!session()->get('restaurant.isPublic') && (session()->get('type.owner') || session()->get('type.admin')))
         <button class="btn btn-primary publish-btn" onclick="publish()">Publicar Restaurante</button>
     @endif
-    @if (!session()->get("restaurant.isActive"))
-        <span class="inactive-warn">Este restaurante esta inativo por tempo indefinido</span>
-    @endif
 
     <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 
