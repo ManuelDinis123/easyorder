@@ -14,6 +14,26 @@
     ])
     @endcomponent
 
+    @component('components.modal_builder', [
+        'modal_id' => 'galleryModal',
+        'hasHeader' => true,
+        'rawHeader' =>
+            '<h5 class="modal-title" id="galleryModalLabel"><i class="fa-solid fa-image"></i> Escolher Imagem</h5>',
+        'hasBody' => true,
+        'inputs' => [
+            ['label' => 'Nome:', 'id' => 'ingredient_name_edit', 'type' => 'text'],
+            ['label' => 'Quantidade:', 'id' => 'edit_quant', 'type' => 'number'],
+            ['label' => 'Preço:', 'id' => 'edit_price', 'type' => 'number'],
+            ['label' => '', 'id' => 'id_for_edit', 'type' => 'hidden'],
+        ],
+        'hasFooter' => true,
+        'buttons' => [
+            ['label' => 'Cancelar', 'id' => 'closeMdl', 'class' => 'btn btn-danger', 'dismiss' => true],
+            ['label' => 'Guardar', 'id' => 'saveUrl', 'class' => 'btn btn-primary'],
+        ],
+    ])
+    @endcomponent
+
     @component('components.delete', [
         'modal_id' => 'confirmModal',
         'function_name' => 'removePost',
@@ -87,15 +107,16 @@
             <h2 style="font-weight: 700">Galeria</h2>
         </div>
         <div class="center">
-            <span class="text-muted">Estas imagens serão usadas quando o seu restaurante for mostrado na página principal</span>
+            <span class="text-muted">Estas imagens serão usadas quando o seu restaurante for mostrado na página
+                principal</span>
         </div>
         <div class="gallery-container center">
             <div class="row">
-                <div class="col-2 image-card"></div>
-                <div class="col-2 image-card"></div>
-                <div class="col-2 image-card"></div>
-                <div class="col-2 image-card"></div>
-                <div class="col-2 image-card"></div>
+                <div class="col-2 image-card" id="ic1"></div>
+                <div class="col-2 image-card" id="ic2"></div>
+                <div class="col-2 image-card" id="ic3"></div>
+                <div class="col-2 image-card" id="ic4"></div>
+                <div class="col-2 image-card" id="ic5"></div>
             </div>
         </div>
 
@@ -132,7 +153,7 @@
         </div>
         <div class="allPosts visually-hidden mt-4" id="drafts">
             @foreach ($drafts as $draft)
-                <div class="center mt-3" id="aDraft{{$draft['id']}}">
+                <div class="center mt-3" id="aDraft{{ $draft['id'] }}">
                     <div class="post">
                         <i class="fa-solid fa-paper-plane post-actions" style="color: #166f17;"
                             onclick="publishDraft({{ $draft['id'] }})"></i>
@@ -188,7 +209,7 @@
                 </div>`
                 );
                 $("#body" + id).clone().insertAfter("#expanded" + id);
-                $("#aDraft"+id).remove();
+                $("#aDraft" + id).remove();
             }).fail((err) => {
                 errorToast(err.responseJSON.title, err.responseJSON.message);
             })
