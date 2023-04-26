@@ -121,7 +121,7 @@
                 $(this).attr("src", menuImgs[i]['imageUrl']);
                 $(this).fadeIn(1150);
             });
-        }, 7000);
+        }, 5000);
 
         function clickCard(id) {
             window.location.href = "/restaurante/" + id + "/menu";

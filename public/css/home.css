@@ -131,7 +131,6 @@ body {
     width: 34vw;
     height: 474px;
     object-fit: cover;
-    border: 2px solid #000000;
     border-radius: 15px !important;
 }
 
