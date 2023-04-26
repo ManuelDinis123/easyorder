@@ -84,6 +84,24 @@
         <hr>
 
         <div class="center mt-4">
+            <h2 style="font-weight: 700">Galeria</h2>
+        </div>
+        <div class="center">
+            <span class="text-muted">Estas imagens serão usadas quando o seu restaurante for mostrado na página principal</span>
+        </div>
+        <div class="gallery-container center">
+            <div class="row">
+                <div class="col-2 image-card"></div>
+                <div class="col-2 image-card"></div>
+                <div class="col-2 image-card"></div>
+                <div class="col-2 image-card"></div>
+                <div class="col-2 image-card"></div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="center mt-4">
             <h2 style="font-weight: 700">Publicações</h2><br>
         </div>
         <button class="btn btn-primary" onclick="window.location.href = 'conteudo/publicar'">Criar Nova
