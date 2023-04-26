@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedInteger("card_num");
             $table->unsignedInteger("restaurant_id");
             $table->text("imageUrl");
+            $table->foreign('restaurant_id')->references('id')->on('restaurants');
         });
     }
 
