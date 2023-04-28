@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Models\Gallery;
 use App\Models\MenuItems;
 use App\Models\Posts;
 use App\Models\Restaurants;
@@ -56,11 +57,15 @@ class EditpageController extends Controller
             ->get()
             ->first();
 
+        // Gallery images
+        $imgs = Gallery::where("restaurant_id", session()->get("restaurant.id"))->get();
+
         return view("frontend/professional/editpage/editpage")
             ->with("menuItems", $menuItemsModal)
             ->with("plateofday", $plateOfDay)
             ->with("posts", $posts)
-            ->with("drafts", $drafts);
+            ->with("drafts", $drafts)
+            ->with("imgs", $imgs);
     }
 
     /**
@@ -101,7 +106,7 @@ class EditpageController extends Controller
 
         $post = null;
         if ($id->get('id')) {
-            $post = Posts::whereId($id->get('id'))                
+            $post = Posts::whereId($id->get('id'))
                 ->get()
                 ->first();
         }
@@ -188,11 +193,50 @@ class EditpageController extends Controller
         }
 
         $res = Posts::whereId($id->id)->update([
-            "published"=>1
+            "published" => 1
         ]);
 
         if (!$res) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a publicar a publicação"], 500);
 
         return response()->json(["title" => "Sucesso!", "message" => "Publicação publicada"], 200);
+    }
+
+    /**
+     * Saves gallery image
+     * 
+     * @param \Illuminate\Http\Request req
+     * @return \Illuminate\Http\Response status
+     */
+    function saveImage(Request $req)
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return response("Access Denied", 401);
+        }
+
+        // Check if position already has any value
+        $exists = Gallery::where("restaurant_id", session()->get("restaurant.id"))
+            ->where("card_num", $req->pos)
+            ->get()
+            ->first();
+
+        // If position is already in db just update it's imageUrl 
+        if ($exists) {
+            $result = Gallery::whereId($exists->id)
+                ->update([
+                    "imageUrl" => $req->img
+                ]);
+            if (!$result) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a guardar esta imagem"], 500);
+            return response()->json(["title" => "Sucesso!", "message" => "Imagem guardada!"], 200);
+        }
+
+        $result = Gallery::create([
+            "card_num" => $req->pos,
+            "restaurant_id" => session()->get("restaurant.id"),
+            "imageUrl" => $req->img
+        ]);
+
+        if (!$result) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a guardar esta imagem"], 500);
+        return response()->json(["title" => "Sucesso!", "message" => "Imagem guardada!"], 200);
     }
 }

@@ -55,18 +55,30 @@
             <h1 style="font-weight: 600">Melhor Rating</h1>
         </div>
         <div class="row g-0">
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <div class="showcase" id="showcase_imgs">
-                    <i class="fa-sharp fa-solid fa-stars"></i>
-                    <div class="balls-container">
-                        <div class="ball" id="img1"></div>
-                        <div class="ball" id="img2"></div>
-                        <div class="ball selected" id="img3"></div>
-                        <div class="ball" id="img4"></div>
-                        <div class="ball" id="img5"></div>
+            @if (count($gallery) > 0)
+                <style>
+                    .showcase {
+                        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 91.67%, #000000 94.27%),
+                            url("{{$gallery[0]['imageUrl']}}");
+                        border-radius: 42px;
+                        width: 98%;
+                        height: 801px;
+                        background-size: cover;
+                        background-position: center;
+                    }
+                </style>
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="showcase" id="showcase_imgs">
+                        <i class="fa-sharp fa-solid fa-stars"></i>
+                        <div class="balls-container">
+                            @foreach ($gallery as $key => $g)
+                                <div class="ball {{ $key == 0 ? 'selected' : '' }}" id="img{{ $g['card_num'] }}"></div>
+                            @endforeach
+                            <input type="hidden" id="galleryImgs" value="{{ json_encode($gallery) }}">
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
             <div class="col-lg-6 col-md-12 col-sm-12">
                 <div class="showcase-description">
                     <div class="center">
@@ -79,22 +91,22 @@
                     <div class="center mt-2">
                         <img class="menu-showcase" id="menuShow" src="{{ $menuImgs[0]['imageUrl'] }}"><br>
                     </div>
-                    <button class="btn btn-dark form-control mt-5" onclick="window.location.href='/restaurante/{{$showcase['id']}}'">Ver Página</button>
+                    <button class="btn btn-dark form-control mt-5"
+                        onclick="window.location.href='/restaurante/{{ $showcase['id'] }}'">Ver Página</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let selected = 3;
+        let selected = 1;
 
-        let slider = [
-            "https://www.confeiteiradesucesso.com/wp-content/uploads/2019/03/hamburguergourmet-fb.jpg",
-            "https://t3.ftcdn.net/jpg/03/24/73/92/360_F_324739203_keeq8udvv0P2h1MLYJ0GLSlTBagoXS48.jpg",
-            "https://assets.vogue.com/photos/605b998c1087bb7115b724b5/16:9/w_1600,h_900,c_limit/Sona_Interiors_048.jpg",
-            "https://images.pexels.com/photos/1126728/pexels-photo-1126728.jpeg?cs=srgb&dl=pexels-lisa-fotios-1126728.jpg&fm=jpg",
-            "https://images.unsplash.com/photo-1620878439129-177b2d18864c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cmVzdGF1cmFudCUyMGJhY2tncm91bmR8ZW58MHx8MHx8&w=1000&q=80",
-        ]
+
+        let allimgs = JSON.parse($("#galleryImgs").val());
+        let slider = ["", "", "", "", ""];
+        $.each(allimgs, (key, val) => {
+            slider[val.card_num - 1] = val.imageUrl;
+        })
 
         $(document).on('click', '.ball', function() {
             var imageToShow = this.id.replace("img", "");

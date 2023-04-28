@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Models\Gallery;
 use App\Models\Menu;
 use App\Models\OrderItems;
 use App\Models\Restaurants;
@@ -33,6 +34,8 @@ class HomeController extends Controller
         // Get best rating
         $bestRating = Restaurants::select("restaurants.id", "restaurants.name", "restaurants.description", DB::raw("ROUND(SUM(reviews.stars)/COUNT(reviews.id)) as average"))
             ->join("reviews", "reviews.restaurant_id", "=", "restaurants.id")
+            ->where("restaurants.isPublic", 1)
+            ->where("restaurants.active", 1)
             ->groupBy("restaurants.id")
             ->orderBy("average", "desc")
             ->limit(5)
@@ -46,9 +49,12 @@ class HomeController extends Controller
             ->where("restaurant_id", $showcase->id)
             ->get();
 
+        $gallery = Gallery::where("restaurant_id", $showcase->id)->orderBy("gallery.card_num")->get();
+
         return view('frontend/home')
             ->with("orders", $mostOrders)
             ->with("showcase", $showcase)
+            ->with("gallery", $gallery)
             ->with("menuImgs", $menuImgs);
     }
 }

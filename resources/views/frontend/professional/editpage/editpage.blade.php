@@ -21,10 +21,8 @@
             '<h5 class="modal-title" id="galleryModalLabel"><i class="fa-solid fa-image"></i> Escolher Imagem</h5>',
         'hasBody' => true,
         'inputs' => [
-            ['label' => 'Nome:', 'id' => 'ingredient_name_edit', 'type' => 'text'],
-            ['label' => 'Quantidade:', 'id' => 'edit_quant', 'type' => 'number'],
-            ['label' => 'Preço:', 'id' => 'edit_price', 'type' => 'number'],
-            ['label' => '', 'id' => 'id_for_edit', 'type' => 'hidden'],
+            ['label' => 'Url de Imagem:', 'id' => 'imageURL', 'type' => 'text', 'placeholder' => 'http://image.png'],
+            ['label' => '', 'id' => 'card_pos', 'type' => 'hidden'],
         ],
         'hasFooter' => true,
         'buttons' => [
@@ -110,13 +108,22 @@
             <span class="text-muted">Estas imagens serão usadas quando o seu restaurante for mostrado na página
                 principal</span>
         </div>
+        @foreach ($imgs as $i)
+            <style>
+                #ic{{ $i['card_num'] }} {
+                    background: url("{{ $i['imageUrl'] }}");
+                    background-size: cover;
+                    background-position: center;
+                }
+            </style>
+        @endforeach
         <div class="gallery-container center">
             <div class="row">
-                <div class="col-2 image-card" id="ic1"></div>
-                <div class="col-2 image-card" id="ic2"></div>
-                <div class="col-2 image-card" id="ic3"></div>
-                <div class="col-2 image-card" id="ic4"></div>
-                <div class="col-2 image-card" id="ic5"></div>
+                <div class="col-2 image-card" id="ic1" onclick="openGalleryModal(1)"></div>
+                <div class="col-2 image-card" id="ic2" onclick="openGalleryModal(2)"></div>
+                <div class="col-2 image-card" id="ic3" onclick="openGalleryModal(3)"></div>
+                <div class="col-2 image-card" id="ic4" onclick="openGalleryModal(4)"></div>
+                <div class="col-2 image-card" id="ic5" onclick="openGalleryModal(5)"></div>
             </div>
         </div>
 
@@ -213,6 +220,39 @@
             }).fail((err) => {
                 errorToast(err.responseJSON.title, err.responseJSON.message);
             })
+        }
+
+        $("#saveUrl").on('click', () => {
+            const position = $("#card_pos").val();
+            const img = $("#imageURL").val();
+
+            $.ajax({
+                method: "post",
+                url: "/professional/conteudo/guardar_imagem",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    pos: position,
+                    img: img
+                }
+            }).done((res) => {
+                successToast(res.title, res.message)
+                $("#ic" + position).css("background", "url('" + img + "')");
+                $("#ic" + position).css("background-size", "cover");
+                $("#ic" + position).css("background-position", "center");
+                $("#galleryModal").modal("toggle");
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
+            });
+        })
+
+        $('#galleryModal').on('hidden.bs.modal', () => {
+            $("#imageURL").val("");
+        });
+
+        // opens gallery modal
+        function openGalleryModal(pos) {
+            $("#card_pos").val(pos);
+            $("#galleryModal").modal("toggle");
         }
 
         // To show the body of a post
