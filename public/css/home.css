@@ -68,16 +68,6 @@ body {
     padding: 0px 140px;
 }
 
-.showcase {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 91.67%, #000000 94.27%),
-        url("https://assets.vogue.com/photos/605b998c1087bb7115b724b5/16:9/w_1600,h_900,c_limit/Sona_Interiors_048.jpg");
-    border-radius: 42px;
-    width: 98%;
-    height: 801px;
-    background-size: cover;
-    background-position: center;
-}
-
 .showcase-description {
     background: #ffffff;
     box-shadow: 0px 4px 11px rgba(0, 0, 0, 0.44);
