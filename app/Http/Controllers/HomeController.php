@@ -41,15 +41,22 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
-        $max = (count($bestRating) - 1);
-        $showcase = $bestRating[rand(0, $max)];
+        $showcase = [];
+        $gallery = [];
+        $menuImgs = [];
+        if(count($bestRating)>0){
+            $max = (count($bestRating) - 1);
+            $showcase = $bestRating[rand(0, $max)];
 
-        $menuImgs = Menu::select("menu_item.imageUrl")
-            ->join("menu_item", "menu_item.menu_id", "=", "menu.id")
-            ->where("restaurant_id", $showcase->id)
-            ->get();
+            $menuImgs = Menu::select("menu_item.imageUrl")
+                ->join("menu_item", "menu_item.menu_id", "=", "menu.id")
+                ->where("restaurant_id", $showcase->id)
+                ->get();
 
-        $gallery = Gallery::where("restaurant_id", $showcase->id)->orderBy("gallery.card_num")->get();
+            $gallery = Gallery::where("restaurant_id", $showcase->id)->orderBy("gallery.card_num")->get();
+        }
+
+
 
         return view('frontend/home')
             ->with("orders", $mostOrders)

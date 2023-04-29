@@ -99,7 +99,7 @@
                             <li id="dpl3"
                                 class="{{ session()->get('type.owner') || session()->get('type.admin') ? '' : 'visually-hidden' }}">
                                 <a class="dropdown-item activate {{ $file == 'options' ? 'li_on' : '' }}"
-                                    href="/professional/admin/options"><i class="fa-solid fa-gear"></i>
+                                    href="/professional/configuracoes/geral"><i class="fa-solid fa-gear"></i>
                                     Opções</a>
                             </li>
                         </ul>

@@ -21,8 +21,6 @@
 <ul class="list-group tabs">
     <li onclick="redirect('/professional/configuracoes/geral')" class="list-group-item list-group-item-action {{ $tab == 'general' ? 'active' : '' }}">Geral</li>
     <li onclick="redirect('/professional/configuracoes/user')" class="list-group-item list-group-item-action {{ $tab == 'users' ? 'active' : '' }}">Utilizador</li>
-    <li onclick="redirect('/professional/configuracoes/restaurante')" class="list-group-item list-group-item-action {{ $tab == 'restaurant' ? 'active' : '' }}">Restaurante</li>
-    <li onclick="redirect('/professional/configuracoes/conexoes')" class="list-group-item list-group-item-action {{ $tab == 'connections' ? 'active' : '' }}">Conexões</li>
 </ul>
 
 

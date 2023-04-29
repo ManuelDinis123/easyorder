@@ -18,6 +18,19 @@ class SettingsController extends Controller
         return view("frontend/professional/settings/user");
     }
 
+    function main()
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+
+        $users = Users::join("user_restaurant", "user_restaurant.user_id", "=", "users.id")
+            ->where("user_restaurant.restaurant_id", session()->get("restaurant.id"))
+            ->where("users.id", "!=", session()->get("user.id"))
+            ->get();
+
+        return view("frontend/professional/settings/main")
+            ->with("users", $users);
+    }
+
     /**
      * For dropzone.js
      * 
@@ -68,13 +81,13 @@ class SettingsController extends Controller
 
             $session_data = [
                 'id' => session()->get('user.id'),
-                'firstName'=> $request->values[0],
+                'firstName' => $request->values[0],
                 'lastName' => $request->values[1],
                 'birthdate' => $request->values[2],
                 'email' => $request->values[3],
                 'isProfessional' => session()->get('user.isProfessional'),
                 'pfp' => session()->get('user.pfp')
-            ];  
+            ];
 
             // Update session
             session(["user" => $session_data]);

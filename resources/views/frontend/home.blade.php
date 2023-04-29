@@ -59,7 +59,7 @@
                 <style>
                     .showcase {
                         background: linear-gradient(180deg, rgba(0, 0, 0, 0) 91.67%, #000000 94.27%),
-                            url("{{$gallery[0]['imageUrl']}}");
+                            url("{{ $gallery[0]['imageUrl'] }}");
                         border-radius: 42px;
                         width: 98%;
                         height: 801px;
@@ -79,22 +79,24 @@
                     </div>
                 </div>
             @endif
-            <div class="col-lg-6 col-md-12 col-sm-12">
-                <div class="showcase-description">
-                    <div class="center">
-                        <h2>{{ $showcase['name'] }}</h2>
+            @if ($showcase)
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="showcase-description">
+                        <div class="center">
+                            <h2>{{ $showcase['name'] }}</h2>
+                        </div>
+                        <div class="center">
+                            <hr style="width: 70%">
+                        </div>
+                        <span class="center">{{ $showcase['description'] }}</span><br>
+                        <div class="center mt-2">
+                            <img class="menu-showcase" id="menuShow" src="{{ $menuImgs[0]['imageUrl'] }}"><br>
+                        </div>
+                        <button class="btn btn-dark form-control mt-5"
+                            onclick="window.location.href='/restaurante/{{ $showcase['id'] }}'">Ver Página</button>
                     </div>
-                    <div class="center">
-                        <hr style="width: 70%">
-                    </div>
-                    <span class="center">{{ $showcase['description'] }}</span><br>
-                    <div class="center mt-2">
-                        <img class="menu-showcase" id="menuShow" src="{{ $menuImgs[0]['imageUrl'] }}"><br>
-                    </div>
-                    <button class="btn btn-dark form-control mt-5"
-                        onclick="window.location.href='/restaurante/{{ $showcase['id'] }}'">Ver Página</button>
                 </div>
-            </div>
+            @endif
         </div>
     </div>
 
