@@ -34,7 +34,7 @@
 {{-- Bootstrap datepicker --}}
 <link rel="stylesheet" href="{{ mix('plugins/bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker.min.css') }}"
     type="text/css">
-<script src="{{ mix('plugins/bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 {{-- Dropzone --}}
 <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
@@ -46,9 +46,6 @@
 
 {{-- Charts.js --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-
-{{-- JQuery UI --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 
 {{-- Global Files --}}
 <link rel="stylesheet" href="{{ asset('css/global.css') }}">

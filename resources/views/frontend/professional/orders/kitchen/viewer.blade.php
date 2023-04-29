@@ -1,6 +1,7 @@
 @include('layouts.includes')
 
 <link rel="stylesheet" href="{{ asset('css/viewer.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 
 <a href="{{ url()->previous() }}"><i class="fa-sharp fa-solid fa-arrow-left back"></i></a>
 
