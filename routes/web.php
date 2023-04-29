@@ -20,6 +20,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserConfigsController;
+use Illuminate\Support\Facades\Redirect;
 
 // Root of the project, redirects to login or home depending on the authentication state of the user
 Route::get('/', function () {
@@ -186,5 +187,5 @@ Route::post('/admin/restaurantes/switch', [AdminController::class, 'switchRestau
 
 // any other route that isn't declared goes to 404 page
 Route::get('/{any}', function () {
-    abort(404, view("errors.404"));
+    return redirect("/");
 })->where('any', '.*');
