@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Models\RestaurantType;
+use App\Models\Types;
 use App\Models\UserAuth;
 use App\Models\Users;
+use App\Models\UsersTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -115,5 +118,47 @@ class SettingsController extends Controller
         } else {
             return response()->json(["status" => "", "message" => ""], 200);
         }
+    }
+
+    /**
+     * Transfers owner ship of a restaurant from a user to another
+     * 
+     * @param \Illuminate\http\Request userIds
+     * @return \Illuminate\http\Response status
+     */
+    function transferOwnerShip(Request $req)
+    {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
+        }
+
+        $ownerID = Types::where("restaurant_id", session()->get("restaurant.id"))->where("label", "Owner")->get()->first();
+
+        // updates the new user's type to be owner
+        $update = UsersTypes::where("user_id", $req->newOwner)->update([
+            "type_id" => $ownerID->id
+        ]);
+
+        if (!$update) {
+            return response()->json(["status" => "Erro", "message" => "Erro a dar owner ao user"], 400);
+        }
+
+        // remove old owner from restaurant
+        $removeType = UsersTypes::where("user_id", session()->get("user.id"))->delete();
+
+        if (!$removeType) {
+            return response()->json(["status" => "Erro", "message" => "Erro ao retirar-lhe owner"], 400);
+        }
+
+        $setProZero = Users::whereId(session()->get("user.id"))->update([
+            "isProfessional" => 0
+        ]);
+
+        if (!$setProZero) {
+            return response()->json(["status" => "Erro", "message" => "Erro retirar-lhe de profissional"], 400);
+        }
+
+        return response()->json(["status" => "Sucesso", "message" => "transferido com sucesso"], 200);
     }
 }

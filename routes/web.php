@@ -137,6 +137,7 @@ Route::get('/professional/admin/options', [OptionsController::class, 'index']);
 
 //Settings
 Route::get('/professional/configuracoes/geral', [SettingsController::class, 'main']);
+Route::post('/professional/configuracoes/novoowner', [SettingsController::class, 'transferOwnerShip'])->name("novoowner");
 Route::get('/professional/configuracoes/user', [SettingsController::class, 'index']);
 Route::post('/professional/updateusersettings', [SettingsController::class, 'update'])->name("updateusersettings");
 Route::post('/professional/fileupload', [SettingsController::class, 'fileupload'])->name("fileupload");
