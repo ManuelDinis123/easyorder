@@ -155,6 +155,7 @@ class MenuController extends Controller
             $this->addTags($data->tags, $menu_item->id, true);
         }
 
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " adicionou \"" . $data->name . "\" ao menu"), "/professional/ementa/" . $menu_item->id);
 
         return response()->json(["title" => "Sucesso", "message" => "Item adicionado com sucesso!", "id" => $menu_item->id], 200);
     }
@@ -218,6 +219,8 @@ class MenuController extends Controller
             }
         }
 
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " editou o item \"" . $newdata->name . "\" no menu"), "/professional/ementa/" . $newdata->id);
+
         return response()->json(["title" => "Sucesso", "message" => "Item editado com sucesso!"], 200);
     }
 
@@ -240,10 +243,14 @@ class MenuController extends Controller
         // Delete ingredients
         $ingredients = Ingredients::where("menu_item_id", $id->id)->delete();
 
+        $itmName = MenuItems::select("name")->where("id", $id->id)->get()->first();
+
         // Delete the item
         $item = MenuItems::where("id", $id->id)->delete();
 
         if (!$item) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro ao apagar o item", "erro" => $item], 500);
+
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " removeu o item \"" . $itmName->name . "\" do menu"));
 
         return response()->json(["title" => "Sucesso", "message" => "Item apagado com sucesso"], 200);
     }

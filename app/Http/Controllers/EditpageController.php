@@ -82,13 +82,21 @@ class EditpageController extends Controller
             if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return redirect("/professional");
         }
 
+        if(isset($id->id)){
+            $platename = MenuItems::select("name")->whereId($id->id)->get()->first();
+        }
+
         $save = Restaurants::whereId(session()->get("restaurant.id"))
             ->update([
                 "plate_of_day" => isset($id->id) ? $id->id : null
             ]);
 
         if (!$save) return Response()->json(["title" => "Erro", "message" => "Ocorreu um erro a guardar o prato do dia"], 500);
-
+        if(isset($id->id)){
+            AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " colocou \"".$platename->name."\" como o prato do dia"), "/professional/conteudo");
+        } else {
+            AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " retirou o prato do dia"), "/professional/conteudo");
+        }
         return Response()->json(["title" => "Sucesso", "message" => "Prato do dia adicionado com sucesso"], 200);
     }
 
@@ -143,6 +151,8 @@ class EditpageController extends Controller
 
             if (!$res) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a guardar a publicação"], 500);
 
+            AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " editou a publicação entitulada \"".$data->title."\""), "/professional/conteudo/publicar?id=" . $data->edit);
+
             return response()->json(["title" => "Sucesso!", "message" => "Publicação publicada"], 200);
         }
 
@@ -155,6 +165,8 @@ class EditpageController extends Controller
         ]);
 
         if (!$res) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a guardar a publicação"], 500);
+
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " criou uma publicação entitulada \"".$data->title."\""), "/professional/conteudo/publicar?id=" . $res->id);
 
         return response()->json(["title" => "Sucesso!", "message" => "Publicação publicada"], 200);
     }
@@ -172,10 +184,11 @@ class EditpageController extends Controller
             if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return response("Access Denied", 401);
         }
 
+        $title = Posts::select("title")->whereId($id->id)->get()->first();
         $res = Posts::whereId($id->id)->delete();
 
         if (!$res) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a remover a publicação"], 500);
-
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " apagou a publicação entitulada \"".$title->title."\""), "");
         return response()->json(["title" => "Sucesso!", "message" => "Publicação removida"], 200);
     }
 
@@ -227,6 +240,7 @@ class EditpageController extends Controller
                     "imageUrl" => $req->img
                 ]);
             if (!$result) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a guardar esta imagem"], 500);
+            AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " adicionou uma imagem à galeria na posição " . $req->pos), "/professional/conteudo");
             return response()->json(["title" => "Sucesso!", "message" => "Imagem guardada!"], 200);
         }
 
@@ -237,6 +251,7 @@ class EditpageController extends Controller
         ]);
 
         if (!$result) return response()->json(["title" => "Erro", "message" => "Occoreu um erro a guardar esta imagem"], 500);
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " adicionou uma imagem à galeria na posição " . $req->pos), "/professional/conteudo");
         return response()->json(["title" => "Sucesso!", "message" => "Imagem guardada!"], 200);
     }
 }

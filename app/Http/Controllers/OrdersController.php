@@ -161,6 +161,8 @@ class OrdersController extends Controller
 
         if (!$progressUpdate) response()->json(["status" => "Erro", "message" => "Ocorreu um erro"], 500);
 
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " atualizou o pedido " . $data->id), "/professional/encomendas/" . $data->id);
+
         return response()->json(["status" => "Sucesso", "message" => "Item " . ($data->isDone == 1 ? "marcado como pronto" : "desmarcado") . " com sucesso!", "progress" => $progress], 200);
     }
 
@@ -202,6 +204,8 @@ class OrdersController extends Controller
             ->get()->first();
         AppHelper::createNotification($userID->ordered_by, "O seu pedido ao restaurante " . $userID->name . " esta pronto!");
 
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " fechou o pedido " . $id->id), "/professional/encomendas/" . $id->id);
+
         return response()->json(["status" => "Sucesso", "message" => "Pedido fechado com sucesso"], 200);
     }
 
@@ -230,6 +234,8 @@ class OrdersController extends Controller
             ->where("orders.id", $id->id)
             ->get()->first();
         AppHelper::createNotification($userID->ordered_by, "O seu pedido ao restaurante " . $userID->name . " foi cancelado...");
+
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " cancelou o pedido " . $id->id), "/professional/encomendas/" . $id->id);
 
         return response()->json(["status" => "Sucesso", "message" => "Pedido cancelado com sucesso"], 200);
     }
@@ -338,6 +344,8 @@ class OrdersController extends Controller
             ->where("orders.id", $id->id)
             ->get()->first();
         AppHelper::createNotification($userID->ordered_by, "O seu pedido ao restaurante " . $userID->name . " esta pronto!");
+
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " fechou o pedido " . $id->id), "/professional/encomendas/" . $id->id);
 
         return response()->json(["status" => "Sucesso", "message" => "Pedido fechado com sucesso"], 200);
     }
