@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Activity;
 use App\Models\CartItems;
 use App\Models\Notifications;
 use App\Models\Orders;
@@ -216,5 +217,26 @@ class AppHelper
         ]);
 
         return $notify;
+    }
+
+    /**
+     * Creates a notification for user
+     * 
+     * @param String info
+     * @param String link (optional)
+     * @return Array response
+     */
+    public static function repordActivity($info, $link = null)
+    {
+        if (!$info) return ["message" => "Info is required", "status" => 400];
+        $save = Activity::create([
+            "user_id" => session()->get("user.id"),
+            "restaurant_id" => session()->get("restaurant.id"),
+            "info" => $info,
+            "link" => $link ? $link : null,
+            "created_at" => date('Y-m-d H:i:s')
+        ]);
+        if(!$save) return ["message" => "Error", "status" => 500];
+        return ["message" => "Success", "status" => 200];
     }
 }

@@ -1,5 +1,5 @@
 @include('layouts.includes')
-@extends('layouts.professional.sidebar', ['file' => 'menu'])
+@extends('layouts.professional.sidebar', ['file' => 'options'])
 
 <link rel="stylesheet" href="{{ asset('css/settings/main.css') }}">
 
