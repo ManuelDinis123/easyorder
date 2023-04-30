@@ -8,6 +8,7 @@ use App\Models\Users;
 use App\Models\UsersTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class PermsController extends Controller
 {
@@ -106,7 +107,7 @@ class PermsController extends Controller
         $save = Types::create($newType);
 
         if (!$save) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a guardar este tipo de user"]);
-
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " criou um novo tipo de user \"".$data->name."\""), "/professional/admin/permissions/" . $save->id);
         return response()->json(["title" => "Sucesso", "message" => "Tipo de user criado com sucesso!"]);
     }
 
@@ -149,7 +150,7 @@ class PermsController extends Controller
         }
 
         if (!$edit) return response()->json(["title" => "Erro", "message" => "Erro a atualizar o tipo de user!"], 500);
-
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " editou o tipo de user \"".$data->name."\""), "/professional/admin/permissions/" . $data->id);
         return response()->json(["title" => "Sucesso", "message" => "Tipo de user atualizado com sucesso!"], 200);
     }
 
@@ -164,11 +165,15 @@ class PermsController extends Controller
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             return redirect("/professional");
         }
+        $typeName = Types::whereId($id->id)->get()->first();
+        try {
+            $remove = Types::whereId($id->id)->delete();
+        } catch(Throwable $err){
+            return response()->json(["title" => "Erro", "message" => "Não pode remover tipos que estão já estão associados a users"], 400);
+        }
 
-        $remove = Types::whereId($id->id)->delete();
-
-        if (!$remove) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a eliminar este tipo de user"]);
-
+        if (!$remove) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a eliminar este tipo de user"], 400);
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " apagou o tipo de user \"".$typeName->label."\""), "");
         return response()->json(["title" => "Sucesso", "message" => "Tipo de user eliminado com sucesso!"]);
     }
 

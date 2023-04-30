@@ -10,6 +10,7 @@ use App\Models\UserRestaurant;
 use App\Models\Users;
 use App\Models\UsersTypes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -161,7 +162,7 @@ class UserConfigsController extends Controller
         // Send the email
         $sendToEmail = strtolower($email->email);
         Mail::to($sendToEmail)->send(new InviteMail($token));
-
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " mandou um convite para o email \"".$email->email."\""), "/professional/admin/users/pending");
         return response()->json(["title" => "Sucesso", "message" => "Convite enviado"], 200);
     }
 
@@ -276,12 +277,14 @@ class UserConfigsController extends Controller
             return response()->json(["title" => "Erro", "message" => "Não tem permissões para " . ($id->active == 1 ? 'ativar' : 'desativar') . " o User"], 403);
         }
 
+        $name = Users::select(DB::raw("Concat(first_name, ' ', last_name) as name"))->whereId($id->id)->get()->first();
+
         $state = Users::whereId($id->id)->update([
             "active" => $id->active
         ]);
 
         if (!$state) return response()->json(["title" => "Erro", "message" => "Erro a " . ($id->active == 1 ? 'ativar' : 'desativar') . " este user"], 500);
-
+        AppHelper::recordActivity((session()->get("user.firstName") . " " . session()->get("user.lastName") . " " . ($id->active == 1 ? 'ativou' : 'desativou') . " o/a user " . $name->name), "");
         return response()->json(["title" => "Sucesso", "message" => "User " . ($id->active == 1 ? 'ativado' : 'desativado') . " com sucesso"], 200);
     }
 

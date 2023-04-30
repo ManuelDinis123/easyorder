@@ -291,8 +291,7 @@ class AuthController extends Controller
                 return view("frontend.invited.accepted")
                     ->with($fullData);
             }
-        }
-
+        }        
         return view("frontend.invited.accepted")
             ->with($fullData);
     }
@@ -359,7 +358,6 @@ class AuthController extends Controller
 
         // Delete the invite
         invite::where('token', $data->inv_uid)->delete();
-
         return response()->json(["title" => "Sucesso", "message" => "Conta criada com sucesso"], 200);
     }
 
