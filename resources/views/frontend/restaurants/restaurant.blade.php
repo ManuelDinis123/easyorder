@@ -37,9 +37,6 @@
                     </div>
                 </div>
             </div>
-            <div class="center">
-                <button class="btn btn-dark pd-btn">Adicionar ao Carrinho</button>
-            </div>
         </div>
     @endif
 

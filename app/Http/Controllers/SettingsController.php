@@ -6,6 +6,7 @@ use App\Helpers\AppHelper;
 use App\Models\RestaurantType;
 use App\Models\Types;
 use App\Models\UserAuth;
+use App\Models\UserRestaurant;
 use App\Models\Users;
 use App\Models\UsersTypes;
 use Illuminate\Http\Request;
@@ -25,7 +26,8 @@ class SettingsController extends Controller
     {
         if (!AppHelper::checkAuth()) return redirect("/no-access");
 
-        $users = Users::join("user_restaurant", "user_restaurant.user_id", "=", "users.id")
+        $users = Users::select("users.id", "users.first_name", "users.last_name")
+            ->join("user_restaurant", "user_restaurant.user_id", "=", "users.id")
             ->where("user_restaurant.restaurant_id", session()->get("restaurant.id"))
             ->where("users.id", "!=", session()->get("user.id"))
             ->get();
@@ -151,6 +153,12 @@ class SettingsController extends Controller
             return response()->json(["status" => "Erro", "message" => "Erro ao retirar-lhe owner"], 400);
         }
 
+        $remUser = UserRestaurant::where("user_id", session()->get("user.id"))->delete();
+
+        if (!$remUser) {
+            return response()->json(["status" => "Erro", "message" => "Erro ao retirar-lhe owner"], 400);
+        }
+
         $setProZero = Users::whereId(session()->get("user.id"))->update([
             "isProfessional" => 0
         ]);
@@ -158,6 +166,10 @@ class SettingsController extends Controller
         if (!$setProZero) {
             return response()->json(["status" => "Erro", "message" => "Erro retirar-lhe de profissional"], 400);
         }
+
+        AppHelper::createNotification($ownerID->id, "As suas permissões foram atualizadas para Owner. Deia logout para ativar estas mudanças");
+
+        AppHelper::logout();
 
         return response()->json(["status" => "Sucesso", "message" => "transferido com sucesso"], 200);
     }

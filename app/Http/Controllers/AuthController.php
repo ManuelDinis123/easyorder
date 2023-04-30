@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AppHelper;
 use App\Models\CartItems;
 use App\Models\invite;
 use App\Models\Restaurants;
@@ -173,18 +174,7 @@ class AuthController extends Controller
      */
     function logout()
     {
-        $logged = Users::whereId(session()->get('user.id'))->update([
-            "logged_in" => 0
-        ]);
-
-        if (session()->get('shoppingCart')) {
-            SideDishes::join('cart_items', 'cart_items.id', '=', "side_dishes.cart_item_id")
-                ->where("cart_id", session()->get('shoppingCart'))->delete();
-            CartItems::where("cart_id", session()->get('shoppingCart'))->delete();
-            Shoppingcart::whereId(session()->get('shoppingCart'))->delete();
-        }
-
-        session()->flush();
+        AppHelper::logout();
 
         return response("/", 200);
     }

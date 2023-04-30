@@ -56,8 +56,6 @@ class HomeController extends Controller
             $gallery = Gallery::where("restaurant_id", $showcase->id)->orderBy("gallery.card_num")->get();
         }
 
-
-
         return view('frontend/home')
             ->with("orders", $mostOrders)
             ->with("showcase", $showcase)
