@@ -46,8 +46,8 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-3"></div>
-            <div class="col-9">
+            <div class="col-lg-3 col-md-3 col-sm-12"></div>
+            <div class="col-lg-9 col-md-9 col-sm-12">
                 <div class="user-activity">
                     <div class="center">
                         <h1>Atividades</h1>
