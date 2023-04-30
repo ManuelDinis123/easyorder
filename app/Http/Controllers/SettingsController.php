@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Models\Activity;
 use App\Models\RestaurantType;
 use App\Models\Types;
 use App\Models\UserAuth;
@@ -32,8 +33,13 @@ class SettingsController extends Controller
             ->where("users.id", "!=", session()->get("user.id"))
             ->get();
 
+        $activities = Activity::where("restaurant_id", session()->get("restaurant.id"))
+            ->join("users", "users.id", "=", "activity.user_id")
+            ->orderBy("created_at", "desc")->get();
+
         return view("frontend/professional/settings/main")
-            ->with("users", $users);
+            ->with("users", $users)
+            ->with("activities", $activities);
     }
 
     /**

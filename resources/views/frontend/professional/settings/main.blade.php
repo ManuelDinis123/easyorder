@@ -8,7 +8,7 @@
     @php
         $usersList = '';
         foreach ($users as $key => $value) {
-            $usersList .= "<div class='select-user unselectable' onclick='selectOwner(" . $value->id . ")'><i class=\"fa-solid fa-caret-right\"></i> " . $value->first_name . " " . $value->last_name . "</div><hr>";
+            $usersList .= "<div class='select-user unselectable' onclick='selectOwner(" . $value->id . ")'><i class=\"fa-solid fa-caret-right\"></i> " . $value->first_name . ' ' . $value->last_name . '</div><hr>';
         }
     @endphp
 
@@ -53,22 +53,16 @@
                         <h1>Atividades</h1>
                     </div>
                     <hr>
-                    <div class="list unselectable">
-                        <div class="item">
-                            <h5>Username</h5>
-                            <span>Ação realizada por esse user</span>
-                        </div>
-                        <hr>
-                        <div class="item">
-                            <h5>Username</h5>
-                            <span>Ação realizada por esse user</span>
-                        </div>
-                        <hr>
-                        <div class="item">
-                            <h5>Username</h5>
-                            <span>Ação realizada por esse user</span>
-                        </div>
-                        <hr>
+                    <div class="list unselectable" style="padding-right: 10px">
+                        @foreach ($activities as $act)
+                            <div class="item">
+                                <h5>{{$act->first_name . ' ' . $act->last_name}} @if (isset($act->link))
+                                    <span><i class="fa-solid fa-eye" style="color: #1C46B2;" onclick="window.location.href='{{$act->link}}'"></i></span>
+                                @endif</h5>
+                                <span>{{$act->info}} <span style="float: right">{{$act->created_at}}</span></span>
+                            </div>
+                            <hr>
+                        @endforeach
                     </div>
                 </div><br>
                 <hr>
@@ -91,7 +85,7 @@
         }
 
         $("#confirmAction").on('click', () => {
-            if($("#confirmName").val()!="{!!session()->get('restaurant.name')!!}"){
+            if ($("#confirmName").val() != "{!! session()->get('restaurant.name') !!}") {
                 errorToast("Erro", "nome incorreto");
                 return;
             }
@@ -105,7 +99,7 @@
                 }
             }).done((res) => {
                 successToast(res.status, res.message);
-                window.location.href="/";
+                window.location.href = "/";
             }).fail((err) => {
                 errorToast(err.responseJSON.status, err.responseJSON.message)
             })

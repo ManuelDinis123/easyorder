@@ -220,7 +220,7 @@ class AppHelper
     }
 
     /**
-     * Creates a notification for user
+     * Records an activity
      * 
      * @param String info
      * @param String link (optional)
