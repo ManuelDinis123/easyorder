@@ -13,7 +13,12 @@
     }
 
     .active::before {
-        content: none
+        content: none;
+    }
+
+    .active {
+        background-color: #1C46B2 !important;
+        border-color: #1C46B2 !important;
     }
 </style>
 
