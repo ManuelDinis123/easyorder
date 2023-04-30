@@ -42,7 +42,7 @@
     ])
     @endcomponent
 
-    @include('layouts.professional.tabs', ['tab' => 'general'])
+    @include('layouts.professional.tabs', ['tab' => 'admin'])
 
     <div class="container">
         <div class="row">

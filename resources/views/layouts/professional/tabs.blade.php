@@ -17,10 +17,17 @@
     }
 </style>
 
-
 <ul class="list-group tabs">
-    <li onclick="redirect('/professional/configuracoes/geral')" class="list-group-item list-group-item-action {{ $tab == 'general' ? 'active' : '' }}">Geral</li>
-    <li onclick="redirect('/professional/configuracoes/user')" class="list-group-item list-group-item-action {{ $tab == 'users' ? 'active' : '' }}">Utilizador</li>
+    @if ( session()->get('type.edit_page') || session()->get('type.owner') || session()->get('type.admin'))
+        <li onclick="redirect('/professional/configuracoes/geral')"
+            class="list-group-item list-group-item-action {{ $tab == 'general' ? 'active' : '' }}">Geral</li>
+    @endif
+    <li onclick="redirect('/professional/configuracoes/user')"
+        class="list-group-item list-group-item-action {{ $tab == 'users' ? 'active' : '' }}">Pessoal</li>
+    @if (session()->get('type.owner') || session()->get('type.admin'))
+        <li onclick="redirect('/professional/configuracoes/admin')"
+            class="list-group-item list-group-item-action {{ $tab == 'admin' ? 'active' : '' }}">Admin</li>
+    @endif
 </ul>
 
 

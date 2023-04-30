@@ -18,14 +18,17 @@ class SettingsController extends Controller
 {
     function index()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
 
         return view("frontend/professional/settings/user");
     }
 
-    function main()
+    function admin()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            return redirect("/");
+        }
 
         $users = Users::select("users.id", "users.first_name", "users.last_name")
             ->join("user_restaurant", "user_restaurant.user_id", "=", "users.id")
@@ -37,9 +40,19 @@ class SettingsController extends Controller
             ->join("users", "users.id", "=", "activity.user_id")
             ->orderBy("created_at", "desc")->get();
 
-        return view("frontend/professional/settings/main")
+        return view("frontend/professional/settings/admin")
             ->with("users", $users)
             ->with("activities", $activities);
+    }
+
+    function general()
+    {
+        if (!AppHelper::checkAuth()) return redirect("/");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['edit_page', 'admin', 'owner'], false))) {
+            return redirect("/");
+        }
+
+        return view("frontend/professional/settings/general");
     }
 
     /**

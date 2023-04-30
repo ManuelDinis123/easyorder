@@ -5,9 +5,7 @@
 
 @section('content')
 
-@if (session()->get('type.owner') || session()->get('type.admin'))
-    @include('layouts.professional.tabs', ['tab'=>'users'])
-@endif
+@include('layouts.professional.tabs', ['tab'=>'users'])
 
 <div class="user-settings">
     <div class="generalInfo">
