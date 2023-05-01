@@ -78,7 +78,7 @@
 
     <div class="container">
         <label class="dpe_lbl">Data para entrega:</label>
-        <input class="form-control dpe" type="datetime-local" id="deadline" name="deadline">
+        <input class="form-control dpe" type="datetime-local" min="{{ date('Y-m-d\TH:i') }}" max="{{ date('Y-m-d\TH:i', strtotime('+30 days')) }}" id="deadline" name="deadline">
     </div>
 
 
