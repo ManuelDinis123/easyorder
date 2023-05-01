@@ -36,7 +36,7 @@
                                     transition: all 0.5s;
                                     -webkit-transition: all 0.5s;
                                     position: relative;
-                                    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 47.4%, #000000 100%), url("{{ isset($item['imageUrl'])?$item['imageUrl']:'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}");
+                                    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 47.4%, #000000 100%), url("{{ isset($item['imageUrl']) ? $item['imageUrl'] : 'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}");
                                     background-size: cover;
                                     background-position: center;
                                     border-radius: 31px;
@@ -46,13 +46,10 @@
                             <div class="item-card">
                                 <div id="{{ $item['id'] }}" class="item{{ $item['id'] }} menu_card"
                                     style="padding:0px 10px; margin-bottom:24px;">
-                                    <div class="row item-cnts g-0 unselectable">
-                                        <div class="col-10">
-                                            <span class="item-name unselectable">{{ $item['name'] }}</span>
-                                        </div>
-                                        <div class="col-2">
-                                            <span class="item-price unselectable">{{ $item['price'] + 0 }}€</span>
-                                        </div>
+                                    <div class="item-cnts g-0 unselectable">
+                                        <span class="item-name unselectable">{{ $item['name'] }}</span>
+                                        <span class="item-price unselectable"
+                                            style="float: left">{{ $item['price'] + 0 }}€</span>
                                     </div>
                                 </div>
                                 <div class="mt-2 buttons-contain" id="buttons{{ $item['id'] }}">
@@ -128,7 +125,7 @@
             }
         }).done((res) => {
             if (isRemove && res == "deleted") {
-                $("#remove"+itemID).attr("disabled", "disabled");
+                $("#remove" + itemID).attr("disabled", "disabled");
                 $("#" + itemID).removeClass("give-space");
                 $("#buttons" + itemID).removeClass("show-buttons");
                 $("#btncontain" + itemID).addClass("hide-btn-list");
@@ -146,7 +143,7 @@
                 "restaurantID": "{{ $info['id'] }}",
             }
         }).done((res) => {
-            if(res=="no items found...") return;
+            if (res == "no items found...") return;
             $.each(res, (key, val) => {
                 $("#" + val.id).addClass("give-space");
                 $("#buttons" + val.id).addClass("show-buttons");
@@ -173,7 +170,7 @@
         $(".rmlibtn").on('click', function() {
             var item = this.id.replace("buttonlirem", "");
             $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) - 1);
-            if($("#item_quantity"+item).val()<0) {
+            if ($("#item_quantity" + item).val() < 0) {
                 $("#item_quantity" + item).val(0);
                 return;
             }
@@ -186,7 +183,7 @@
 
         $(".menu_card").on('click', function() {
             $("#btncontain" + this.id).removeClass("hide-btn-list");
-            $("#remove"+this.id).removeAttr("disabled", "");
+            $("#remove" + this.id).removeAttr("disabled", "");
             $("#qntli" + this.id).removeClass("visually-hidden");
             $("#" + this.id).addClass("give-space");
             $("#buttons" + this.id).addClass("show-buttons");
@@ -208,7 +205,7 @@
         $(".rem-btns").on('click', function() {
             var item = this.id.replace("remove", ""); // Extract the item id from the btn id
             $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) - 1);
-            if($("#item_quantity"+item).val()<0) {
+            if ($("#item_quantity" + item).val() < 0) {
                 $("#item_quantity" + item).val(0);
                 return;
             }
@@ -219,7 +216,7 @@
         });
         $(".add-btn").on('click', function() {
             var item = this.id.replace("additem", ""); // Extract the item id from the btn id
-            $("#remove"+item).removeAttr("disabled", "");
+            $("#remove" + item).removeAttr("disabled", "");
             cartAddRemove(item);
             $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) + 1);
             $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
