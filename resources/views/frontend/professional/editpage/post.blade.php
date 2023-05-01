@@ -41,7 +41,6 @@
             <div class="loader2"></div>
         </div>
     </div>
-
     <div class="container">
         <div class="center">
             <input type="text" class="form-control title-input" id="post_title" placeholder="Titulo da Publicação"

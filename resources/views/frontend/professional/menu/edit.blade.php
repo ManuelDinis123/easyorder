@@ -91,11 +91,11 @@
     $disable = session()->get('type.write_menu') || session()->get('type.owner') || session()->get('type.admin') ? '' : 'disabled';
 @endphp
 
-@section('content')
-
+@section('content')    
     <div class="row">
         <div class="col-3">
-            <span class="btn is-selected" id="geral">Geral</span>
+            <span><a href="/professional/ementa"><i style="position:absolute; top:22px" class="fa-solid fa-angle-left theBACKBUTTON"></i></a></span>
+            <span style="margin-left:27px" class="btn is-selected" id="geral">Geral</span>
             <span class="btn not-selected" id="ing">Acompanhamentos</span>
         </div>
         @if ($canWrite)

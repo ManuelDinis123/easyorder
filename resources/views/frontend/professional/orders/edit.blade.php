@@ -81,8 +81,9 @@
 @endcomponent
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-12">
+<a href="/professional/encomendas"><i class="fa-solid fa-angle-left theBACKBUTTON"></i></a>
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12">
             <span>Pedido de</span>
             <h3 style="font-weight: 700">{{ $first_name . ' ' . $last_name }}</h3>
         </div>
