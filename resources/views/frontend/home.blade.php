@@ -15,7 +15,7 @@
                 @foreach ($orders as $o)
                     <style>
                         .card{{ $o['id'] }} {
-                            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 31.77%, #000000 100%), url("{{ $o['imageUrl'] }}");
+                            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 31.77%, #000000 100%), url("{{ isset($o['imageUrl'])?$o['imageUrl']:'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}");
                             background-size: cover;
                             background-position: center;
                             border-radius: 14px;
@@ -132,7 +132,7 @@
         setInterval(function() {
             i = (i + 1) % menuImgs.length;
             pic.fadeOut(350, function() {
-                $(this).attr("src", menuImgs[i]['imageUrl']);
+                $(this).attr("src", (menuImgs[i]['imageUrl']!=null?menuImgs[i]['imageUrl']:'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png'));
                 $(this).fadeIn(1150);
             });
         }, 5000);

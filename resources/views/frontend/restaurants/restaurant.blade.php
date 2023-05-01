@@ -52,7 +52,7 @@
                             background-image: linear-gradient(180deg,
                                     rgba(0, 0, 0, 0) 31.77%,
                                     #000000 100%),
-                                url("{{ $item['imageUrl'] }}");
+                                url("{{ isset($item['imageUrl'])?$item['imageUrl']:'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}");
                             background-size: cover;
                             background-position: center;
                         }

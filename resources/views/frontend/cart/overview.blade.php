@@ -46,7 +46,7 @@
         @foreach ($items['items'] as $item)
             <div class="item-card-container" id="card{{ $item['item_id'] }}">
                 <div class="item">
-                    <img src="{{ $item['imageUrl'] }}" class="item-img">
+                    <img src="{{ isset($item['imageUrl'])?$item['imageUrl']:'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}" class="item-img">
                     <div class="item-info">
                         <h3>{{ $item['name'] }} <span id="quantity_for_{{ $item['item_id'] }}">x
                                 {{ $item['quantity'] }}</span></h3>
