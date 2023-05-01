@@ -31,7 +31,11 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/cart.css') }}">
-
+    <div class="loaderFADE visually-hidden">
+        <div class="loader-container" id="lc">
+            <div class="loader2"></div>
+        </div>
+    </div>
     <div class="overview-header">
         <h1 class="oh-h1">Carinho de Compras <span id="count_header">{{ $count }} Items</span></h1>
         <input type="hidden" id="count" value="{{ $count }}">
@@ -101,12 +105,11 @@
                 alert('Por favor, selecione uma data para entrega.');
                 return false;
             }
-        }
-
-        // TODO: Later this should redirect to payment page and the confirm should be done there
+        }        
         $("#confirmOrder").on('click', () => {
             var isInvalid = animateErr(["deadline"]);
             if (isInvalid) return;
+            $(".loaderFADE").removeClass("visually-hidden");
             $("#hiddenDeadline").val($("#deadline").val());
 
             $("#check_out_form").click();

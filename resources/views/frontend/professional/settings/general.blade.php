@@ -19,7 +19,7 @@
     @if ($info['banner'])
         <style>
             #bannerInput {
-                background: url("{!! $info['banner'] !!}") !important;
+                background: url("{!! $info['banner'] !!}");
                 background-size: cover !important;
                 background-position: center !important;
             }
@@ -76,9 +76,15 @@
         logoImgFile = null;
         $('#fileInputLogo').on('change', async function() {
             $(".loaderFADE").removeClass("visually-hidden");
-            await createBase64(this.files[0], "res-img")
+            await createBase64(this.files[0])
                 .then(imgFile => {
                     logoImgFile = imgFile;
+                    $(".res-img").css("background", "url('" + imgFile.dataURL + "')");
+                    $(".res-img").css("background-size", "cover");
+                    $(".res-img").css("background-position", "center");
+                }).catch((err)=>{
+                    errorToast("Erro", "ocorreu um erro inesperado!")
+                    $(".loaderFADE").addClass("visually-hidden")
                 })
             $(".loaderFADE").addClass("visually-hidden");
             console.log(logoImgFile);
@@ -86,9 +92,15 @@
         bannerImgFile = null;
         $('#fileInputBanner').on('change', async function() {
             $(".loaderFADE").removeClass("visually-hidden");
-            await createBase64(this.files[0], "banner")
+            await createBase64(this.files[0])
                 .then(imgFile => {
                     bannerImgFile = imgFile;
+                    $(".banner").css("background", "url('" + imgFile.dataURL + "')");
+                    $(".banner").css("background-size", "cover");
+                    $(".banner").css("background-position", "center");
+                }).catch((err)=>{
+                    errorToast("Erro", "ocorreu um erro inesperado!")
+                    $(".loaderFADE").addClass("visually-hidden")
                 })
             $(".loaderFADE").addClass("visually-hidden");
             console.log(bannerImgFile);
@@ -102,15 +114,12 @@
         })
 
         // Handle the image files
-        function createBase64(file, classID) {
+        function createBase64(file) {
             return new Promise((resolve, reject) => {
                 var reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function() {
                     var base64 = reader.result;
-                    $("." + classID).css("background", "url('" + base64 + "')");
-                    $("." + classID).css("background-size", "cover");
-                    $("." + classID).css("background-position", "center");
                     var imgFile = {
                         "dataURL": base64,
                         "type": file.type

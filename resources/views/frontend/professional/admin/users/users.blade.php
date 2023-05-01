@@ -33,6 +33,11 @@
 @endphp
 
 @section('content')
+    <div class="loaderFADE visually-hidden">
+        <div class="loader-container" id="lc">
+            <div class="loader2"></div>
+        </div>
+    </div>
     <div class="container">
         <div class="t-contain">
             <div class="table-card" style="width: 75%">
@@ -79,7 +84,8 @@
         $("#confirm").on('click', () => {
             hasEmpty = animateErr(["invite_email", "types"]);
             if (hasEmpty) return;
-
+            $("#inviteModal").modal("toggle");
+            $(".loaderFADE").removeClass("visually-hidden");
             $.ajax({
                 method: 'post',
                 url: '/professional/admin/invite_users',
@@ -92,6 +98,7 @@
                 successToast(res.title, res.message);
                 $("#invite_email").val("");
                 $("#types").val(0);
+                $(".loaderFADE").addClass("visually-hidden");
             }).fail((err) => {
                 errorToast(err.responseJSON.title, err.responseJSON.message);
             })
@@ -176,7 +183,9 @@
                         if (row['admin'] == 1 && {{ session()->get('type.owner') }} != 1)
                             isDisabled = " disabled ";
 
-                        if (!{{ $canWrite ? 1 : 0 }}&&!{{session()->get('type.ban_users')?1:0}}) isDisabled = " disabled ";
+                        if (!{{ $canWrite ? 1 : 0 }} && !
+                            {{ session()->get('type.ban_users') ? 1 : 0 }}) isDisabled =
+                            " disabled ";
 
                         return "<div class=\"form-check form-switch\">\
                             <input class=\"form-check-input switchActive\" type=\"checkbox\" role=\"switch\" id=\"check" +
