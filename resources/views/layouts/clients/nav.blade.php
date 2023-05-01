@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="{{ asset('css/nav.css') }}">
-
+<title>EasyOrder</title>
 <header class="header nav-extra" id="header">
     <div class="logo">
         <img src="{{ asset('img/eologo.svg') }}" id="eoLogo" style="cursor:pointer;">
@@ -19,7 +19,10 @@
         <div class="dropdown">
             <a href="#" class="nav-item" id="userDropdown" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <i class="fa-solid fa-user"></i>
+                {{-- <i class="fa-solid fa-user"></i> --}}
+                <img src="{{ asset('img/pfp/' . session()->get('user.pfp')) }}"
+                onerror="this.src = '{{ asset('img/pfp/defaultpfp.png') }}';" class="navbar-pfp n-icons"
+                id="userIco">
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                 <li><a class="dropdown-item" href="/configuracoes/user"><i class="fa-regular fa-user"></i> Perfil</a></li>

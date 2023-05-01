@@ -1,3 +1,5 @@
+<link rel="icon" href="{{ asset('img/eologo.svg') }}">
+
 {{-- Montserrat Font --}}
 <link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet">
 

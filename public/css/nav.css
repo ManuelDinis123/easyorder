@@ -117,3 +117,12 @@ a {
     left: 5px;
     font-weight: 900 !important;
 }
+
+.navbar-pfp {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: flex;
+    justify-content: center;
+}
