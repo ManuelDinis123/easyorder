@@ -133,7 +133,7 @@ class UserConfigsController extends Controller
         if ($email->type == 0) return response()->json(["title" => "Erro", "message" => "Deve escolher um tipo para este utilizador"], 400);
 
         // Check if already sent an invite to that email
-        $invitedAlready = invite::where('email', $email->email)->get();
+        $invitedAlready = invite::where('email', $email->email)->where("restaurant_id", session()->get("restaurant.id"))->get();
 
         if (count($invitedAlready) > 0) return response()->json(["title" => "Erro", "message" => "Já mando um convite para esse email"], 400);
 

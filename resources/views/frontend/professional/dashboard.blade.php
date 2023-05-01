@@ -12,10 +12,10 @@
                         <h4>Rendimento de {{ $month['month'] }} <i class="fa-solid fa-money-bill-wave"></i></h4>
                     </div>
                     <hr class="blue">
-                    <span>Rendimento Bruto: {{ $month['rendimento'] }}€</span><br>
-                    <span>Despesas: {{ $month['despesas'] }}€</span>
+                    <span>Rendimento Bruto: {{ $month['rendimento']?$month['rendimento']:0 }}€</span><br>
+                    <span>Despesas: {{ $month['despesas']?$month['despesas']:0 }}€</span>
                     <hr>
-                    <span class="lucro1">Lucro: <span class="lucro2">{{ $month['lucro'] }}€</span> </span>
+                    <span class="lucro1">Lucro: <span class="lucro2">{{ $month['lucro']?$month['lucro']:0 }}€</span> </span>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-12">

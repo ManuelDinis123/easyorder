@@ -101,6 +101,7 @@
                 $(".loaderFADE").addClass("visually-hidden");
             }).fail((err) => {
                 errorToast(err.responseJSON.title, err.responseJSON.message);
+                $(".loaderFADE").addClass("visually-hidden");
             })
         })
 
