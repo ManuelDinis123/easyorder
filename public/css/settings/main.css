@@ -61,6 +61,8 @@
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s;
+    background-size: cover;
+    background-position: center;
 }
 
 .banner:hover {
@@ -135,5 +137,40 @@
     }
     .textareawidth{
         width: 100%;
+    }
+}
+
+/* Loader */
+
+div.loaderFADE {
+    opacity: 0.5;
+    background: #000;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+}
+
+.loader2 {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid rgba(233, 233, 233, 0.897);
+    border-top-color: transparent;
+    animation: rot1 1.2s linear infinite;
+}
+
+@keyframes rot1 {
+    to {
+        transform: rotate(360deg);
     }
 }

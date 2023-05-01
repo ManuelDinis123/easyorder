@@ -7,11 +7,11 @@
         left: 0;
         height: 234px;
         width: 100%;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 48.44%, #000000ce 100%), url("{{ asset('img/banner.png') }}");
         filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));
-        background-size: cover;
-        background-position: 0px;
+        background-size: cover !important;
+        background-position: center !important;
         z-index: 0;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 48.44%, #000000ce 100%), {{isset($info['banner']) ? "url(".$info['banner'].")" : "#6e6e6e"}};
     }
 </style>
 

@@ -138,6 +138,7 @@ Route::get('/professional/admin/options', [OptionsController::class, 'index']);
 
 //Settings
 Route::get('/professional/configuracoes/geral', [SettingsController::class, 'general']);
+Route::post('/professional/configuracoes/geral/save', [SettingsController::class, 'saveGeneralChanges'])->name("geralSave");
 Route::get('/professional/configuracoes/admin', [SettingsController::class, 'admin']);
 Route::post('/professional/configuracoes/novoowner', [SettingsController::class, 'transferOwnerShip'])->name("novoowner");
 Route::get('/professional/configuracoes/user', [SettingsController::class, 'index']);

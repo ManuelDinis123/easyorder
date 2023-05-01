@@ -87,6 +87,7 @@ class AppHelper
                     $hasPerm = 0;
                 } else if (!$all) {
                     $hasPerm = 1;
+                    break;
                 }
             }
         } else {

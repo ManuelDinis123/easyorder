@@ -59,7 +59,7 @@
                     </style>
                     <div class="p-card pcard{{ $item['id'] }}">
                         <div class="price-container">
-                            <h3>{{ $item['price'] }}€</h3>
+                            <h3>{{ $item['price']+0 }}€</h3>
                         </div>
                     </div>
                 @endforeach

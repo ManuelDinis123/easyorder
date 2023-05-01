@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
 use App\Models\Activity;
+use App\Models\Restaurants;
 use App\Models\RestaurantType;
 use App\Models\Types;
 use App\Models\UserAuth;
@@ -48,11 +49,51 @@ class SettingsController extends Controller
     function general()
     {
         if (!AppHelper::checkAuth()) return redirect("/");
-        if ((!AppHelper::checkUserType(session()->get("type.id"), ['edit_page', 'admin', 'owner'], false))) {
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'edit_page'], false))) {
             return redirect("/");
         }
 
-        return view("frontend/professional/settings/general");
+        $info = Restaurants::whereId(session()->get("restaurant.id"))->get()->first();
+
+        return view("frontend/professional/settings/general")->with("info", $info);
+    }
+
+    /**
+     * Save changes made in general tab
+     * 
+     * @param \Illuminate\Http\Request info
+     * @return \Illuminate\Http\Response status
+     */
+    function saveGeneralChanges(Request $info)
+    {
+        if (!AppHelper::checkAuth()) return redirect("/");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'edit_page'], false))) {
+            return redirect("/");
+        }
+
+        if(AppHelper::hasEmpty([$info->name, $info->description])){
+            return response()->json(["title" => "Erro", "message" => "Preencha todos os campos!"], 400);
+        }
+
+        $newData = [
+            "name" => $info->name, 
+            "description" => $info->description
+        ];
+        if($info->logo_url != null){
+            $newData['logo_url'] = $info->logo_url['dataURL'];
+            Restaurants::whereId(session()->get("restaurant.id"))->update([
+                "logo_name" => null,            
+             ]);
+        }
+        if($info->banner!=null){
+            $newData['banner'] = $info->banner['dataURL'];
+        }
+        $result = Restaurants::whereId(session()->get("restaurant.id"))->update($newData);
+
+        if(!$result){
+            return response()->json(["title" => "Erro", "message" => "Erro a guardar as novas informações"], 500);
+        }
+        return response()->json(["title" => "Sucesso", "message" => "Informação guardada com sucesso!"]);
     }
 
     /**
@@ -110,7 +151,8 @@ class SettingsController extends Controller
                 'birthdate' => $request->values[2],
                 'email' => $request->values[3],
                 'isProfessional' => session()->get('user.isProfessional'),
-                'pfp' => session()->get('user.pfp')
+                'pfp' => session()->get('user.pfp'),
+                'active' => session()->get('user.active')
             ];
 
             // Update session
