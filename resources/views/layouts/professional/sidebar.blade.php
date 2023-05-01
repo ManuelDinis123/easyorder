@@ -24,7 +24,7 @@
                     </div>
                     <div class="custom-dpdown-body">
                         <span class="custom-dpdown-item-container"><a class="custom-dpdown-item"
-                                href="/professional/configuracoes/user"><i class="fa-solid fa-user-gear"></i>
+                                href="/configuracoes/user"><i class="fa-solid fa-user-gear"></i>
                                 Configurações</a></span>
                         <span class="custom-dpdown-item-container"><a class="custom-dpdown-item" href="/"><i
                                     class="fa-solid fa-arrow-up-right-from-square"></i> EasyOrder</a></span>

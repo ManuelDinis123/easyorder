@@ -19,7 +19,7 @@ class SettingsController extends Controller
 {
     function index()
     {
-        if (!AppHelper::checkAuth()) return redirect("/");
+        if (!AppHelper::hasLogin()) return redirect("/");
 
         return view("frontend/professional/settings/user");
     }
@@ -124,7 +124,7 @@ class SettingsController extends Controller
      */
     function update(Request $request)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::hasLogin()) return redirect("/no-access");
         if ($request->update) {
             // Check if any of the values are empty
             if (AppHelper::hasEmpty($request->values)) {

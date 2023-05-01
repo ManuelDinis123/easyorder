@@ -44,7 +44,7 @@
     <button class="btn {{ $tab == 'general' ? 'btn-activation' : '' }}"
         onclick="redirect('/professional/configuracoes/geral')">Geral</button>
     <button class="btn {{ $tab == 'users' ? 'btn-activation' : '' }}"
-        onclick="redirect('/professional/configuracoes/user')">Pessoal</button>
+        onclick="redirect('/configuracoes/user')">Pessoal</button>
     <button class="btn {{ $tab == 'admin' ? 'btn-activation' : '' }}"
         onclick="redirect('/professional/configuracoes/admin')">Admin</button>
 </div>
@@ -54,7 +54,7 @@
         <li onclick="redirect('/professional/configuracoes/geral')"
             class="list-group-item list-group-item-action {{ $tab == 'general' ? 'active' : '' }}">Geral</li>
     @endif
-    <li onclick="redirect('/professional/configuracoes/user')"
+    <li onclick="redirect('/configuracoes/user')"
         class="list-group-item list-group-item-action {{ $tab == 'users' ? 'active' : '' }}">Pessoal</li>
     @if (session()->get('type.owner') || session()->get('type.admin'))
         <li onclick="redirect('/professional/configuracoes/admin')"

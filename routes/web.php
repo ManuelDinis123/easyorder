@@ -141,7 +141,7 @@ Route::get('/professional/configuracoes/geral', [SettingsController::class, 'gen
 Route::post('/professional/configuracoes/geral/save', [SettingsController::class, 'saveGeneralChanges'])->name("geralSave");
 Route::get('/professional/configuracoes/admin', [SettingsController::class, 'admin']);
 Route::post('/professional/configuracoes/novoowner', [SettingsController::class, 'transferOwnerShip'])->name("novoowner");
-Route::get('/professional/configuracoes/user', [SettingsController::class, 'index']);
+Route::get('/configuracoes/user', [SettingsController::class, 'index']);
 Route::post('/professional/updateusersettings', [SettingsController::class, 'update'])->name("updateusersettings");
 Route::post('/professional/fileupload', [SettingsController::class, 'fileupload'])->name("fileupload");
 
