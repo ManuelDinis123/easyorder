@@ -12,6 +12,9 @@
     </div>
     <div class="center mt-3">
         <div class="orders-card" id="pending">
+            @if (count($orders) == 0)
+                <span class="text-muted">Parece que não tem encomendas!</span>
+            @endif
             @foreach ($orders as $o)
                 <div class="order">
                     <div class="order-header">
@@ -32,6 +35,9 @@
             @endforeach
         </div>
         <div class="orders-card visually-hidden" id="done">
+            @if (count($closed) == 0)
+                <span class="text-muted">Parece que não tem encomendas!</span>
+            @endif
             @foreach ($closed as $o)
                 <div class="order">
                     <div class="order-header">
@@ -52,6 +58,9 @@
             @endforeach
         </div>
         <div class="orders-card visually-hidden" id="cancelled">
+            @if (count($cancelled) == 0)
+                <span class="text-muted">Parece que não tem encomendas!</span>
+            @endif
             @foreach ($cancelled as $o)
                 <div class="order">
                     <div class="order-header">
