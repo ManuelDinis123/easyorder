@@ -103,8 +103,6 @@
 @stop
 
 <script>
-    // TODO: Refactor this code (it's so bad!!)
-
     function changeTab(id, view, idrem, viewrem) {
         if (!$("#" + view).hasClass("hide-view visually-hidden")) return;
 
@@ -112,6 +110,35 @@
         $("#" + idrem).removeClass("choosen");
         $("#" + id).addClass("choosen");
         $("#" + view).removeClass("hide-view visually-hidden");
+    }
+
+    // Expands menu cards and changes quantity
+    function expandMenuItem(itemID, quantity = 0, hide) {
+        if (hide) {
+            $("#" + itemID).removeClass("give-space");
+            $("#buttons" + itemID).removeClass("show-buttons");
+            $("#qnt" + itemID).text(0 + " no cart");
+            $("#item_quantity" + itemID).val(0);
+        } else if (quantity > 0) {
+            $("#" + itemID).addClass("give-space");
+            $("#buttons" + itemID).addClass("show-buttons");
+            $("#qnt" + itemID).text(quantity + " no cart");
+            $("#item_quantity" + itemID).val(quantity);
+        }
+    }
+
+    function expandListItem(itemID, quantity = 0, hide) {
+        if (hide) {
+            $("#btncontain" + itemID).addClass("hide-btn-list");
+            $("#remove" + itemID).attr("disabled", "disabled");
+            $("#qntli" + itemID).addClass("visually-hidden");
+        } else if (quantity > 0) {
+            $("#btncontain" + itemID).removeClass("hide-btn-list");
+            $("#remove" + itemID).removeAttr("disabled", "");
+            $("#qntli" + itemID).removeClass("visually-hidden");
+            $("#item_quantity" + itemID).val(quantity);
+            $("#qntli" + itemID).text(" x " + quantity);
+        }
     }
 
     function cartAddRemove(itemID, isRemove = 0) {
@@ -125,12 +152,13 @@
             }
         }).done((res) => {
             if (isRemove && res == "deleted") {
-                $("#remove" + itemID).attr("disabled", "disabled");
-                $("#" + itemID).removeClass("give-space");
-                $("#buttons" + itemID).removeClass("show-buttons");
-                $("#btncontain" + itemID).addClass("hide-btn-list");
-                $("#qntli" + itemID).addClass("visually-hidden");
+                expandMenuItem(itemID, 0, true)
+                expandListItem(itemID, 0, true)
             }
+            expandMenuItem(itemID, res.quantity, false)
+            expandListItem(itemID, res.quantity, false)
+            $("#cart_total").text(isRemove ? parseInt($("#cart_total").text()) - 1 : parseInt($("#cart_total")
+                .text()) + 1);
         })
     }
 
@@ -145,26 +173,14 @@
         }).done((res) => {
             if (res == "no items found...") return;
             $.each(res, (key, val) => {
-                $("#" + val.id).addClass("give-space");
-                $("#buttons" + val.id).addClass("show-buttons");
-                $("#qnt" + val.id).text(val.quantity + " no cart");
-                $("#item_quantity" + val.id).val(val.quantity);
+                expandMenuItem(val.id, val.quantity, false)
+            expandListItem(val.id, val.quantity, false)
             })
         })
 
         $(".menu-item").on('click', function() {
             var item = this.id.replace("li-", "");
-            $("#" + item).addClass("give-space");
-            $("#buttons" + item).addClass("show-buttons");
-
-            $("#btncontain" + item).removeClass("hide-btn-list");
-            $("#qntli" + item).removeClass("visually-hidden");
             cartAddRemove(item);
-            $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) + 1);
-            $("#qntli" + item).text(" x " + $("#item_quantity" + item).val());
-
-            $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
-            $("#cart_total").text(parseInt($("#cart_total").text()) + 1);
         })
 
         $(".rmlibtn").on('click', function() {
@@ -175,23 +191,10 @@
                 return;
             }
             cartAddRemove(item, 1);
-            $("#qntli" + item).text(" x " + $("#item_quantity" + item).val());
-
-            $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
-            $("#cart_total").text(parseInt($("#cart_total").text()) - 1);
         })
 
         $(".menu_card").on('click', function() {
-            $("#btncontain" + this.id).removeClass("hide-btn-list");
-            $("#remove" + this.id).removeAttr("disabled", "");
-            $("#qntli" + this.id).removeClass("visually-hidden");
-            $("#" + this.id).addClass("give-space");
-            $("#buttons" + this.id).addClass("show-buttons");
             cartAddRemove(this.id);
-            $("#item_quantity" + this.id).val(parseInt($("#item_quantity" + this.id).val()) + 1);
-            $("#qnt" + this.id).text($("#item_quantity" + this.id).val() + " no cart");
-            $("#qntli" + this.id).text(" x " + $("#item_quantity" + this.id).val());
-            $("#cart_total").text(parseInt($("#cart_total").text()) + 1);
         })
 
         $(".menu-card-ico").on('click', function() {
@@ -210,18 +213,11 @@
                 return;
             }
             cartAddRemove(item, 1);
-            $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
-            $("#qntli" + item).text(" x " + $("#item_quantity" + item).val());
-            $("#cart_total").text(parseInt($("#cart_total").text()) - 1);
         });
         $(".add-btn").on('click', function() {
             var item = this.id.replace("additem", ""); // Extract the item id from the btn id
             $("#remove" + item).removeAttr("disabled", "");
             cartAddRemove(item);
-            $("#item_quantity" + item).val(parseInt($("#item_quantity" + item).val()) + 1);
-            $("#qnt" + item).text($("#item_quantity" + item).val() + " no cart");
-            $("#qntli" + item).text(" x " + $("#item_quantity" + item).val());
-            $("#cart_total").text(parseInt($("#cart_total").text()) + 1);
         });
     });
 </script>

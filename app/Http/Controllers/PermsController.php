@@ -44,6 +44,7 @@ class PermsController extends Controller
             return redirect("/professional");
         }
         if(!$this->can_view_type($id->id)) return redirect("/professional/admin/permissions");
+        if($id->id == session()->get("type.id")) return redirect("/professional/admin/permissions");
 
 
         $type = Types::whereId($id->id)->get()->first();

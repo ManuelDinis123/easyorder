@@ -99,7 +99,9 @@ class CartController extends Controller
             ->join('menu_item_ingredients', 'menu_item_ingredients.id', '=', 'side_dishes.side_id')
             ->where('side_dishes.cart_item_id', $data->cart_item_id)->get()->first();
 
-        return response()->json(["title" => "Sucesso", "message" => "Adicionado ao carrinho com sucesso!", "to_add" => $prices], 200);
+        $quant = CartItems::where("item_id",$data->item_id)->where("cart_id", session()->get("shoppingCart"))->get()->first();
+
+        return response()->json(["title" => "Sucesso", "message" => "Adicionado ao carrinho com sucesso!", "to_add" => $prices, "quantity"=>$quant->quantity], 200);
     }
 
     /**
