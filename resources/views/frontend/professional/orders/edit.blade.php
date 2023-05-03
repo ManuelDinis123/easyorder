@@ -310,7 +310,7 @@
                     data: null,
                     width: "30%",
                     render: function(data, type, row, meta) {
-                        if (!{{ session()->get('type.write_orders') }}) return "";
+                        if (!{{ session()->get('type.write_orders')?session()->get('type.write_orders'):'0' }}) return "";
                         return (!row['done']) ?
                             '<button class="btn btn-primary table-btn"' +
                             "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : '' }}" +

@@ -1,6 +1,6 @@
 @include('layouts.includes')
 <link rel="stylesheet" href="{{ asset('css/invites/accepted.css') }}">
-
+<title>Convidado</title>
 @if (isset($hasRestaurant))
     <div class="context">
         <div class="all">
