@@ -440,4 +440,60 @@ class AuthController extends Controller
         Mail::to($sendToEmail)->send(new forgotpswMail($token));
         return response()->json(["title" => "Sucesso", "message" => "Email para repor password enviado"], 200);
     }
+
+    /**
+     * Forgot password page
+     * 
+     * @return View
+     */
+    function forgotPass(Request $token)
+    {
+        $fullData = [];
+
+        // Get info
+        $info = Forgotpassword::where('token', $token->route('token'))
+            ->get()
+            ->first();
+
+        $emailExists = Users::where("email", $info->email)->get();
+        if(count($emailExists)<=0){
+            return redirect("/");
+        }
+
+        if (!$info) return redirect("/");
+
+        return view("frontend.forgot")->with("email", $info->email)->with("token", $token->route('token'));
+    }
+
+    /**
+     * Save new password
+     * 
+     * @param \Illuminate\Http\Request password
+     * @return \Illuminate\Http\Response status
+     */
+    function saveNewPassword(Request $req)
+    {
+        if(!$req->password){
+            return response()->json(["title" => "Erro", "message" => "insira uma password!"], 500);
+        }
+
+        $info = Forgotpassword::where('token', $req->token)
+        ->get()
+        ->first();
+
+        $psw = password_hash($req->password, PASSWORD_DEFAULT);
+
+        $id = Users::where('email', $info->email)->get()->first();
+        $save = UserAuth::where("user_id", $id->id)->update([
+            "password" => $psw
+        ]);
+
+        if(!$save){
+            return response()->json(["title" => "Erro", "message" => "ocorreu um erro a mudar a sua password!"], 500);
+        }
+
+        Forgotpassword::where('token', $req->token)->delete();
+
+        return response()->json(["title" => "Sucesso", "message" => "sucesso!"]);
+    }
 }
