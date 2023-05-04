@@ -1,7 +1,7 @@
 <link rel="icon" href="{{ asset('img/eologo.svg') }}">
 
 {{-- Montserrat Font --}}
-<link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet">
+{{-- <link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet"> --}}
 
 {{-- JQuery --}}
 <script src="{{ mix('plugins/jquery/jquery-3.6.1.min.js') }}"></script>

@@ -75,8 +75,6 @@ function animateErr(map, checkForEmpty = true) {
     return hasEmpty;
 }
 
-// TODO: Change all toasts to these function
-
 /**
  * Toast for success
  */

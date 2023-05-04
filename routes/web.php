@@ -61,6 +61,8 @@ Route::post('/professional/saverestaurantinfo', [RestaurantController::class, 's
 
 // Authentication method
 Route::post('/auth', [AuthController::class, 'auth'])->name("auth");
+// Forgot password
+Route::post('/forgotpass', [AuthController::class, 'forgot'])->name("forgot");
 
 // Logout method
 Route::post('/logout', [AuthController::class, 'logout'])->name("logout");

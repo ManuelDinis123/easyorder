@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\AppHelper;
 use App\Models\CartItems;
+use App\Mail\forgotpswMail;
+use App\Models\Forgotpassword;
 use App\Models\invite;
 use App\Models\Restaurants;
 use App\Models\Shoppingcart;
@@ -16,6 +18,8 @@ use App\Models\UsersTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -411,5 +415,29 @@ class AuthController extends Controller
         ]]);
 
         if (!$userType) return response()->json(["title" => "Erro", "message" => "Ocorreu um erro a connectar a sua conta ao restaurante"], 500);
+    }
+
+    /**
+     * send forgot password email
+     * 
+     * @param \Illuminate\Http\Request email
+     * @return \Illuminate\Http\Response status
+     */
+    function forgot(Request $req)
+    {
+        if(!$req->email) return response()->json(["title"=>"Erro", "message"=>"Insira um email"], 400);
+
+        $token = Str::random(32, 'alpha_num');
+
+        $email = Forgotpassword::create([
+            "token" => $token,
+            "email"=>$req->email
+        ]);
+
+        if(!$email) return response()->json(["title"=>"Erro", "message"=>"Ocorreu um erro a mandar o email"], 500);
+
+        $sendToEmail = strtolower($req->email);
+        Mail::to($sendToEmail)->send(new forgotpswMail($token));
+        return response()->json(["title" => "Sucesso", "message" => "Email para repor password enviado"], 200);
     }
 }

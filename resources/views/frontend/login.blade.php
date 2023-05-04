@@ -33,12 +33,58 @@
 
         <span id="forgot_pssw"><a href="#">Esqueçeu-se da password?</a></span>
         <button id="login_btn" class="mt-3">Login</button>
-        <span id="register"><a href="/register" class="mt-2">Criar nova conta</a></span>    
-
-        <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+        <span id="register"><a href="/register" class="mt-2">Criar nova conta</a></span>
     </div>
 </body>
 
 </html>
 
-<script src="{{ asset('js/login.js') }}"></script>
+<script>
+    // Performs the login
+    function login_action() {
+        $.ajax({
+                method: "post",
+                url: "auth",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    email: $("#email").val(),
+                    password: $("#password").val(),
+                },
+            })
+            .done((res) => {
+                window.location.replace(
+                    res.isProfessional ? "/professional" : "/home"
+                );
+            })
+            .fail((err) => {
+                errorToast(err.responseJSON.status, err.responseJSON.message);
+            });
+    }
+
+    $(document).ready(() => {
+        $("#login_btn").on("click", () => {
+            login_action();
+        });
+        $(document).on("keypress", (e) => {
+            if (e.which == 13) login_action();
+        });
+        // Forgot password
+        $("#forgot_pssw").on('click', () => {
+            const hasempty = animateErr(["email"]);
+            if (hasempty) return;
+
+            $.ajax({
+                method: "post",
+                url: "/forgotpass",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "email": $("#email").val()
+                }
+            }).done((res) => {
+                successToast(res.title, res.message);
+            }).fail((err) => {
+                errorToast(err.responseJSON.title, err.responseJSON.message);
+            });
+        })
+    });
+</script>
