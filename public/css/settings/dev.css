@@ -1,0 +1,12 @@
+.getApiKey {
+    background-color: white;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 10px;
+    padding: 24px 24px;
+    width: 64%;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}

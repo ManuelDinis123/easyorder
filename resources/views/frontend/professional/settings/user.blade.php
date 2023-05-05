@@ -1,13 +1,11 @@
 @include('layouts.includes')
 
-@extends(session()->get('user.isProfessional')?('layouts.professional.sidebar'):('layouts.clients.nav'), ['file' => 'options'])
+@extends(session()->get('user.isProfessional') ? 'layouts.professional.sidebar' : 'layouts.clients.nav', ['file' => 'options'])
 
 <link rel="stylesheet" href="{{ asset('css/settings/user.css') }}">
 
 @section('content')
-    @if (session()->get('user.isProfessional'))
-        @include('layouts.professional.tabs', ['tab' => 'users'])
-    @endif
+    @include('layouts.professional.tabs', ['tab' => 'users'])
 
     <div class="user-settings">
         <div class="generalInfo">

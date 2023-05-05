@@ -34,19 +34,26 @@
         .small-screen-tabs {
             display: block;
         }
-        .tabs{
+
+        .tabs {
             display: none;
         }
     }
 </style>
 
 <div class="small-screen-tabs">
-    <button class="btn {{ $tab == 'general' ? 'btn-activation' : '' }}"
-        onclick="redirect('/professional/configuracoes/geral')">Geral</button>
+    @if (session()->get('type.edit_page') || session()->get('type.owner') || session()->get('type.admin'))
+        <button class="btn {{ $tab == 'general' ? 'btn-activation' : '' }}"
+            onclick="redirect('/professional/configuracoes/geral')">Geral</button>
+    @endif
     <button class="btn {{ $tab == 'users' ? 'btn-activation' : '' }}"
         onclick="redirect('/configuracoes/user')">Pessoal</button>
-    <button class="btn {{ $tab == 'admin' ? 'btn-activation' : '' }}"
-        onclick="redirect('/professional/configuracoes/admin')">Admin</button>
+    @if (session()->get('type.owner') || session()->get('type.admin'))
+        <button class="btn {{ $tab == 'admin' ? 'btn-activation' : '' }}"
+            onclick="redirect('/professional/configuracoes/admin')">Admin</button>
+    @endif
+    <button class="btn {{ $tab == 'dev' ? 'btn-activation' : '' }}"
+        onclick="redirect('/developers/api')">Desenvolvedores</button>
 </div>
 
 <ul class="list-group tabs">
@@ -60,6 +67,8 @@
         <li onclick="redirect('/professional/configuracoes/admin')"
             class="list-group-item list-group-item-action {{ $tab == 'admin' ? 'active' : '' }}">Admin</li>
     @endif
+    <li onclick="redirect('/developers/api')"
+        class="list-group-item list-group-item-action {{ $tab == 'dev' ? 'active' : '' }}">Developers</li>
 </ul>
 
 

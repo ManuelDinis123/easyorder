@@ -2,6 +2,7 @@
 
 use App\Helpers\AppHelper;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ApiKeyController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
@@ -190,6 +191,9 @@ Route::post('/admin/users/appadmin', [AdminController::class, 'switchAppAdmin'])
 Route::post('/admin/users/ban', [AdminController::class, 'banUser'])->name("banUser");
 Route::post('/admin/restaurantes/get', [AdminController::class, 'getRestaurants'])->name("getRestaurants");
 Route::post('/admin/restaurantes/switch', [AdminController::class, 'switchRestaurant'])->name("switchRestaurant");
+
+// Developers
+Route::get('/developers/api', [ApiKeyController::class, 'index']);
 
 // any other route that isn't declared goes to 404 page
 Route::get('/{any}', function () {
