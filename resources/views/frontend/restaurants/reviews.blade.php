@@ -84,7 +84,7 @@
                                     @for ($i = 0; $i < $mr['stars']; $i++)
                                         <i class="fa-solid fa-star rw-st"></i>
                                     @endfor
-                                    <span style="float: right">{{ date("d/m/Y", strtotime($mr['written_at'])) }}</span>
+                                    <span style="float: right">{{ date('d/m/Y', strtotime($mr['written_at'])) }}</span>
                                 </div>
                                 <hr>
                                 <div class="r-title">
@@ -119,7 +119,7 @@
                                     @for ($i = 0; $i < $r['stars']; $i++)
                                         <i class="fa-solid fa-star rw-st"></i>
                                     @endfor
-                                    <span style="float: right">{{ date("d/m/Y", strtotime($r['written_at'])) }}</span>
+                                    <span style="float: right">{{ date('d/m/Y', strtotime($r['written_at'])) }}</span>
                                 </div>
                                 <hr>
                                 <div class="r-title">
@@ -219,28 +219,51 @@
 
             if (hasEmpty || total_stars <= 0) return;
 
-            var ajax_data = {
-                "_token": "{{ csrf_token() }}",
-                "restaurant_id": $("#restaurant_id").val(),
-                "title": $("#review_title").val(),
-                "body": $("#review_body").val(),
-                "stars": total_stars,
-                "edit": $("#whichAction").val() == "new" ? 0 : 1,
-                "id": $("#whichAction").val() == "new" ? "no to be used..." : $("#id_of_editing").val()
+            const texto = '{"text":"' + $("#review_title").val() + ' ' + $("#review_body").val() +
+                '", "maskCharacter": "x", "language": "pt"}';
+            console.log(texto)
+            const settings = {
+                async: true,
+                crossDomain: true,
+                url: 'https://profanity-cleaner-bad-word-filter.p.rapidapi.com/profanity',
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'X-RapidAPI-Key': 'fd4376aebcmshee63295b5031b37p1eb22djsnccb958dc8818',
+                    'X-RapidAPI-Host': 'profanity-cleaner-bad-word-filter.p.rapidapi.com'
+                },
+                processData: false,
+                data: texto
             };
 
-            $.ajax({
-                method: 'post',
-                url: '/review/add',
-                data: ajax_data
-            }).done((res) => {
-                successToast(res.title, res.message);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
-            }).fail((err) => {
-                errorToast(err.responseJSON.title, err.responseJSON.message);
-            })
+            $.ajax(settings).done(function(res) {
+                if (res.profanities.length > 0) {
+                    return errorToast("Aviso!", "Críticas não devem conter profanidade");
+                }
+                var ajax_data = {
+                    "_token": "{{ csrf_token() }}",
+                    "restaurant_id": $("#restaurant_id").val(),
+                    "title": $("#review_title").val(),
+                    "body": $("#review_body").val(),
+                    "stars": total_stars,
+                    "edit": $("#whichAction").val() == "new" ? 0 : 1,
+                    "id": $("#whichAction").val() == "new" ? "no to be used..." : $("#id_of_editing")
+                        .val()
+                };
+
+                $.ajax({
+                    method: 'post',
+                    url: '/review/add',
+                    data: ajax_data
+                }).done((res) => {
+                    successToast(res.title, res.message);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                }).fail((err) => {
+                    errorToast(err.responseJSON.title, err.responseJSON.message);
+                })
+            });
         });
     </script>
 @stop
