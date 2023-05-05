@@ -140,7 +140,7 @@ class SettingsController extends Controller
             $userInfoUpdate = Users::whereId(session()->get('user.id'))->update([
                 "first_name" => $request->values[0],
                 "last_name" => $request->values[1],
-                "birthdate" => date("Y-m-d", strtotime($request->values[2])),
+                "birthdate" => $request->values[2],
                 "email" => $request->values[3],
             ]);
 

@@ -88,20 +88,20 @@
                         </a>
                         <ul class="dropdown-menu n-dropdown animate slideIn" id="dpmenu"
                             aria-labelledby="dropdownMenuLink">
-                            <li><a class="dropdown-item activate {{ $file == 'edit_users' ? 'li_on' : '' }}"
-                                    href="/professional/admin/users"><i class="fa-solid fa-users-gear"></i>
-                                    Utilizadores</a></li>
+                            <li><a class="dropdown-item activate {{ $file == 'edit_users' ? 'li_on' : '' }}" style="display: inline-flex"
+                                    href="/professional/admin/users"><i class="fa-solid fa-users-gear dropdwIcon"></i>
+                                    <span class="dropdwName">Utilizadores</span></a></li>
                             <li id="dpl2"
                                 class="{{ session()->get('type.owner') || session()->get('type.admin') ? '' : 'visually-hidden' }}">
                                 <a class="dropdown-item activate {{ $file == 'perms' ? 'li_on' : '' }}"
-                                    href="/professional/admin/permissions"><i class="fa-solid fa-lock"></i>
-                                    Permissões</a>
+                                    href="/professional/admin/permissions"><i class="fa-solid fa-lock dropdwIcon"></i>
+                                <span class="dropdwName">Permissões</span></a>
                             </li>
                             <li id="dpl3"
                                 class="{{ session()->get('type.owner') || session()->get('type.admin') ? '' : 'visually-hidden' }}">
                                 <a class="dropdown-item activate {{ $file == 'options' ? 'li_on' : '' }}"
-                                    href="/professional/configuracoes/geral"><i class="fa-solid fa-gear"></i>
-                                    Opções</a>
+                                    href="/professional/configuracoes/geral"><i class="fa-solid fa-gear dropdwIcon"></i>
+                                <span class="dropdwName">Opções</span></a>
                             </li>
                         </ul>
                     </div>

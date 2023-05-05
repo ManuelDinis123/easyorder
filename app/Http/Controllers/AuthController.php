@@ -152,7 +152,7 @@ class AuthController extends Controller
         }
 
         // format date
-        $birth = date("Y-m-d", strtotime($user_data->db));
+        $birth = $user_data->db;
 
         // insert into db
         $new_user = Users::create([

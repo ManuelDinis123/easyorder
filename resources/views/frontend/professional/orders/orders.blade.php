@@ -136,12 +136,14 @@
                         data: "deadline",
                         width: "25%",
                         render: function(data, type, row, meta) {
+                            var formatDate = new Date(data);
+                            formatDate = formatDate.getDate() + '/' + (formatDate.getMonth()+1) + "/" + formatDate.getFullYear() + " " + formatDate.getHours() + ":" + formatDate.getMinutes() + ":" + formatDate.getSeconds();
                             return (data >= '{{ date('Y-m-d h:i:s') }}') ? '<span>' +
-                                data +
-                                '</span>' : ((row['closed']) ? '<span>' + data +
+                                formatDate +
+                                '</span>' : ((row['closed']) ? '<span>' + formatDate +
                                     '</span>' :
                                     '<span style="color: #dc3545; font-weight: 600">' +
-                                    data + '</span>')
+                                    formatDate + '</span>')
                         }
                     },
                     {

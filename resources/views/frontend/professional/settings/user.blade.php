@@ -109,7 +109,7 @@
             inputValuesMap = [
                 $("#firstName").val(),
                 $("#lastName").val(),
-                $("#birthdate").val(),
+                $("#birthdate").data('datepicker').getFormattedDate('yyyy-mm-dd'),
                 $("#email").val(),
             ];
             sessionValuesMap = [

@@ -92,7 +92,7 @@
                 <span>Data de entrega</span>
                 <div class="deadline-contain">
                     @if ($deadline >= date('Y-m-d h:i:s'))
-                        <h3 style="font-weight: 700;">{{ $deadline }}</h3>
+                        <h3 style="font-weight: 700;">{{ date("d/m/Y H:i:s", strtotime($deadline)) }}</h3>
                     @elseif($closed)
                         <h3 style="font-weight: 700;">{{ $deadline }}</h3>
                     @else

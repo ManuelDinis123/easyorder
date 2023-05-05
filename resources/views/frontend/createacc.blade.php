@@ -77,7 +77,7 @@
                     "_token": "{{ csrf_token() }}",
                     "first": $("#first").val(),
                     "last": $("#last").val(),
-                    "db": $("#db").val(),
+                    "db": $("#db").data('datepicker').getFormattedDate('yyyy-mm-dd'),
                     "email": $("#email").val(),
                     "password": $("#password").val()
                 }
