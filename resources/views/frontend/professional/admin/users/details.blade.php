@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-3">
                     <h3 class="mt-4 details-username">{{ $name }}</h3>
-                    <span class="text-muted details-db">{{ $birthdate }}</span>
+                    <span class="text-muted details-db">{{ date("d/m/Y", strtotime($birthdate)) }}</span>
                 </div>
                 <div class="col-8">
                     <div style="margin-top: 38px;">
@@ -34,7 +34,7 @@
                         <label>Nome:</label>
                         <input type="text" value="{{ $name }}" class="form-control" disabled>
                         <label class="mt-3">Data de nascimento:</label>
-                        <input type="text" value="{{ $birthdate }}" class="form-control" disabled>
+                        <input type="text" value="{{ date("d/m/Y", strtotime($birthdate)) }}" class="form-control" disabled>
                         <label class="mt-3">Email:</label>
                         <input type="text" value="{{ $email }}" class="form-control" disabled>
                         <hr style="margin-top: 30px">
