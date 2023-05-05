@@ -84,7 +84,7 @@
                                     @for ($i = 0; $i < $mr['stars']; $i++)
                                         <i class="fa-solid fa-star rw-st"></i>
                                     @endfor
-                                    <span style="float: right">{{ $mr['written_at'] }}</span>
+                                    <span style="float: right">{{ date("d/m/Y", strtotime($mr['written_at'])) }}</span>
                                 </div>
                                 <hr>
                                 <div class="r-title">
@@ -119,7 +119,7 @@
                                     @for ($i = 0; $i < $r['stars']; $i++)
                                         <i class="fa-solid fa-star rw-st"></i>
                                     @endfor
-                                    <span style="float: right">{{ $r['written_at'] }}</span>
+                                    <span style="float: right">{{ date("d/m/Y", strtotime($r['written_at'])) }}</span>
                                 </div>
                                 <hr>
                                 <div class="r-title">
