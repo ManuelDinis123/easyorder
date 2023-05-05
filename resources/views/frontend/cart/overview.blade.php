@@ -198,6 +198,9 @@
                     $("#count_header").text($("#count").val() + " Items");
                     $("#card" + itemID).remove();
                     $("#btns_for_" + itemID).remove();
+                    if($("#cart_total").text()==0){
+                        $("#confirmOrder").attr("disabled", "disabled");
+                    }
                     return;
                 }
                 var quantity = parseInt($("#hidden" + itemID).val());
