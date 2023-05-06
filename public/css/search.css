@@ -90,3 +90,27 @@ div.loaderFADE {
         transform: rotate(360deg);
     }
 }
+
+@media (max-width: 991px) {
+    .filters {
+        display: none;
+    }
+    .restaurant-name-dsc {
+        margin-left: 0px;
+    }
+}
+@media (max-width: 767px) {
+    .filters {
+        display: none;
+    }
+    .res-contain {
+        display: flex;
+        justify-content: center;        
+    }
+}
+
+@media (max-width: 1199px) {
+    .restaurant-name-dsc {
+        margin-left: 24px;
+    }
+}
