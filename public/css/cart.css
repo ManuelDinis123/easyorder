@@ -185,3 +185,14 @@ div.loaderFADE {
         text-align: center;
     }
 }
+
+@media (max-width: 360px) {
+    .remaddbtns {
+        width: 70px !important;
+        height: 50px !important;
+    }
+
+    .icons-container {
+        margin-top: 10px;
+    }
+}

@@ -72,14 +72,14 @@ a {
     color: #ffffff;
 }
 
-.inner-addon{
+.inner-addon {
     transition: all 0.2s;
     display: flex;
     justify-content: center;
     width: 100%;
 }
 
-.nav-search {    
+.nav-search {
     height: 40px;
     border: 0px;
     border-radius: 24px;
@@ -106,7 +106,7 @@ a {
 }
 
 .animate-search {
-    transform: scale(.96);
+    transform: scale(0.96);
 }
 
 .shp-badge {
@@ -125,4 +125,21 @@ a {
     object-fit: cover;
     display: flex;
     justify-content: center;
+}
+
+@media (max-width: 639px) {
+    .nav-search {
+        width: 90%;
+        padding-left: 0px;
+        border-radius: 10px;
+    }
+    .nav-search::placeholder {
+        color: transparent;
+    }
+    .inner-addon {
+        justify-content: unset;
+    }
+    .left-addon {
+        display: none;
+    }
 }

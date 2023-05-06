@@ -1,5 +1,12 @@
 <link rel="stylesheet" href="{{ asset('css/nav.css') }}">
-<title>EasyOrder</title>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EasyOrder</title>
+</head>
+
 <header class="header nav-extra" id="header">
     <div class="logo">
         <img src="{{ asset('img/eologo.svg') }}" id="eoLogo" style="cursor:pointer;">
@@ -50,6 +57,8 @@
 <div class="pt-3 visually-hidden" id="content">
     @yield('content')
 </div>
+
+</html>
 
 <script>
     $(window).on('load', () => {
