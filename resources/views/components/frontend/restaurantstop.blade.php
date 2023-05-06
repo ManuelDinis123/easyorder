@@ -15,7 +15,6 @@
     }
 </style>
 
-{{-- TODO: Banner from DB --}}
 <div class="banner">
     <img src="{{ $info['logo_name'] ? asset('img/logos/' . $info['logo_name']) : $info['logo_url'] }}"
         class="restaurant-logo">

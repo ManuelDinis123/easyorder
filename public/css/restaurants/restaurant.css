@@ -379,3 +379,14 @@ body {
 .seeMore{
     cursor: pointer;
 }
+
+@media (max-width: 777px) {
+    .banner {
+        width: unset !important;
+    }
+}
+@media (max-width: 1399px) {
+    .rmlibtn {
+        width: 55px !important;
+    }
+}
