@@ -42,7 +42,7 @@
         <hr>
     </div>
     <div class="center">
-        @if (isset($card))        
+        @if (count($cart)>0)        
         <div class="whole-card">
             @php
                 $count = 1;
