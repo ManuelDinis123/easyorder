@@ -154,3 +154,17 @@ body {
         margin-top: 5px !important;
     }
 }
+
+@media (max-width: 991px) {
+    .menu-showcase {
+        width: 52vw;
+    }
+}
+@media (max-width: 707px) {
+    .best-rating-container {
+        padding: 0px 0px;
+    }
+    .menu-showcase {
+        width: 95%;
+    }
+}

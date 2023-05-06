@@ -15,7 +15,7 @@
                 @foreach ($orders as $o)
                     <style>
                         .card{{ $o['id'] }} {
-                            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 31.77%, #000000 100%), url("{{ isset($o['imageUrl'])?$o['imageUrl']:'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}");
+                            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 31.77%, #000000 100%), url("{{ isset($o['imageUrl']) ? $o['imageUrl'] : 'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}");
                             background-size: cover;
                             background-position: center;
                             border-radius: 14px;
@@ -80,7 +80,14 @@
                 </div>
             @endif
             @if ($showcase)
-                <div class="col-lg-6 col-md-12 col-sm-12">
+                @if (count($gallery) <= 0)
+                    <style>
+                        .showcase-description {
+                            width: 50% !important;
+                        }
+                    </style>
+                @endif
+                <div class="{{ count($gallery) > 0 ? 'col-lg-6' : 'col-lg-12 center' }} col-md-12 col-sm-12">
                     <div class="showcase-description">
                         <div class="center">
                             <h2>{{ $showcase['name'] }}</h2>
@@ -132,7 +139,9 @@
         setInterval(function() {
             i = (i + 1) % menuImgs.length;
             pic.fadeOut(350, function() {
-                $(this).attr("src", (menuImgs[i]['imageUrl']!=null?menuImgs[i]['imageUrl']:'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png'));
+                $(this).attr("src", (menuImgs[i]['imageUrl'] != null ? menuImgs[i]['imageUrl'] :
+                    'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png'
+                ));
                 $(this).fadeIn(1150);
             });
         }, 5000);
