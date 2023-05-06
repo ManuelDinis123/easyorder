@@ -107,7 +107,7 @@
     <hr>
     <div id="general">
         <div class="row">
-            <div class="col-5" id="form">
+            <div class="col-lg-5 col-md-5 col-sm-12" id="form">
                 <label class="mt-1">Nome:</label>
                 <input type="text" id="item_title" {{ $disable }} class="form-control" placeholder="Nome do item"
                     value="{{ $name }}" autocomplete="off">
@@ -136,7 +136,7 @@
                 @endif
             </div>
 
-            <div class="col-6">
+            <div class="col-lg-6 col-md-6 col-sm-12">
 
                 <script>
                     imageurlIn = $("#imageurl").val()
@@ -156,9 +156,9 @@
 
             </div>
             <div class="row mt-3">
-                <div class="col-5">
+                <div class="col-lg-5 col-md-5 col-sm-12">
                     @if ($canWrite)
-                        <button class="btn btn-primary" id="edit-confirm" style="width: 100%">Editar</button>
+                        <button class="btn btn-primary" id="edit-confirm" style="width: 100%">Editar</button>                        
                     @endif
                 </div>
             </div>
@@ -167,7 +167,7 @@
     <div id="ingredients" class="visually-hidden">
         <div class="row">
             @if ($canWrite)
-                <div class="col-3">
+                <div class="col-lg-3 col-md-6 col-sm-12">
                     <h4>Adicionar Acompanhamentos</h3>
                         <hr>
                         <label>Nome:</label>
@@ -195,9 +195,9 @@
                         <button class="btn btn-primary mt-3" id="add">Adicionar</button>
                 </div>
             @endif
-            <div class="col-6">
+            <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="t-contain">
-                    <table id="ing_table" class="table table-striped table-borderless">
+                    <table id="ing_table" class="table table-striped table-borderless" style="width: 100%">
                         <thead>
                             <th>Acompanhamento</th>
                             <th>Quantidade</th>
@@ -426,7 +426,7 @@
         $("#ing_table").dataTable({
 
             "ordering": false,
-
+            
             "language": {
                 "paginate": {
                     "next": '<i class="fa-solid fa-caret-right"></i>',
@@ -462,7 +462,7 @@
                 },
                 {
                     data: "quantity_type",
-                    width: "10%",
+                    width: "20%",
                     className: "dt-center",
                     render: function(data, type, row, meta) {
                         return "<label>" + (data == 'numeric' ? 'Numerico' : 'Dose') +
