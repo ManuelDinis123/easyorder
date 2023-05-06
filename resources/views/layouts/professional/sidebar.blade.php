@@ -222,8 +222,14 @@
                         $("#" + key + "_side").removeClass('visually-hidden');
                     }
                 })
+                console.log(res.newSession);
                 if (res.newSession.admin == 0 && res.newSession.owner == 0) {
-                    $("#dp").addClass('visually-hidden');
+                    if(res.newSession.ban_users == 1 || res.newSession.invite_users == 1){
+                        $("#dpl2").addClass('visually-hidden');
+                        $("#dpl3").addClass('visually-hidden');
+                    } else {
+                        $("#dp").addClass('visually-hidden');
+                    }
                 } else {
                     $("#view_menu_side").removeClass('visually-hidden');
                     $("#view_editpage_side").removeClass('visually-hidden');

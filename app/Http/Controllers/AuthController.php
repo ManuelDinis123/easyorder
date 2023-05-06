@@ -201,6 +201,8 @@ class AuthController extends Controller
                 "view_menu",
                 "view_stats",
                 "edit_page",
+                "ban_users",
+                "invite_users",
                 "admin",
                 "owner",
             )->whereId($type_id->type_id)->get()->first();

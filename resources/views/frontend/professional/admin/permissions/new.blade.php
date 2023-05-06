@@ -19,7 +19,7 @@
                     <h4 style="font-weight: 600">Permissões:</h4>
                     <hr class="mt-2">
                     @php
-                        $map = [['label' => 'Ver Pedidos', 'id' => 'view_orders'], ['label' => 'Editar Pedidos', 'id' => 'write_orders'], ['label' => 'Ver Menu', 'id' => 'view_menu'], ['label' => 'Editar Menu', 'id' => 'write_menu'], ['label' => 'Ver Estatisticas', 'id' => 'view_stats'], ['label' => 'Convidar Utilizadores', 'id' => 'invite_users'], ['label' => 'Banir Utilizadores', 'id' => 'ban_users'], ['label' => 'Admin', 'id' => 'admin']];
+                        $map = [['label' => 'Ver Pedidos', 'id' => 'view_orders'], ['label' => 'Editar Pedidos', 'id' => 'write_orders'], ['label' => 'Ver Menu', 'id' => 'view_menu'], ['label' => 'Editar Menu', 'id' => 'write_menu'], ['label' => 'Ver Estatisticas', 'id' => 'view_stats'], ['label' => 'Editar Pagina', 'id' => 'edit_page'], ['label' => 'Convidar Utilizadores', 'id' => 'invite_users'], ['label' => 'Banir Utilizadores', 'id' => 'ban_users'], ['label' => 'Admin', 'id' => 'admin']];
                     @endphp
                     <div class="row">
                         @foreach ($map as $permission)
@@ -56,6 +56,7 @@
             "view_menu",
             "write_menu",
             "view_stats",
+            "edit_page",
             "invite_users",
             "ban_users",
             "admin",
