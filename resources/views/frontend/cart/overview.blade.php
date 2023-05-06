@@ -208,7 +208,7 @@
                 $("#hidden" + itemID).val(quantity);
                 $("#quantity_for_" + itemID).text("x " + quantity);
                 $("#sidePrices" + itemID).val(res.to_add.price);
-                $("#ttlPrice" + itemID).text(((parseInt($("#base_price" + itemID).val()) * quantity) + parseInt(($(
+                $("#ttlPrice" + itemID).text(((parseFloat($("#base_price" + itemID).val()) * quantity).toFixed(2) + parseInt(($(
                     "#sidePrices" + itemID).val() ? $("#sidePrices" + itemID).val() : 0))) + "€");
                 $("#cart_total").text((isRemove ? parseInt($("#cart_total").text()) - 1 : parseInt($("#cart_total")
                     .text()) + 1));
