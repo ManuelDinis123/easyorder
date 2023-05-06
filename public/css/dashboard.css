@@ -136,3 +136,8 @@
     border-radius: 50px;
 }
 
+@media (max-width: 991px) {
+    .dashboard-cards {
+        margin-bottom: 10px;
+    }
+}

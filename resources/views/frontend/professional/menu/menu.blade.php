@@ -61,36 +61,33 @@
 @endphp
 
 @section('content')
-    <div class="container-fluid" style="padding-top:15px">
-        <div class="centered">
-            <div class="c-contents">
+    <div class="center">
+            <div class="centered">
+                <div class="c-contents">
+                    {{-- Header --}}
+                    <div class="row">
+                        <div class="col-6">
+                            <h3 class="c-h">Ementa</h3>
+                        </div>
+                        <div class="col-6">
+                            @if ($canWrite)
+                                <span class="icons" data-bs-toggle="modal" data-bs-target="#addModal"><i
+                                        class="fa-solid fa-plus"></i></span>
+                            @endif
+                        </div>
+                    </div>
 
-                {{-- Header --}}
-                <div class="row">
-                    <div class="col-6">
-                        <h3 class="c-h">Ementa</h3>
-                    </div>
-                    <div class="col-6">
-                        @if ($canWrite)
-                            <span class="icons" data-bs-toggle="modal" data-bs-target="#addModal"><i
-                                    class="fa-solid fa-plus"></i></span>
-                        @endif
-                    </div>
+                    <hr style="height: 2px;" class="separation-line">
+
+                    {{-- Table --}}
+                    <table id="menu" class="table table-borderless" style="width: 100%">
+                        <thead>
+                            <th>Nome</th>
+                            <th>Preço</th>
+                            <th></th>
+                        </thead>
+                    </table>
                 </div>
-
-                <hr style="height: 2px;" class="separation-line">
-
-                {{-- Table --}}
-                <table id="menu" class="table table-borderless">
-                    <thead>
-                        <th>Nome</th>
-                        <th>Preço</th>
-                        <th></th>
-                    </thead>
-                </table>
-
-
-            </div>
         </div>
     </div>
 @stop
@@ -216,13 +213,16 @@
                 dataSrc: ''
             },
             columns: [{
-                    data: "title"
+                    data: "title",
+                    width: "65%"
                 },
                 {
-                    data: "price"
+                    data: "price",
+                    width: "20%"
                 },
                 {
                     data: null,
+                    width: "15%",
                     render: function(data, type, row, meta) {
                         return '<span>\
                     <a href="/professional/ementa/' + row.id + '"><i class="fa-sharp fa-solid ' + (
