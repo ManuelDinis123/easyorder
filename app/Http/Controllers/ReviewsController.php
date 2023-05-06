@@ -19,6 +19,8 @@ class ReviewsController extends Controller
      */
     function index()
     {
+        if (!AppHelper::checkAuth()) return redirect("/s");
+
         // Get all reviews
         $reviews = Reviews::select("reviews.id", "reviews.stars", "reviews.written_at", "users.first_name", "users.last_name", "reviews.title", "reviews.review", "users.pfp")
             ->where("restaurant_id", session()->get("restaurant.id"))
@@ -37,7 +39,7 @@ class ReviewsController extends Controller
      */
     function report_review(Request $req)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
         }
@@ -61,7 +63,7 @@ class ReviewsController extends Controller
      */
     function add(Request $request)
     {
-
+        if (!AppHelper::hasLogin()) return redirect("/");
         if ($request->edit) {
             $update = Reviews::whereId($request->id)->update([
                 "written_by" => session()->get("user.id"),
@@ -99,6 +101,7 @@ class ReviewsController extends Controller
      */
     function deleteReview(Request $request)
     {
+        if (!AppHelper::hasLogin()) return redirect("/");
         $action = Reviews::whereId($request->id)->delete();
 
         if (!$action) return response()->json(["title" => "Erro", "message" => "Erro ao apagar review"], 500);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AppHelper;
 use App\Models\Restaurants;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -43,6 +44,7 @@ class SearchController extends Controller
      */
     function search(Request $data)
     {
+        if (!AppHelper::hasLogin()) return redirect("/");
         $keyword = $data->input('query');
 
         $results = Restaurants::where('name', 'like', "%$keyword%")->where("isPublic", 1)->where("active", 1)

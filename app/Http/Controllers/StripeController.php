@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\AppHelper;
 use App\Models\Shoppingcart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,11 +12,13 @@ class StripeController extends Controller
 {
     public function index()
     {
+        if (!AppHelper::hasLogin()) return redirect("/");
         return view("frontend.cart.checkout");
     }
 
     public function checkout(Request $deadline)
     {
+        if (!AppHelper::hasLogin()) return redirect("/");
         session(["last_order_deadline" => $deadline->deadline]);
 
         // Get order data

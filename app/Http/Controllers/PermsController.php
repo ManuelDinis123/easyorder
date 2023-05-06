@@ -73,6 +73,11 @@ class PermsController extends Controller
      */
     function getTypes()
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
+            return redirect("/professional");
+        }
+
         $perms = Types::select("id", "label")->where('restaurant_id', session()->get('restaurant.id'))->get();
 
         return response()->json($perms, 200);

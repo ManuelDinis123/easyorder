@@ -173,6 +173,10 @@ class UserConfigsController extends Controller
      */
     function delete_invites(Request $data)
     {
+        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'invite_users'], false))) {
+            return redirect("/professional");
+        }
         $del = invite::where('token', $data->id)->delete();
         if (!$del) response()->json(["title" => "Erro", "message" => "Erro a remover o convite"], 500);
 
