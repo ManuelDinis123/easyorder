@@ -41,50 +41,69 @@
         <input type="hidden" id="count" value="{{ $count }}">
         <hr>
     </div>
-
-    @foreach ($cart as $items)
-        @foreach ($items['items'] as $item)
-            <div class="item-card-container" id="card{{ $item['item_id'] }}">
-                <div class="item">
-                    <img src="{{ isset($item['imageUrl'])?$item['imageUrl']:'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}" class="item-img">
-                    <div class="item-info">
-                        <h3>{{ $item['name'] }} <span id="quantity_for_{{ $item['item_id'] }}">x
-                                {{ $item['quantity'] }}</span></h3>
-                        <span class="total-price">Total: <span
-                                id="ttlPrice{{ $item['item_id'] }}">{{ $item['price'] * $item['quantity'] + $item['addition'] }}€</span></span>
-                        <div class="btnss">
-                            <button class="btn btn-dark" class="minus-btn qntbtns"
-                                onclick="cartAddRemove({{ $item['item_id'] }}, 1, {{ $item['cart_item_id'] }})"><i
-                                    class="fa-solid fa-minus"></i></button>
-                            <button class="btn btn-dark" class="plus-btn qntbtns"
-                                onclick="cartAddRemove({{ $item['item_id'] }}, 0, {{ $item['cart_item_id'] }})"><i
-                                    class="fa-solid fa-plus"></i></button>
+    <div class="center">
+        <div class="whole-card">
+            @foreach ($cart as $items)
+                @foreach ($items['items'] as $item)
+                    <div class="row g-0 item-card" id="card{{ $item['item_id'] }}">
+                        <div class="col-1">
+                            <img src="{{ isset($item['imageUrl']) ? $item['imageUrl'] : 'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}"
+                                class="item-img">
                         </div>
-                        <h4>{{ $items['name'] }}</h4>
-                        <span class="description text-muted">{{ $item['description'] }}</span>
+                        <div class="col-3">
+                            <div class="item-name-container">
+                                <h3 class="item-name" style="font-weight: 800"><span
+                                        class="text-muted restaurant-name">{{ $items['name'] }}</span><br>{{ $item['name'] }}
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="btns-contain">
+                                <span>
+                                    <button onclick="cartAddRemove({{ $item['item_id'] }}, 1, {{ $item['cart_item_id'] }})"
+                                        class="btn btn-dark remaddbtns">-</button>
+                                    <span id="quantity_for_{{ $item['item_id'] }}"
+                                        class="theQuant">{{ $item['quantity'] }}</span>
+                                    <button
+                                        onclick="cartAddRemove({{ $item['item_id'] }}, 0, {{ $item['cart_item_id'] }})"
+                                        class="btn btn-dark remaddbtns">+</button>
+                                    <br>
+                                    <div class="total-price-contain">
+                                        <span class="total-price">Total: <span class="price-lbl"
+                                                id="ttlPrice{{ $item['item_id'] }}">{{ $item['price'] * $item['quantity'] + $item['addition'] }}€</span></span>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="icons-container">
+                                <i class="fa-solid fa-french-fries action-icos"
+                                    onclick="open_modal({{ $item['item_id'] }}, {{ $item['cart_item_id'] }})"></i>
+                                <i class="fa-solid
+                                    fa-note-sticky action-icos"
+                                    onclick="noteMDL({{ $item['cart_item_id'] }})"></i>
+                            </div>
+                        </div>
+                        <input type="hidden" id="hidden{{ $item['item_id'] }}" value="{{ $item['quantity'] }}">
+                        <input type="hidden" id="base_price{{ $item['item_id'] }}" value="{{ $item['default_price'] }}">
+                        <input type="hidden" id="sidePrices{{ $item['item_id'] }}" value="{{ $item['side_prices']['price'] }}">
                     </div>
-                </div>
-                <input type="hidden" id="hidden{{ $item['item_id'] }}" value="{{ $item['quantity'] }}">
-                <input type="hidden" id="base_price{{ $item['item_id'] }}" value="{{ $item['default_price'] }}">
-                <input type="hidden" id="sidePrices{{ $item['item_id'] }}" value="{{ $item['side_prices']['price'] }}">
-            </div>
-            <div class="card-btns" id="btns_for_{{ $item['item_id'] }}">
-                <button class="btn btn-dark" onclick="noteMDL({{ $item['cart_item_id'] }})">Deixar Nota</button>
-                <button class="btn btn-light"
-                    onclick="open_modal({{ $item['item_id'] }}, {{ $item['cart_item_id'] }})">Acompanhamentos</button>
-            </div>
-        @endforeach
-    @endforeach
-
-    <div class="container">
+                    <hr>
+                @endforeach
+            @endforeach
+        </div>
+    </div>
+    <div class="container mt-5">
         <label class="dpe_lbl">Data para entrega:</label>
-        <input class="form-control dpe" type="datetime-local" min="{{ date('Y-m-d\TH:i') }}" max="{{ date('Y-m-d\TH:i', strtotime('+30 days')) }}" id="deadline" name="deadline">
+        <input class="form-control dpe" type="datetime-local" min="{{ date('Y-m-d\TH:i') }}"
+            max="{{ date('Y-m-d\TH:i', strtotime('+30 days')) }}" id="deadline" name="deadline">
     </div>
 
-
-    <button class="btn btn-dark form-control mt-5" {{ count($cart) <= 0 ? 'disabled' : '' }}
-        style="margin-bottom:20px; height: 50px" id="confirmOrder">Confirmar
-        Pedido</button>
+    <div class="center">
+        <button class="btn btn-dark mt-5" {{ count($cart) <= 0 ? 'disabled' : '' }}
+            style="margin-bottom:20px; height: 50px; width:87%; font-weight: 800" id="confirmOrder">Confirmar
+            Pedido</button>
+    </div>
 
 
     <form action="/checkout" method="POST">
@@ -105,7 +124,7 @@
                 alert('Por favor, selecione uma data para entrega.');
                 return false;
             }
-        }        
+        }
         $("#confirmOrder").on('click', () => {
             var isInvalid = animateErr(["deadline"]);
             if (isInvalid) return;
@@ -198,7 +217,7 @@
                     $("#count_header").text($("#count").val() + " Items");
                     $("#card" + itemID).remove();
                     $("#btns_for_" + itemID).remove();
-                    if($("#cart_total").text()==0){
+                    if ($("#cart_total").text() == 0) {
                         $("#confirmOrder").attr("disabled", "disabled");
                     }
                     return;
@@ -208,8 +227,9 @@
                 $("#hidden" + itemID).val(quantity);
                 $("#quantity_for_" + itemID).text("x " + quantity);
                 $("#sidePrices" + itemID).val(res.to_add.price);
-                $("#ttlPrice" + itemID).text(((parseFloat($("#base_price" + itemID).val()) * quantity).toFixed(2) + parseInt(($(
-                    "#sidePrices" + itemID).val() ? $("#sidePrices" + itemID).val() : 0))) + "€");
+                $("#ttlPrice" + itemID).text(((parseFloat($("#base_price" + itemID).val()) * quantity).toFixed(2) +
+                    parseInt(($(
+                        "#sidePrices" + itemID).val() ? $("#sidePrices" + itemID).val() : 0))) + "€");
                 $("#cart_total").text((isRemove ? parseInt($("#cart_total").text()) - 1 : parseInt($("#cart_total")
                     .text()) + 1));
 
@@ -235,20 +255,30 @@
                     $.each(res, (key, val) => {
                         $("#acomp_list").append(
                             '<li class="list-group-item d-flex justify-content-between align-items-center">\
-                                                    <div><span class="text-muted">' + val['quantity_type'] + '</span><br />\
-                                                        <span>' + val["ingredient"] +
+                                                                                                    <div><span class="text-muted">' +
+                            val[
+                                'quantity_type'] + '</span><br />\
+                                                                                                        <span>' + val[
+                                "ingredient"] +
                             '</span><span class="fw-bold" id="acp_' +
                             val["id"] + '"> x ' + (val["quantity"] == null ? 0 : val["quantity"]) +
-                            '</span></div>' + '\
-                                                    <div><label class="price_sides">' + val["price"] +
+                            '</span></div>' +
+                            '\
+                                                                                                    <div><label class="price_sides">' +
+                            val[
+                                "price"] +
                             '€</label><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' +
                             cart_item_id +
                             ', 0, ' + val['price'] + ', ' + id +
                             ')" class="btn btn-dark" style="margin-right:6px"><i class="fa-solid fa-plus"></i></button><button class="btn btn-dark" onclick="addRemoveAcompanhamentos(' +
                             val["id"] + ', ' + cart_item_id + ', 1, ' + val['price'] + ', ' + id +
                             ')" id="rmAC_' + val["id"] + '" ' + (val["quantity"] == null ? "disabled" :
-                                "") + '><i class="fa-solid fa-minus"></i></button></div>\
-                                                    <input type="hidden" id="idfor_' + val["id"] + '" value="none"></li>'
+                                "") +
+                            '><i class="fa-solid fa-minus"></i></button></div>\
+                                                                                                    <input type="hidden" id="idfor_' +
+                            val[
+                                "id"] +
+                            '" value="none"></li>'
                         );
                     })
                 } else {
