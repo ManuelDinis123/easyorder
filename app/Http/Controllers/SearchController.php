@@ -33,7 +33,7 @@ class SearchController extends Controller
             ];
         }
 
-        return view('frontend.search.search')->with("restaurants", $data);
+        return view('frontend.search.search')->with("restaurants", $data)->with("hasSearch", '0');
     }
 
     /**
@@ -59,6 +59,10 @@ class SearchController extends Controller
             ];
         }
 
-        return view('frontend.search.partialSearch')->with("restaurants", $data);
+        $hasSearch = '0';
+        if(isset($keyword)){
+            $hasSearch = '1';            
+        }
+        return view('frontend.search.partialSearch')->with("restaurants", $data)->with("hasSearch", $hasSearch);
     }
 }

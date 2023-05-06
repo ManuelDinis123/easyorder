@@ -1,6 +1,13 @@
 <link rel="stylesheet" href="{{ asset('css/search.css') }}">
 
-<div class="container" id="container">
+@if (!$hasSearch)
+    <div class="loaderFADE">
+        <div class="loader-container" id="lc">
+            <div class="loader2"></div>
+        </div>
+    </div>
+@endif
+<div class="container {{ $hasSearch ? '' : (isset($noLoad) ? 'visually-hidden' : '') }}" id="container">
     <div class="row">
         <div class="col-8">
             <div class="restaurants">
@@ -73,6 +80,25 @@
     </div>
 </div>
 
+@if (!$hasSearch)
+    @if (isset($noLoad))
+        <script>
+            console.log("ENTERED WITHOUT LOADING");
+            setTimeout(() => {
+                $(".loaderFade").addClass("visually-hidden");
+                $("#container").removeClass("visually-hidden");
+            }, 700);
+        </script>
+    @else
+        <script>
+            console.log("HAD LOADING");
+            $(document).ready(() => {
+                $(".loaderFade").addClass("visually-hidden");
+                $("#container").removeClass("visually-hidden");
+            });
+        </script>
+    @endif
+@endif
 <script>
     $(document).ready(() => {
         $(".restaurant").on('click', function() {

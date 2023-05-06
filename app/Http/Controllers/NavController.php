@@ -79,8 +79,7 @@ class NavController extends Controller
                 "logo_name" => $result->logo_name
             ];
         }
-
-        return view('frontend.search.partialSearch')->with("restaurants", $data)->with("filters", $filtersBack);
+        return view('frontend.search.partialSearch')->with("restaurants", $data)->with("filters", $filtersBack)->with("noLoad", true)->with("hasSearch", '0');
     }
 
     /**
