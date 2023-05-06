@@ -42,75 +42,79 @@
         <hr>
     </div>
     <div class="center">
-        @if (count($cart)>0)        
-        <div class="whole-card">
-            @php
-                $count = 1;
-            @endphp
-            @foreach ($cart as $items)
-                @foreach ($items['items'] as $item)
-                    @php
-                        $count++;
-                    @endphp
-                    <div class="row g-0 item-card" id="card{{ $item['item_id'] }}">
-                        <div class="col-1">
-                            <img src="{{ isset($item['imageUrl']) ? $item['imageUrl'] : 'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}"
-                                class="item-img">
-                        </div>
-                        <div class="col-3">
-                            <div class="item-name-container">
-                                <h3 class="item-name" style="font-weight: 800"><span
-                                        class="text-muted restaurant-name">{{ $items['name'] }}</span><br>{{ $item['name'] }}
-                                </h3>
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="btns-contain">
-                                <span>
-                                    <button onclick="cartAddRemove({{ $item['item_id'] }}, 1, {{ $item['cart_item_id'] }})"
-                                        class="btn btn-dark remaddbtns">-</button>
-                                    <span id="quantity_for_{{ $item['item_id'] }}"
-                                        class="theQuant">{{ $item['quantity'] }}</span>
-                                    <button
-                                        onclick="cartAddRemove({{ $item['item_id'] }}, 0, {{ $item['cart_item_id'] }})"
-                                        class="btn btn-dark remaddbtns">+</button>
-                                    <br>
-                                    <div class="total-price-contain">
-                                        <span class="total-price">Total: <span class="price-lbl"
-                                                id="ttlPrice{{ $item['item_id'] }}">{{ $item['price'] * $item['quantity'] + $item['addition'] }}€</span></span>
-                                    </div>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="icons-container">
-                                <i class="fa-solid fa-french-fries action-icos"
-                                    onclick="open_modal({{ $item['item_id'] }}, {{ $item['cart_item_id'] }})"></i>
-                                <i class="fa-solid
-                                    fa-note-sticky action-icos"
-                                    onclick="noteMDL({{ $item['cart_item_id'] }})"></i>
-                            </div>
-                        </div>
-                        <input type="hidden" id="hidden{{ $item['item_id'] }}" value="{{ $item['quantity'] }}">
-                        <input type="hidden" id="base_price{{ $item['item_id'] }}" value="{{ $item['default_price'] }}">
-                        <input type="hidden" id="sidePrices{{ $item['item_id'] }}"
-                            value="{{ $item['side_prices']['price'] }}">
-                    </div>
-                    @if ($count == count($items['items']))
-                        <hr id="hrof{{ $item['item_id'] }}">
-                    @endif
-                @endforeach
+        @if (count($cart) > 0)
+            <div class="whole-card">
                 @php
-                    $count = 0;
+                    $count = 1;
                 @endphp
-            @endforeach
-        </div>
+                @foreach ($cart as $items)
+                    @foreach ($items['items'] as $item)
+                        @php
+                            $count++;
+                        @endphp
+                        <div class="row g-0 item-card" id="card{{ $item['item_id'] }}">
+                            <div class="col-lg-1 col-md-2 col-sm-12">
+                                <div class="theIMG">
+                                    <img src="{{ isset($item['imageUrl']) ? $item['imageUrl'] : 'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}"
+                                        class="item-img">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-10 col-sm-12">
+                                <div class="item-name-container">
+                                    <h3 class="item-name" style="font-weight: 800"><span
+                                            class="text-muted restaurant-name">{{ $items['name'] }}</span><br>{{ $item['name'] }}
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-12 col-sm-12">
+                                <div class="btns-contain">
+                                    <span>
+                                        <button
+                                            onclick="cartAddRemove({{ $item['item_id'] }}, 1, {{ $item['cart_item_id'] }})"
+                                            class="btn btn-dark remaddbtns">-</button>
+                                        <span id="quantity_for_{{ $item['item_id'] }}"
+                                            class="theQuant">{{ $item['quantity'] }}</span>
+                                        <button
+                                            onclick="cartAddRemove({{ $item['item_id'] }}, 0, {{ $item['cart_item_id'] }})"
+                                            class="btn btn-dark remaddbtns">+</button>
+                                        <br>
+                                        <div class="total-price-contain">
+                                            <span class="total-price">Total: <span class="price-lbl"
+                                                    id="ttlPrice{{ $item['item_id'] }}">{{ $item['price'] * $item['quantity'] + $item['addition'] }}€</span></span>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-12 col-sm-12">
+                                <div class="icons-container">
+                                    <i class="fa-solid fa-french-fries action-icos"
+                                        onclick="open_modal({{ $item['item_id'] }}, {{ $item['cart_item_id'] }})"></i>
+                                    <i class="fa-solid
+                                    fa-note-sticky action-icos"
+                                        onclick="noteMDL({{ $item['cart_item_id'] }})"></i>
+                                </div>
+                            </div>
+                            <input type="hidden" id="hidden{{ $item['item_id'] }}" value="{{ $item['quantity'] }}">
+                            <input type="hidden" id="base_price{{ $item['item_id'] }}"
+                                value="{{ $item['default_price'] }}">
+                            <input type="hidden" id="sidePrices{{ $item['item_id'] }}"
+                                value="{{ $item['side_prices']['price'] }}">
+                        </div>
+                        @if ($count != count($items['items']))
+                            <hr id="hrof{{ $item['item_id'] }}">
+                        @endif
+                    @endforeach
+                    @php
+                        $count = 0;
+                    @endphp
+                @endforeach
+            </div>
         @else
-        <div class="center">
-            <span class="text-muted">
-                O seu carinho está vazio!
-            </span>
-        </div>
+            <div class="center">
+                <span class="text-muted">
+                    O seu carinho está vazio!
+                </span>
+            </div>
         @endif
     </div>
     <div class="container mt-5">
@@ -277,18 +281,18 @@
                     $.each(res, (key, val) => {
                         $("#acomp_list").append(
                             '<li class="list-group-item d-flex justify-content-between align-items-center">\
-                                                                                                                        <div><span class="text-muted">' +
+                                                                                                                            <div><span class="text-muted">' +
                             val[
                                 'quantity_type'] +
                             '</span><br />\
-                                                                                                                            <span>' +
+                                                                                                                                <span>' +
                             val[
                                 "ingredient"] +
                             '</span><span class="fw-bold" id="acp_' +
                             val["id"] + '"> x ' + (val["quantity"] == null ? 0 : val["quantity"]) +
                             '</span></div>' +
                             '\
-                                                                                                                        <div><label class="price_sides">' +
+                                                                                                                            <div><label class="price_sides">' +
                             val[
                                 "price"] +
                             '€</label><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' +
@@ -299,7 +303,7 @@
                             ')" id="rmAC_' + val["id"] + '" ' + (val["quantity"] == null ? "disabled" :
                                 "") +
                             '><i class="fa-solid fa-minus"></i></button></div>\
-                                                                                                                        <input type="hidden" id="idfor_' +
+                                                                                                                            <input type="hidden" id="idfor_' +
                             val[
                                 "id"] +
                             '" value="none"></li>'
