@@ -42,9 +42,16 @@
         <hr>
     </div>
     <div class="center">
+        @if (isset($card))        
         <div class="whole-card">
+            @php
+                $count = 1;
+            @endphp
             @foreach ($cart as $items)
                 @foreach ($items['items'] as $item)
+                    @php
+                        $count++;
+                    @endphp
                     <div class="row g-0 item-card" id="card{{ $item['item_id'] }}">
                         <div class="col-1">
                             <img src="{{ isset($item['imageUrl']) ? $item['imageUrl'] : 'https://trello.com/1/cards/642f03e28350900aa3aac4ee/attachments/6430690d990221cd112dbc0f/download/image.png' }}"
@@ -86,12 +93,25 @@
                         </div>
                         <input type="hidden" id="hidden{{ $item['item_id'] }}" value="{{ $item['quantity'] }}">
                         <input type="hidden" id="base_price{{ $item['item_id'] }}" value="{{ $item['default_price'] }}">
-                        <input type="hidden" id="sidePrices{{ $item['item_id'] }}" value="{{ $item['side_prices']['price'] }}">
+                        <input type="hidden" id="sidePrices{{ $item['item_id'] }}"
+                            value="{{ $item['side_prices']['price'] }}">
                     </div>
-                    <hr>
+                    @if ($count == count($items['items']))
+                        <hr id="hrof{{ $item['item_id'] }}">
+                    @endif
                 @endforeach
+                @php
+                    $count = 0;
+                @endphp
             @endforeach
         </div>
+        @else
+        <div class="center">
+            <span class="text-muted">
+                O seu carinho está vazio!
+            </span>
+        </div>
+        @endif
     </div>
     <div class="container mt-5">
         <label class="dpe_lbl">Data para entrega:</label>
@@ -216,6 +236,7 @@
                     $("#count").val(parseInt($("#count").val()) - 1);
                     $("#count_header").text($("#count").val() + " Items");
                     $("#card" + itemID).remove();
+                    $("#hrof" + itemID).remove();
                     $("#btns_for_" + itemID).remove();
                     if ($("#cart_total").text() == 0) {
                         $("#confirmOrder").attr("disabled", "disabled");
@@ -227,7 +248,8 @@
                 $("#hidden" + itemID).val(quantity);
                 $("#quantity_for_" + itemID).text("x " + quantity);
                 $("#sidePrices" + itemID).val(res.to_add.price);
-                $("#ttlPrice" + itemID).text(((parseFloat($("#base_price" + itemID).val()) * quantity).toFixed(2) +
+                $("#ttlPrice" + itemID).text((roundNumber((parseFloat($("#base_price" + itemID).val()) * quantity),
+                        2) +
                     parseInt(($(
                         "#sidePrices" + itemID).val() ? $("#sidePrices" + itemID).val() : 0))) + "€");
                 $("#cart_total").text((isRemove ? parseInt($("#cart_total").text()) - 1 : parseInt($("#cart_total")
@@ -255,16 +277,18 @@
                     $.each(res, (key, val) => {
                         $("#acomp_list").append(
                             '<li class="list-group-item d-flex justify-content-between align-items-center">\
-                                                                                                    <div><span class="text-muted">' +
+                                                                                                                        <div><span class="text-muted">' +
                             val[
-                                'quantity_type'] + '</span><br />\
-                                                                                                        <span>' + val[
+                                'quantity_type'] +
+                            '</span><br />\
+                                                                                                                            <span>' +
+                            val[
                                 "ingredient"] +
                             '</span><span class="fw-bold" id="acp_' +
                             val["id"] + '"> x ' + (val["quantity"] == null ? 0 : val["quantity"]) +
                             '</span></div>' +
                             '\
-                                                                                                    <div><label class="price_sides">' +
+                                                                                                                        <div><label class="price_sides">' +
                             val[
                                 "price"] +
                             '€</label><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' +
@@ -275,7 +299,7 @@
                             ')" id="rmAC_' + val["id"] + '" ' + (val["quantity"] == null ? "disabled" :
                                 "") +
                             '><i class="fa-solid fa-minus"></i></button></div>\
-                                                                                                    <input type="hidden" id="idfor_' +
+                                                                                                                        <input type="hidden" id="idfor_' +
                             val[
                                 "id"] +
                             '" value="none"></li>'
