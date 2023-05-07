@@ -66,7 +66,7 @@
             </div>
             <span id="leave" class="nav_link leave" style="cursor: pointer">
                 <i class="fa-solid fa-right-from-bracket"></i>
-                <span class="nav_name">SignOut</span>
+                <span class="nav_name">Sair</span>
             </span>
         </nav>
     </div>

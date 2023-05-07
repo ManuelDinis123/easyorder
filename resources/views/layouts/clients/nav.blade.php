@@ -16,7 +16,7 @@
         <input type="text" class="nav-search" id="searchBar" placeholder="Que restaurante procura?">
     </div>
     <div class="icons-nav">
-        <a href="/carinho" class="nav-item position-relative">
+        <a href="/carinho" class="nav-item position-relative shpcrt">
             <i class="fa-solid fa-cart-shopping"></i>
             <span class="position-absolute badge rounded-pill shp-badge" id="cart_total">
                 0

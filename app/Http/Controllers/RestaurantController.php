@@ -376,6 +376,7 @@ class RestaurantController extends Controller
 
         // If user can't review then theres no need to show him his reviews since he shouldn't have any
         if ($canReview > 0) {
+            $canReview = session()->get("restaurant.id") != $info->id;
             // Get all user reviews
             $myreviews = Reviews::select("reviews.title", "reviews.review", "users.pfp", "users.first_name", "users.last_name", "reviews.written_at", "reviews.stars", "reviews.id")
                 ->where("restaurant_id", $id->route('id'))

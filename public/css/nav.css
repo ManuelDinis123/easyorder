@@ -103,6 +103,19 @@ a {
     height: 63px;
     width: 60px;
     object-fit: cover;
+    transition: all 0.2s;
+}
+
+.shpcrt {
+    transition: all 0.2s;
+}
+
+.shpcrt:hover {
+    transform: scale(1.1);
+}
+
+.logo img:hover {
+    transform: scale(1.1);
 }
 
 .animate-search {
@@ -125,6 +138,13 @@ a {
     object-fit: cover;
     display: flex;
     justify-content: center;
+    transition: all 0.2s;
+}
+.navbar-pfp:hover {
+    transform: scale(1.1);
+}
+.navbar-pfp:active {
+    transform: scale(1);
 }
 
 @media (max-width: 639px) {
