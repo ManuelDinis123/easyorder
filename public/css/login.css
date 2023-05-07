@@ -101,6 +101,7 @@ body {
   animation-name: input_focus;
   animation-duration: 0.5s;
   animation-fill-mode: forwards;
+  outline: none !important;
 }
 
 @keyframes input_focus {
@@ -218,3 +219,4 @@ input[type=text], input[type="password"]{
   font-size: 20px;
   color: rgb(104, 104, 104);
 }
+

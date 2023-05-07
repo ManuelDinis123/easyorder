@@ -64,6 +64,7 @@
     box-shadow: 0px 4.70914px 10.5956px rgba(0, 0, 0, 0.25);
     border-radius: 30px;
     background-color: white;
+    height: 340px;
 }
 
 .dashboard-cards hr.blue {
