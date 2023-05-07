@@ -8,7 +8,7 @@
         <div class="allPublications">
             @if (count($posts) == 0)
                 <div class="center">
-                    <span class="unselectable text-muted">Este restaurante ainda não tem publicações!</span>
+                    <span class="unselectable" style="color: rgb(228, 228, 228)">Este restaurante ainda não tem publicações!</span>
                 </div>
             @endif
             @foreach ($posts as $key => $post)
