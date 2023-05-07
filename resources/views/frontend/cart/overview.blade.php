@@ -44,14 +44,8 @@
     <div class="center">
         @if (count($cart) > 0)
             <div class="whole-card">
-                @php
-                    $count = 1;
-                @endphp
                 @foreach ($cart as $items)
                     @foreach ($items['items'] as $item)
-                        @php
-                            $count++;
-                        @endphp
                         <div class="row g-0 item-card" id="card{{ $item['item_id'] }}">
                             <div class="col-lg-1 col-md-2 col-sm-12">
                                 <div class="theIMG">
@@ -100,13 +94,7 @@
                             <input type="hidden" id="sidePrices{{ $item['item_id'] }}"
                                 value="{{ $item['side_prices']['price'] }}">
                         </div>
-                        @if ($count != count($items['items']))
-                            <hr id="hrof{{ $item['item_id'] }}">
-                        @endif
                     @endforeach
-                    @php
-                        $count = 0;
-                    @endphp
                 @endforeach
             </div>
         @else
@@ -281,18 +269,18 @@
                     $.each(res, (key, val) => {
                         $("#acomp_list").append(
                             '<li class="list-group-item d-flex justify-content-between align-items-center">\
-                                                                                                                            <div><span class="text-muted">' +
+                                                                                                                                <div><span class="text-muted">' +
                             val[
                                 'quantity_type'] +
                             '</span><br />\
-                                                                                                                                <span>' +
+                                                                                                                                    <span>' +
                             val[
                                 "ingredient"] +
                             '</span><span class="fw-bold" id="acp_' +
                             val["id"] + '"> x ' + (val["quantity"] == null ? 0 : val["quantity"]) +
                             '</span></div>' +
                             '\
-                                                                                                                            <div><label class="price_sides">' +
+                                                                                                                                <div><label class="price_sides">' +
                             val[
                                 "price"] +
                             '€</label><button onclick="addRemoveAcompanhamentos(' + val["id"] + ', ' +
@@ -303,7 +291,7 @@
                             ')" id="rmAC_' + val["id"] + '" ' + (val["quantity"] == null ? "disabled" :
                                 "") +
                             '><i class="fa-solid fa-minus"></i></button></div>\
-                                                                                                                            <input type="hidden" id="idfor_' +
+                                                                                                                                <input type="hidden" id="idfor_' +
                             val[
                                 "id"] +
                             '" value="none"></li>'

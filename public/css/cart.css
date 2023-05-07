@@ -71,6 +71,7 @@ div.loaderFADE {
     height: 164px;
     width: 164px;
     z-index: 1;
+    margin-bottom: 24px;
 }
 
 .item-name-container {
