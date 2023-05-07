@@ -79,7 +79,13 @@ class NavController extends Controller
                 "logo_name" => $result->logo_name
             ];
         }
-        return view('frontend.search.partialSearch')->with("restaurants", $data)->with("filters", $filtersBack)->with("noLoad", true)->with("hasSearch", '0');
+
+        $hasSearch = '0';
+        if (count($filtersBack) > 0) {
+            $hasSearch = '1';
+        }
+
+        return view('frontend.search.partialSearch')->with("restaurants", $data)->with("filters", $filtersBack)->with("noLoad", true)->with("hasSearch", $hasSearch);
     }
 
     /**
@@ -90,8 +96,8 @@ class NavController extends Controller
     function checkForNotification()
     {
         $notifications = Notifications::where("user_id", session()->get("user.id"))->get();
-        
-        if(!$notifications) return response("no notifications", 404);
+
+        if (!$notifications) return response("no notifications", 404);
 
         Notifications::where("user_id", session()->get("user.id"))->delete();
 

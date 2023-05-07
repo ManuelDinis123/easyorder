@@ -110,12 +110,14 @@
     <script>
         let selected = 1;
 
-
-        let allimgs = JSON.parse($("#galleryImgs").val());
+        let allimgs = "";
         let slider = ["", "", "", "", ""];
-        $.each(allimgs, (key, val) => {
-            slider[val.card_num - 1] = val.imageUrl;
-        })
+        if ($("#galleryImgs").val() != undefined) {
+            allimgs = JSON.parse($("#galleryImgs").val());
+            $.each(allimgs, (key, val) => {
+                slider[val.card_num - 1] = val.imageUrl;
+            })
+        }
 
         $(document).on('click', '.ball', function() {
             var imageToShow = this.id.replace("img", "");
