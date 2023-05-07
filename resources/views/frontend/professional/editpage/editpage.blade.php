@@ -94,7 +94,7 @@
             </h4>
         </div>
         <div class="center mt-1 pd-c">
-            <div class="plateofday plateofdayimg" id="plateoftheday">
+            <div class="plateofday plateofdayimg animate__animated" id="plateoftheday">
                 <span class="pod-msg unselectable text-muted">Nenhum prato selecionado</span>
             </div>
         </div>
@@ -314,7 +314,11 @@
                 $(".plateofdayimg").css("background", "rgb(241, 241, 241)");
                 $(".plateofdayimg span").css("opacity", "1");
                 $("#removePlate").css("opacity", "0");
-                $("#removePlate").css("pointer-events", "none");
+                $("#removePlate").css("pointer-events", "none");                
+                $("#plateoftheday").addClass("animate__headShake");
+                setTimeout(() => {
+                    $("#plateoftheday").removeClass("animate__headShake");
+                }, 800);
             }).fail((err) => {
                 errorToast(err.responseJSON.title, err.responseJSON.message);
             })

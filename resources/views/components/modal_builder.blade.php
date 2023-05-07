@@ -18,7 +18,7 @@
         cursor: pointer;
     }
     .modal-card-general:hover {
-        transform: scale(1.01);
+        transform: scale(1.05);
     }
 
     .scrollable::-webkit-scrollbar {
