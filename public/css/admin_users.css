@@ -184,3 +184,38 @@ div.loaderFADE {
         padding: 0px 0px 0px 0px;
     }
 }
+
+@media (max-width: 1400px) {
+    .details-body {
+        padding: 15px 15px;
+    }
+}
+@media (max-width: 1060px) {
+    .access-description {
+        float: unset;
+    }
+}
+@media (max-width: 767px) {
+    .pm-list {
+        width: 65%;
+    }
+    .pm-list li {
+        width: 60vw;
+    }
+}
+@media (max-width: 1383px) {
+    .details-username{
+        margin-left: 50px;
+    }
+    .details-db {
+        margin-left: 50px;
+    }
+}
+@media (max-width: 1039px) {
+    .details-username{
+        margin-left: 20px;
+    }
+    .details-db {
+        margin-left: 20px;
+    }
+}

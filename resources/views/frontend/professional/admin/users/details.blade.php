@@ -13,14 +13,14 @@
     <div class="container">
         <div class="details-card">
             <div class="row g-0">
-                <div class="col-1">
+                <div class="col-lg-1 col-md-2">
                     <img src="{{ asset('img/pfp/' . $pfp) }}" class="details-pfp">
                 </div>
-                <div class="col-3">
+                <div class="col-3 col-md-4">
                     <h3 class="mt-4 details-username">{{ $name }}</h3>
                     <span class="text-muted details-db">{{ date("d/m/Y", strtotime($birthdate)) }}</span>
                 </div>
-                <div class="col-8">
+                <div class="col-8 col-md-6">
                     <div style="margin-top: 38px;">
                         <span class="dtypes">Tipo:</span><br>
                         <h4 class="details-type dtypes">{{ $label }}</h4>
@@ -30,7 +30,7 @@
             <hr>
             <div class="details-body">
                 <div class="row g-0">
-                    <div class="col-5">
+                    <div class="col-lg-5 col-md-12 col-sm-12">
                         <label>Nome:</label>
                         <input type="text" value="{{ $name }}" class="form-control" disabled>
                         <label class="mt-3">Data de nascimento:</label>
@@ -50,7 +50,7 @@
                         <button class="btn btn-primary mt-3" id="changeType" style="width: 100%"
                             {{ $isDisabled }}>Editar</button>
                     </div>
-                    <div class="col-7">
+                    <div class="col-lg-7 col-md-12 col-sm-12">
                         <div class="access-description">
                             <h5 class="fw-bolder">Este utilizador tem acesso a:</h5>
                             <div class="description">

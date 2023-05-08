@@ -238,7 +238,7 @@
                 var quantity = parseInt($("#hidden" + itemID).val());
                 var quantity = (isRemove ? quantity - 1 : quantity + 1);
                 $("#hidden" + itemID).val(quantity);
-                $("#quantity_for_" + itemID).text("x " + quantity);
+                $("#quantity_for_" + itemID).text(quantity);
                 $("#sidePrices" + itemID).val(res.to_add.price);
                 $("#ttlPrice" + itemID).text((roundNumber((parseFloat($("#base_price" + itemID).val()) * quantity),
                         2) +
