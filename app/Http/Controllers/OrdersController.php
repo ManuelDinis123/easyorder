@@ -439,9 +439,8 @@ class OrdersController extends Controller
     function getOrders($option)
     {
         $orders = Orders::select("orders.id", "orders.deadline", "restaurants.name", "orders.progress")
-            ->join("restaurants", "restaurants.id", "=", "orders.restaurant_id")
-            ->where("orders.restaurant_id", session()->get("restaurant.id"));
-
+            ->join("restaurants", "restaurants.id", "=", "orders.restaurant_id");
+            
         if ($option == "pending") {
             $orders = $orders->where("orders.closed", 0)->where("orders.isCancelled", 0);
         } else if ($option == "closed") {
@@ -473,7 +472,7 @@ class OrdersController extends Controller
                 "items" => $lbl,
             ];
         }
-
+        Log::info($orders_all);
         return $orders_all;
     }
 }

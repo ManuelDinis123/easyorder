@@ -2,7 +2,6 @@
 @extends('layouts.professional.sidebar', ['file' => 'options'])
 
 <link rel="stylesheet" href="{{ asset('css/settings/main.css') }}">
-
 @section('content')
 
     @php
@@ -56,10 +55,13 @@
                     <div class="list unselectable" style="padding-right: 10px">
                         @foreach ($activities as $act)
                             <div class="item">
-                                <h5>{{$act->first_name . ' ' . $act->last_name}} @if (isset($act->link))
-                                    <span><i class="fa-solid fa-eye" style="color: #1C46B2;" onclick="window.location.href='{{$act->link}}'"></i></span>
-                                @endif</h5>
-                                <span>{{$act->info}} <span style="float: right">{{$act->created_at}}</span></span>
+                                <h5>{{ $act->first_name . ' ' . $act->last_name }} @if (isset($act->link))
+                                        <span><i class="fa-solid fa-eye" style="color: #1C46B2;"
+                                                onclick="window.location.href='{{ $act->link }}'"></i></span>
+                                    @endif
+                                </h5>
+                                <span>{{ $act->info }} <span
+                                        style="float: right">{{ date('d/m/Y H:i:s', strtotime($act->created_at)) }}</span></span>
                             </div>
                             <hr>
                         @endforeach

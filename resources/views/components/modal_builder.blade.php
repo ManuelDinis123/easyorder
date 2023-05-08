@@ -90,7 +90,8 @@
                             @else
                                 <input type="{{ $input['type'] }}"
                                     @if (isset($input['placeholder'])) placeholder="{{ $input['placeholder'] }}" @endif
-                                    class="form-control mb-3" id="{{ $input['id'] }}" autocomplete="off">
+                                    class="form-control mb-3" id="{{ $input['id'] }}" autocomplete="off"
+                                    @if(isset($input['restrictFile'])) accept="image/*" @endif >
                             @endif
                         @endforeach
                     @endif

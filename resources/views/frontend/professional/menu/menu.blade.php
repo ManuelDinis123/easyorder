@@ -19,10 +19,11 @@
         ],
         [
             'label' => 'Imagem:',
-            'type' => 'text',
+            'type' => 'file',
             'id' => 'imageurl',
             'placeholder' => 'https://imageurl.jpg',
             'optional' => true,
+            'restrictFile' => true,
         ],
     ],
     'rawBody' => '<label class="mt-3">Etiquetas:</label><br />
@@ -62,32 +63,32 @@
 
 @section('content')
     <div class="center">
-            <div class="centered">
-                <div class="c-contents">
-                    {{-- Header --}}
-                    <div class="row">
-                        <div class="col-6">
-                            <h3 class="c-h">Ementa</h3>
-                        </div>
-                        <div class="col-6">
-                            @if ($canWrite)
-                                <span class="icons" data-bs-toggle="modal" data-bs-target="#addModal"><i
-                                        class="fa-solid fa-plus"></i></span>
-                            @endif
-                        </div>
+        <div class="centered">
+            <div class="c-contents">
+                {{-- Header --}}
+                <div class="row">
+                    <div class="col-6">
+                        <h3 class="c-h">Ementa</h3>
                     </div>
-
-                    <hr style="height: 2px;" class="separation-line">
-
-                    {{-- Table --}}
-                    <table id="menu" class="table table-borderless" style="width: 100%">
-                        <thead>
-                            <th>Nome</th>
-                            <th>Preço</th>
-                            <th></th>
-                        </thead>
-                    </table>
+                    <div class="col-6">
+                        @if ($canWrite)
+                            <span class="icons" data-bs-toggle="modal" data-bs-target="#addModal"><i
+                                    class="fa-solid fa-plus"></i></span>
+                        @endif
+                    </div>
                 </div>
+
+                <hr style="height: 2px;" class="separation-line">
+
+                {{-- Table --}}
+                <table id="menu" class="table table-borderless" style="width: 100%">
+                    <thead>
+                        <th>Nome</th>
+                        <th>Preço</th>
+                        <th></th>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
 @stop
@@ -102,6 +103,20 @@
         $("#cost").val("");
         $("#tags").val("");
     }
+
+    imgFile = null;
+    $('#imageurl').on('change', function() {
+        var file = this.files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+            var base64 = reader.result;
+            imgFile = {
+                "dataURL": base64,
+                "type": file.type
+            };
+        };
+    });
 
     // saves the item data to Database
     function saveData(enter = false) {
@@ -133,7 +148,7 @@
             url: "createmenuitem",
             data: Object.assign(form_data, {
                 tags: $("#tags").val(),
-                imageurl: $("#imageurl").val(),
+                imageurl: imgFile!=null?imgFile.dataURL:"",
                 "_token": $('#token').val()
             })
         }).done((res) => {

@@ -91,10 +91,11 @@
     $disable = session()->get('type.write_menu') || session()->get('type.owner') || session()->get('type.admin') ? '' : 'disabled';
 @endphp
 
-@section('content')    
+@section('content')
     <div class="row">
         <div class="col-3">
-            <span><a href="/professional/ementa"><i style="position:absolute; top:22px" class="fa-solid fa-angle-left theBACKBUTTON"></i></a></span>
+            <span><a href="/professional/ementa"><i style="position:absolute; top:22px"
+                        class="fa-solid fa-angle-left theBACKBUTTON"></i></a></span>
             <span style="margin-left:27px" class="btn is-selected" id="geral">Geral</span>
             <span class="btn not-selected" id="ing">Acompanhamentos</span>
         </div>
@@ -121,7 +122,7 @@
                     placeholder="Custo de produção €" value="{{ $cost }}" autocomplete="off">
 
                 <label class="mt-3">Imagem:</label>
-                <input type="text" id="imageurl" {{ $disable }} class="form-control"
+                <input type="file" id="imageurl" {{ $disable }} class="form-control"
                     placeholder="https://imageurl.jpg" value="{{ $imageurl }}" autocomplete="off">
 
                 <label class="mt-3">Descrição:</label>
@@ -158,7 +159,7 @@
             <div class="row mt-3">
                 <div class="col-lg-5 col-md-5 col-sm-12">
                     @if ($canWrite)
-                        <button class="btn btn-primary" id="edit-confirm" style="width: 100%">Editar</button>                        
+                        <button class="btn btn-primary" id="edit-confirm" style="width: 100%">Editar</button>
                     @endif
                 </div>
             </div>
@@ -355,9 +356,9 @@
 
 
         $(".img_card").css("background-image", "linear-gradient(180deg, rgba(0, 0, 0, 0) 47.4%, #000000 100%), url(\"" +
-            $("#imageurl").val() + "\")");
+            imgFile.dataURL + "\")");
 
-        if ($("#imageurl").val() === "") {
+        if (imgFile === null) {
             $("#item-card").addClass("visually-hidden");
             $("#card-info").removeClass("visually-hidden");
             $("#item-card").removeClass("animate__animated animate__bounceIn");
@@ -369,6 +370,21 @@
     }
 
     $(document).ready(() => {
+
+        imgFile = null;
+        $('#imageurl').on('change', function() {
+            var file = this.files[0]; 
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function() {
+                var base64 = reader.result;
+                imgFile = {
+                    "dataURL": base64,
+                    "type": file.type
+                };
+                updateCard();
+            };
+        });
 
         // Clicking enter submits the ingredient data.
         $("#ingredients").on('keypress', (e) => {
@@ -407,7 +423,7 @@
                         "name": $("#item_title").val(),
                         "price": $("#price").val(),
                         "cost": $("#cost").val(),
-                        "imageurl": $("#imageurl").val(),
+                        "imageurl": imgFile != null ? imgFile.dataURL : "",
                         "description": $("#description").val(),
                         "tags_in_db": $("#db_tags").val(),
                         "tags": $("#tags").val(),
@@ -426,7 +442,7 @@
         $("#ing_table").dataTable({
 
             "ordering": false,
-            
+
             "language": {
                 "paginate": {
                     "next": '<i class="fa-solid fa-caret-right"></i>',
