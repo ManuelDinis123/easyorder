@@ -225,8 +225,10 @@ class AuthController extends Controller
                 "update_session" => 0
             ]);
 
-            return response()->json(["title" => "Atenção!", "message" => "As suas permissões foram alteradas", "newSession" => [
+            return response()->json(["title" => "Atenção!", "message" => "As suas permissões foram alteradas. Faça login novamente para ter todas as mudanças.", "newSession" => [
                 "view_menu" => session()->get("type.view_menu"),
+                "write_menu" => session()->get("type.write_menu"),
+                "write_orders" => session()->get("type.write_orders"),
                 "view_orders" => session()->get("type.view_orders"),
                 "view_stats" => session()->get("type.view_stats"),
                 "admin" => session()->get("type.admin"),

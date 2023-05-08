@@ -123,7 +123,7 @@
 
                 <label class="mt-3">Imagem:</label>
                 <input type="file" id="imageurl" {{ $disable }} class="form-control"
-                    placeholder="https://imageurl.jpg" value="{{ $imageurl }}" autocomplete="off">
+                    placeholder="https://imageurl.jpg" value="{{ $imageurl }}" autocomplete="off" accept="image/*">
 
                 <label class="mt-3">Descrição:</label>
                 <textarea type="text" id="description" {{ $disable }} class="form-control"

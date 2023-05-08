@@ -21,7 +21,13 @@
             '<h5 class="modal-title" id="galleryModalLabel"><i class="fa-solid fa-image"></i> Escolher Imagem</h5>',
         'hasBody' => true,
         'inputs' => [
-            ['label' => 'Imagem:', 'id' => 'imageURL', 'type' => 'file', 'placeholder' => 'http://image.png'],
+            [
+                'label' => 'Imagem:',
+                'id' => 'imageURL',
+                'type' => 'file',
+                'placeholder' => 'http://image.png',
+                'restrictFile' => true,
+            ],
             ['label' => '', 'id' => 'card_pos', 'type' => 'hidden'],
         ],
         'hasFooter' => true,
