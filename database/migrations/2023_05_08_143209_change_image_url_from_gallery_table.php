@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('menu_item', function (Blueprint $table) {
+        Schema::table('gallery', function (Blueprint $table) {
             $table->longText('imageUrl')->change();
         });
     }
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('menu_item', function (Blueprint $table) {
+        Schema::table('gallery', function (Blueprint $table) {
             $table->text("imageUrl", 255)->change();
         });
     }

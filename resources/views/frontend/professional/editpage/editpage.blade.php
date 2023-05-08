@@ -21,7 +21,7 @@
             '<h5 class="modal-title" id="galleryModalLabel"><i class="fa-solid fa-image"></i> Escolher Imagem</h5>',
         'hasBody' => true,
         'inputs' => [
-            ['label' => 'Url de Imagem:', 'id' => 'imageURL', 'type' => 'text', 'placeholder' => 'http://image.png'],
+            ['label' => 'Imagem:', 'id' => 'imageURL', 'type' => 'file', 'placeholder' => 'http://image.png'],
             ['label' => '', 'id' => 'card_pos', 'type' => 'hidden'],
         ],
         'hasFooter' => true,
@@ -232,11 +232,11 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     pos: position,
-                    img: img
+                    img: imgFile.dataURL
                 }
             }).done((res) => {
                 successToast(res.title, res.message)
-                $("#ic" + position).css("background", "url('" + img + "')");
+                $("#ic" + position).css("background", "url('" + imgFile.dataURL + "')");
                 $("#ic" + position).css("background-size", "cover");
                 $("#ic" + position).css("background-position", "center");
                 $("#galleryModal").modal("toggle");
@@ -314,7 +314,7 @@
                 $(".plateofdayimg").css("background", "rgb(241, 241, 241)");
                 $(".plateofdayimg span").css("opacity", "1");
                 $("#removePlate").css("opacity", "0");
-                $("#removePlate").css("pointer-events", "none");                
+                $("#removePlate").css("pointer-events", "none");
                 $("#plateoftheday").addClass("animate__headShake");
                 setTimeout(() => {
                     $("#plateoftheday").removeClass("animate__headShake");
@@ -354,6 +354,23 @@
             }).fail((err) => {
                 errorToast(err.responseJSON.title, err.responseJSON.message);
             })
+        })
+
+        $(document).ready(() => {
+            imgFile = null;
+            $('#imageURL').on('change', function() {
+                var file = this.files[0];
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function() {
+                    var base64 = reader.result;
+                    imgFile = {
+                        "dataURL": base64,
+                        "type": file.type
+                    };
+                    updateCard();
+                };
+            });
         })
     </script>
 
