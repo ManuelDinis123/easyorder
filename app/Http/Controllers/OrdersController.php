@@ -472,7 +472,6 @@ class OrdersController extends Controller
                 "items" => $lbl,
             ];
         }
-        Log::info($orders_all);
         return $orders_all;
     }
 }

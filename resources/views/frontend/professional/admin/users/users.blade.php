@@ -41,17 +41,19 @@
     <div class="container">
         <div class="t-contain">
             <div class="table-card" style="width: 75%">
-                <table id="users" class="table" style="width: 100%">
-                    <thead class="t-head">
-                        <th class="t-point1">#</th>
-                        <th></th>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Birthdate</th>
-                        <th>Ativo</th>
-                        <th class="t-point2"></th>
-                    </thead>
-                </table>
+                <div class="table-responsive">
+                    <table id="users" class="table" style="width: 100%">
+                        <thead class="t-head">
+                            <th class="t-point1">#</th>
+                            <th></th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Birthdate</th>
+                            <th>Ativo</th>
+                            <th class="t-point2"></th>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
         <span class="btn-container mt-3">
@@ -113,7 +115,7 @@
         $("#users").dataTable({
 
             "ordering": false,
-
+            "responsive": true,
             "language": {
                 "paginate": {
                     "next": '<i class="fa-solid fa-caret-right"></i>',

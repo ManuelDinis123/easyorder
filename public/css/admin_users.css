@@ -178,3 +178,9 @@ div.loaderFADE {
         transform: rotate(360deg);
     }
 }
+
+@media (max-width: 360px) {
+    .btn-container {
+        padding: 0px 0px 0px 0px;
+    }
+}
