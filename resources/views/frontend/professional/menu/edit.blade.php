@@ -5,9 +5,11 @@
 
 <style>
     .img_card {
+        display: flex;
+        align-items: flex-end;
         margin: 0 auto;
         margin-top: 45px !important;
-
+        padding: 5px 5px;
         background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 47.4%, #000000 100%),
             url({{ $imageurl }});
         background-size: cover;
@@ -115,11 +117,11 @@
 
                 <label class="mt-3">Preço:</label>
                 <input type="number" id="price" {{ $disable }} class="form-control" placeholder="Preço €"
-                    value="{{ $price }}" autocomplete="off">
+                    value="{{ $price+0 }}" autocomplete="off">
 
                 <label class="mt-3">Custo:</label>
                 <input type="number" id="cost" {{ $disable }} class="form-control"
-                    placeholder="Custo de produção €" value="{{ $cost }}" autocomplete="off">
+                    placeholder="Custo de produção €" value="{{ $cost+0 }}" autocomplete="off">
 
                 <label class="mt-3">Imagem:</label>
                 <input type="file" id="imageurl" {{ $disable }} class="form-control"
@@ -145,8 +147,8 @@
 
 
                 <div class="img_card @if (!$imageurl) visually-hidden @endif" id="item-card">
+                    <h3 class="img-h" id="card-name" style="width: 289px">{{ $name }}</h3>
                     <h3 class="img-price h-no-linebreaks" id="card-price">{{ $price + 0 }}€</h3>
-                    <h3 class="img-h" id="card-name">{{ $name }}</h3>
                 </div>
 
                 <label style="text-align: center !important; margin-left: 20%;"
@@ -233,22 +235,6 @@
             // animation
             $("#" + main).addClass("animate__animated animate__fadeIn");
             $("#" + secondary).removeClass("animate__animated animate__fadeIn");
-        }
-    }
-
-    // Checks if item name in card has linebreaks or not and changes the position depending on it
-    function cardHeaderPosition() {
-        // Select the img-h element
-        var element = $('.img-h');
-
-        // Get the height of the text within the element
-        var textHeight = element[0].scrollHeight;
-
-        // Check if the element has any line breaks
-        if (textHeight > 348) {
-            $(".img-h").css("padding-top", "290px");
-        } else {
-            $(".img-h").css("padding-top", "314px");
         }
     }
 

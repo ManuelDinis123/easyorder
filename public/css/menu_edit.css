@@ -9,8 +9,8 @@
 
 .img-h {    
     color: white;
-    padding-top: 314px;
-    padding-left: 12px;
+    /* padding-top: 314px;
+    padding-left: 12px; */
     font-weight: 300;
 }
 
@@ -18,8 +18,8 @@
     color: white;    
     font-weight: 600;
     float: right;
-    margin-top: 316px;
-    margin-right: 5px;
+    /* margin-top: 316px;
+    margin-right: 5px; */
 }
 
 
