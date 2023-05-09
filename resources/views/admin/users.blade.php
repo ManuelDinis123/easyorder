@@ -153,14 +153,12 @@
                         data: "app_admin",
                         width: "10%",
                         render: function(data, type, row, meta) {
-                            var isCheck = data == 1 ? "checked" : ";"
-                            var disable = (row.id == "{{ session()->get('user.id') }}") ?
-                                "disabled" : "";
+                            var isCheck = data == 1 ? "checked disabled" : ";"
                             return `<div class="form-check form-switch">
                                         <input class="form-check-input" onclick="switches(` + row.id +
                                 `, 1)" type="checkbox" role="switch" id="app_admin` + row.id +
                                 `" ` +
-                                isCheck + ` ` + disable + `>
+                                isCheck + `>
                                     </div>`
                         }
                     },
