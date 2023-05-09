@@ -20,7 +20,7 @@ class MenuController extends Controller
      */
     function index()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
         }
@@ -36,7 +36,7 @@ class MenuController extends Controller
      */
     function edit(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
         }
@@ -74,7 +74,7 @@ class MenuController extends Controller
      */
     function get(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
         }
@@ -105,7 +105,7 @@ class MenuController extends Controller
      */
     function get_tags()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
         }
@@ -125,7 +125,7 @@ class MenuController extends Controller
      */
     function create(Request $data)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }
@@ -168,7 +168,7 @@ class MenuController extends Controller
      */
     function update(Request $newdata)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }
@@ -232,7 +232,7 @@ class MenuController extends Controller
      */
     function remove(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }
@@ -263,7 +263,7 @@ class MenuController extends Controller
      */
     function fetch_ingredients(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
         }
@@ -281,7 +281,7 @@ class MenuController extends Controller
      */
     function add_ingredients(Request $data)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }
@@ -311,7 +311,7 @@ class MenuController extends Controller
      */
     function update_ingredients(Request $data)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }
@@ -339,7 +339,7 @@ class MenuController extends Controller
      */
     function delete_ingredients(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_menu')) return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }

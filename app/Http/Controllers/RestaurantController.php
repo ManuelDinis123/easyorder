@@ -188,7 +188,7 @@ class RestaurantController extends Controller
      */
     function saveInfo(Request $data)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }
@@ -237,7 +237,7 @@ class RestaurantController extends Controller
      */
     function publish()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             return response()->json(["title" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }

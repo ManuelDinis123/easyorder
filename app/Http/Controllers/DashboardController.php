@@ -15,7 +15,7 @@ class DashboardController extends Controller
 {
     function index()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
 
         $startDate = new DateTime('first day of this month');
         $endDate = new DateTime('last day of this month');

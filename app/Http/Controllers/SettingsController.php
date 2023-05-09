@@ -124,7 +124,7 @@ class SettingsController extends Controller
      */
     function update(Request $request)
     {
-        if (!AppHelper::hasLogin()) return redirect("/no-access");
+        if (!AppHelper::hasLogin()) return redirect("/");
         if ($request->update) {
             // Check if any of the values are empty
             if (AppHelper::hasEmpty($request->values)) {
@@ -191,7 +191,7 @@ class SettingsController extends Controller
      */
     function transferOwnerShip(Request $req)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
         }

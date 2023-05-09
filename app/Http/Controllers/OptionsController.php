@@ -9,7 +9,7 @@ class OptionsController extends Controller
 {
     function index()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             return redirect("/professional");
         }

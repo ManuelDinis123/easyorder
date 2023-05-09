@@ -21,7 +21,7 @@ class OrdersController extends Controller
 {
     function index()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
         }
@@ -36,7 +36,7 @@ class OrdersController extends Controller
      */
     function get(Request $data)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
         }
@@ -58,7 +58,7 @@ class OrdersController extends Controller
      */
     function edit(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
         }
@@ -119,7 +119,7 @@ class OrdersController extends Controller
      */
     function get_items_from_order(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
         }
@@ -141,7 +141,7 @@ class OrdersController extends Controller
      */
     function change_status(Request $data)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_orders')) return response()->json(["status" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }
@@ -174,7 +174,7 @@ class OrdersController extends Controller
      */
     function close_order(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_orders')) return response()->json(["status" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }
@@ -217,7 +217,7 @@ class OrdersController extends Controller
      */
     function cancel_order(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_orders')) return response()->json(["status" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }
@@ -248,7 +248,7 @@ class OrdersController extends Controller
      */
     function get_sides(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_menu')) return redirect("/professional");
         }
@@ -305,7 +305,7 @@ class OrdersController extends Controller
      */
     function kitchen_viewer()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_orders')) return redirect("/professional");
         }
@@ -320,7 +320,7 @@ class OrdersController extends Controller
      */
     function mark_done_fast(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'write_orders')) return response()->json(["status" => "Erro", "message" => "Não tem permissão para realizar esta ação"], 403);
         }

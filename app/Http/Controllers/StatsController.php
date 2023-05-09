@@ -14,7 +14,7 @@ class StatsController extends Controller
     // Display the stats view and get the statistics data
     function index()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), 'owner') || !AppHelper::checkUserType(session()->get("type.id"), 'admin')) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'view_stats')) return redirect("/professional");
         }

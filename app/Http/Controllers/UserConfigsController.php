@@ -19,7 +19,7 @@ class UserConfigsController extends Controller
 {
     function index()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'invite_users'], false))) {
             return redirect("/professional");
         }
@@ -78,7 +78,7 @@ class UserConfigsController extends Controller
      */
     function pending_page()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'invite_users'], false))) {
             return redirect("/professional");
         }
@@ -93,7 +93,7 @@ class UserConfigsController extends Controller
      */
     function getPending()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'invite_users'], false))) {
             return redirect("/professional");
         }
@@ -124,7 +124,7 @@ class UserConfigsController extends Controller
      */
     function invite(Request $email)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'invite_users'], false))) {
             return redirect("/professional");
         }
@@ -173,7 +173,7 @@ class UserConfigsController extends Controller
      */
     function delete_invites(Request $data)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'invite_users'], false))) {
             return redirect("/professional");
         }
@@ -190,7 +190,7 @@ class UserConfigsController extends Controller
      */
     function user_details(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             return redirect("/professional");
         }
@@ -243,7 +243,7 @@ class UserConfigsController extends Controller
      */
     function changeType(Request $ids)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false))) {
             return redirect("/professional");
         }
@@ -276,7 +276,7 @@ class UserConfigsController extends Controller
      */
     function changeUserState(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if ((!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin', 'ban_users'], false))) {
             return response()->json(["title" => "Erro", "message" => "Não tem permissões para " . ($id->active == 1 ? 'ativar' : 'desativar') . " o User"], 403);
         }

@@ -21,7 +21,7 @@ class EditpageController extends Controller
      */
     function index()
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return redirect("/professional");
         }
@@ -77,7 +77,7 @@ class EditpageController extends Controller
      */
     function setPlateOfDay(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return redirect("/professional");
         }
@@ -107,7 +107,7 @@ class EditpageController extends Controller
      */
     function postPage(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return redirect("/professional");
         }
@@ -130,7 +130,7 @@ class EditpageController extends Controller
      */
     function savePost(Request $data)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return response("Access Denied", 401);
         }
@@ -179,7 +179,7 @@ class EditpageController extends Controller
      */
     function deletePost(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return response("Access Denied", 401);
         }
@@ -200,7 +200,7 @@ class EditpageController extends Controller
      */
     function publishDraft(Request $id)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return response("Access Denied", 401);
         }
@@ -222,7 +222,7 @@ class EditpageController extends Controller
      */
     function saveImage(Request $req)
     {
-        if (!AppHelper::checkAuth()) return redirect("/no-access");
+        if (!AppHelper::checkAuth()) return redirect("/");
         if (!AppHelper::checkUserType(session()->get("type.id"), ['owner', 'admin'], false)) {
             if (!AppHelper::checkUserType(session()->get("type.id"), 'edit_page')) return response("Access Denied", 401);
         }
