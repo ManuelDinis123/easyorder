@@ -107,27 +107,21 @@
 
 
 .food-card-label {
-    margin-left: 10px;
-    margin-top: 170px;
     color: white;
     font-size: 24px;
     font-weight: bolder;
 }
 
 .food-card-quantity {
-    margin-top: 170px;
     color: white;
     font-size: 20px;
     font-weight: normal;
 }
 
 .food-card-price {
-    margin-right: 10px;
-    margin-top: 170px;
     color: white;
     font-size: 24px;
-    font-weight: 500;
-    float: right;
+    font-weight: 500;    
 }
 
 .item-card-footer {

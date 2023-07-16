@@ -89,7 +89,9 @@ class OrdersController extends Controller
             "menu_item.imageUrl",
             "order_items.note",
             "order_items.quantity",
-            DB::raw("COALESCE(SUM(order_items_sides.price * order_items_sides.quantity), 0) as 'side_price'")
+            DB::raw("COALESCE(SUM(order_items_sides.price * order_items_sides.quantity), 0) as 'side_price'"),
+            DB::raw("IF(order_items.note != '', 1, 0) as 'has_note'"),
+            DB::raw("IF(COUNT(order_items_sides.id) > 0, 1, 0) as 'has_side'")
         )
             ->where("order_id", $order_details["id"])
             ->join('menu_item', 'menu_item.id', '=', 'order_items.menu_item_id')

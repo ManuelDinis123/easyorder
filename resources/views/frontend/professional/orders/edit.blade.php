@@ -9,7 +9,7 @@
         border-radius: 14px;
         cursor: pointer;
         overflow: hidden;
-        margin-right:5px;
+        margin-right: 5px;
     }
 
     .item-card {
@@ -29,6 +29,8 @@
         background: linear-gradient(180deg, rgba(0, 0, 0, 0) 47.4%, #000000 100%);
         -webkit-transition: all .4s;
         transition: all .4s ease-in-out;
+        ;
+        height: 100%;
     }
 
     .item-gradient:hover {
@@ -91,8 +93,8 @@
     ])
     @endcomponent
 
-<div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-12">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12">
             <span>Pedido de</span>
             <h3 style="font-weight: 700">{{ $first_name . ' ' . $last_name }}</h3>
         </div>
@@ -101,7 +103,7 @@
                 <span>Data de entrega</span>
                 <div class="deadline-contain">
                     @if ($deadline >= date('Y-m-d h:i:s'))
-                        <h3 style="font-weight: 700;">{{ date("d/m/Y H:i:s", strtotime($deadline)) }}</h3>
+                        <h3 style="font-weight: 700;">{{ date('d/m/Y H:i:s', strtotime($deadline)) }}</h3>
                     @elseif($closed)
                         <h3 style="font-weight: 700;">{{ $deadline }}</h3>
                     @else
@@ -124,10 +126,25 @@
                                 <div class="item-card" style="background-image: url({{ $item['imageUrl'] }});"
                                     onclick="open_modal({{ $item['id'] }}, '{{ $item['note'] }}')">
                                     <div class="item-gradient">
-                                        <label class="food-card-label">{{ $item['name'] }}</label>
-                                        <label class="food-card-quantity"> x {{ $item['quantity'] }}</label>
-                                        <label
-                                            class="food-card-price">{{ $item['price'] * $item['quantity'] + $item['side_price'] }}€</label>
+                                        <div class="d-flex align-items-start px-2">
+                                            @if ($item['has_note'])
+                                                <span style="color: white" class="me-2 mt-2"><i
+                                                        class="fa-solid fa-comment"></i></span>
+                                            @endif
+                                            @if ($item['has_side'])
+                                                <span style="color: white" class="mt-2"><i
+                                                        class="fa-solid fa-french-fries"></i></span>
+                                            @endif
+                                        </div>
+                                        <div style="height: {{$item['has_note'] || $item['has_side'] ? '90' : '100'}}%"
+                                            class="d-flex align-items-end justify-content-between px-2">
+                                            <div>
+                                                <label class="food-card-label">{{ $item['name'] }}</label>
+                                                <label class="food-card-quantity"> x {{ $item['quantity'] }}</label>
+                                            </div>
+                                            <label
+                                                class="food-card-price">{{ $item['price'] * $item['quantity'] + $item['side_price'] }}€</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -319,7 +336,9 @@
                     data: null,
                     width: "30%",
                     render: function(data, type, row, meta) {
-                        if (!{{ session()->get('type.write_orders')?session()->get('type.write_orders'):'0' }}) return "";
+                        if (!
+                            {{ session()->get('type.write_orders') ? session()->get('type.write_orders') : '0' }}
+                        ) return "";
                         return (!row['done']) ?
                             '<button class="btn btn-primary table-btn"' +
                             "{{ $closed == 1 || $isCancelled == 1 ? 'disabled' : '' }}" +
