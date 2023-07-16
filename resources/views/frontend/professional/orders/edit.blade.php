@@ -87,7 +87,7 @@
     @component('components.breadcrumbs', [
         'title' => 'Pedido',
         'crumbs' => [
-            ['link' => '/professional/encomendas', 'label' => 'Menu'],
+            ['link' => '/professional/encomendas', 'label' => 'Pedidos'],
             ['link' => '/professional/encomendas/' . $id, 'label' => $first_name . ' ' . $last_name],
         ],
     ])
