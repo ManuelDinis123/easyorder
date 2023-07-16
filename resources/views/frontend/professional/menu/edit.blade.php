@@ -161,7 +161,7 @@
             <div class="row mt-3">
                 <div class="col-lg-5 col-md-5 col-sm-12">
                     @if ($canWrite)
-                        <button class="btn btn-primary" id="edit-confirm" style="width: 100%">Editar</button>
+                        <button class="btn btn-primary" id="edit-confirm" style="width: 100%">Confirmar</button>
                     @endif
                 </div>
             </div>

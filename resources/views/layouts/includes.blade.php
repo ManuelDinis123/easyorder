@@ -1,7 +1,7 @@
 <link rel="icon" href="{{ asset('img/eologo.svg') }}">
 
 {{-- Montserrat Font --}}
-{{-- <link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet"> --}}
+<link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet">
 
 {{-- JQuery --}}
 <script src="{{ mix('plugins/jquery/jquery-3.6.1.min.js') }}"></script>
@@ -13,7 +13,7 @@
 
 {{-- Font Awesome 6 --}}
 
-<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
+<link href="{{mix('plugins/font-awesome-pro-v6-6.2.0/css/all.min.css')}}" rel="stylesheet"
     type="text/css" />
 
 {{-- IzyToast --}}
