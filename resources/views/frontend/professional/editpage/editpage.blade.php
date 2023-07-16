@@ -51,6 +51,13 @@
         @endslot
     @endcomponent
 
+        {{-- Breadcrumbs --}}
+        @component('components.breadcrumbs', [
+            'title' => 'Gerir Conteúdo',
+            'separator' => true
+        ])
+        @endcomponent
+
     <style>
         #removePlate {
             @if ($plateofday)

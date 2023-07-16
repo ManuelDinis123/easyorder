@@ -36,6 +36,17 @@
         }
     </style>
 
+    {{-- Breadcrumbs --}}
+    @component('components.breadcrumbs', [
+        'title' => (isset($post) ? 'Editar' : 'Criar') . ' Publicação',
+        'crumbs' => [
+            ['link' => '/professional/conteudo', 'label' => 'Conteúdo'],
+            ['link' => '/professional/conteudo/publicar', 'label' => (isset($post) ? 'Editar' : 'Criar') . ' Publicação'],
+        ],
+        'separator' => true
+    ])
+    @endcomponent
+
     <div class="loaderFADE visually-hidden">
         <div class="loader-container" id="lc">
             <div class="loader2"></div>
@@ -85,7 +96,7 @@
         // Saves the post and gets whether it should be published or not
         function savePost(publish) {
             if (animateErr(["post_title"])) return;
-            const text = tinymce.get("postBody").getContent();            
+            const text = tinymce.get("postBody").getContent();
             $.ajax({
                 method: "post",
                 url: "/professional/conteudo/publicar/save",

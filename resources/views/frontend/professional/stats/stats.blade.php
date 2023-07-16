@@ -5,6 +5,12 @@
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/stats.css') }}">
 
+    {{-- Breadcrumbs --}}
+    @component('components.breadcrumbs', [
+        'title' => 'Estatísticas',        
+    ])
+    @endcomponent
+
     <span>
         <button class="btn tab-selected" id="weekly" onclick="changeTab('weekly')">Semana</button>
         <button class="btn" id="monthly" onclick="changeTab('monthly')">Mês</button>

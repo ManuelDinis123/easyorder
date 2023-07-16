@@ -5,12 +5,19 @@
 
 @section('content')
 
+    {{-- Breadcrumbs --}}
+    @component('components.breadcrumbs', [
+        'title' => "Pedidos",
+    ])
+    @endcomponent
+
     <div class="row">
         <div class="col-12">
             <button class="btn is-selected" id="ongoingbtn">Em progresso</button>
             <button class="btn not-selected" id="closedbtn">Finalizados</button>
             <button class="btn not-selected" id="cancelledbtn">Cancelados</button>
-            <button onclick="kitchenviewer()" style="float: right" class="btn btn-primary">Kitchen Viewer <i class="fa-solid fa-display"></i></button>
+            <button onclick="kitchenviewer()" style="float: right" class="btn btn-primary">Kitchen Viewer <i
+                    class="fa-solid fa-display"></i></button>
         </div>
     </div>
 
@@ -51,12 +58,12 @@
 @stop
 
 <script>
-    function kitchenviewer(){
-        window.location.href="/professional/encomendas/viewer";
+    function kitchenviewer() {
+        window.location.href = "/professional/encomendas/viewer";
     }
 
     // Changes tabs
-    function changeTabs(changeTo, remove) {        
+    function changeTabs(changeTo, remove) {
         $("#" + changeTo).removeClass("visually-hidden");
         $("#" + changeTo + 'btn').addClass("is-selected");
         $("#" + changeTo + 'btn').removeClass("not-selected");
@@ -127,8 +134,7 @@
                     },
                     dataSrc: ''
                 },
-                columns: [
-                    {
+                columns: [{
                         data: "full_name",
                         width: "25%"
                     },
@@ -137,7 +143,10 @@
                         width: "25%",
                         render: function(data, type, row, meta) {
                             var formatDate = new Date(data);
-                            formatDate = formatDate.getDate() + '/' + (formatDate.getMonth()+1) + "/" + formatDate.getFullYear() + " " + formatDate.getHours() + ":" + formatDate.getMinutes() + ":" + formatDate.getSeconds();
+                            formatDate = formatDate.getDate() + '/' + (formatDate
+                                    .getMonth() + 1) + "/" + formatDate.getFullYear() +
+                                " " + formatDate.getHours() + ":" + formatDate
+                                .getMinutes() + ":" + formatDate.getSeconds();
                             return (data >= '{{ date('Y-m-d h:i:s') }}') ? '<span>' +
                                 formatDate +
                                 '</span>' : ((row['closed']) ? '<span>' + formatDate +

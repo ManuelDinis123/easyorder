@@ -33,6 +33,14 @@
 @endphp
 
 @section('content')
+    {{-- Breadcrumbs --}}
+    @component('components.breadcrumbs', [
+        'title' => 'Users',
+        'crumbs' => [['link' => null, 'label' => 'Admin'], ['link' => '/professional/admin/users', 'label' => 'Users']],
+        'separator' => true,
+    ])
+    @endcomponent
+
     <div class="loaderFADE visually-hidden">
         <div class="loader-container" id="lc">
             <div class="loader2"></div>

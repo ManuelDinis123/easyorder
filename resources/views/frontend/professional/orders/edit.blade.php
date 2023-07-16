@@ -81,7 +81,16 @@
 @endcomponent
 
 @section('content')
-<a href="/professional/encomendas"><i class="fa-solid fa-angle-left theBACKBUTTON"></i></a>
+    {{-- Breadcrumbs --}}
+    @component('components.breadcrumbs', [
+        'title' => 'Pedido',
+        'crumbs' => [
+            ['link' => '/professional/encomendas', 'label' => 'Menu'],
+            ['link' => '/professional/encomendas/' . $id, 'label' => $first_name . ' ' . $last_name],
+        ],
+    ])
+    @endcomponent
+
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12">
             <span>Pedido de</span>

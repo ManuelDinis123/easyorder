@@ -10,6 +10,18 @@
         $isDisabled = $isOwner || ($isAdmin && !session()->get('type.owner')) ? 'disabled' : '';
     @endphp
 
+    {{-- Breadcrumbs --}}
+    @component('components.breadcrumbs', [
+        'title' => $name,
+        'crumbs' => [
+            ['link' => null, 'label' => 'Admin'],
+            ['link' => '/professional/admin/users', 'label' => 'Users'],
+            ['link' => '/professional/admin/users/'.$id, 'label' => $name]
+        ],
+        'separator' => true,
+    ])
+    @endcomponent
+
     <div class="container">
         <div class="details-card">
             <div class="row g-0">
@@ -18,7 +30,7 @@
                 </div>
                 <div class="col-3 col-md-4">
                     <h3 class="mt-4 details-username">{{ $name }}</h3>
-                    <span class="text-muted details-db">{{ date("d/m/Y", strtotime($birthdate)) }}</span>
+                    <span class="text-muted details-db">{{ date('d/m/Y', strtotime($birthdate)) }}</span>
                 </div>
                 <div class="col-8 col-md-6">
                     <div style="margin-top: 38px;">
@@ -34,7 +46,8 @@
                         <label>Nome:</label>
                         <input type="text" value="{{ $name }}" class="form-control" disabled>
                         <label class="mt-3">Data de nascimento:</label>
-                        <input type="text" value="{{ date("d/m/Y", strtotime($birthdate)) }}" class="form-control" disabled>
+                        <input type="text" value="{{ date('d/m/Y', strtotime($birthdate)) }}" class="form-control"
+                            disabled>
                         <label class="mt-3">Email:</label>
                         <input type="text" value="{{ $email }}" class="form-control" disabled>
                         <hr style="margin-top: 30px">

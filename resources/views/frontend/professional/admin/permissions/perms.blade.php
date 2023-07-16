@@ -18,6 +18,17 @@
 @endcomponent
 
 @section('content')
+    {{-- Breadcrumbs --}}
+    @component('components.breadcrumbs', [
+        'title' => 'Roles',
+        'crumbs' => [
+            ['link' => null, 'label' => 'Admin'],
+            ['link' => '/professional/admin/permissions', 'label' => 'Roles'],            
+        ],
+        'separator' => true,
+    ])
+    @endcomponent
+
     <div class="perms-container">
         <div class="perms-card">
             <table class="table table-striped" id="types" style="width: 100%">
@@ -83,11 +94,11 @@
                         width: "10%",
                         render: function(data, type, row, meta) {
                             if (row.label == "Owner") return '';
-                            if(row.id=={{session()->get("type.id")}}) return '';
+                            if (row.id == {{ session()->get('type.id') }}) return '';
                             return '<div  style="display: flex; align-items: center">\
-                                    <i class="fa-sharp fa-solid fa-pen" onClick="goEdit(' + row.id + ')" style="color:#1C46B2; cursor:pointer; margin-right:5px;"></i>\
-                                    <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\
-                                    </div>';
+                                        <i class="fa-sharp fa-solid fa-pen" onClick="goEdit(' + row.id + ')" style="color:#1C46B2; cursor:pointer; margin-right:5px;"></i>\
+                                        <i onClick="confirmationModal(' + row.id + ')" class="fa-sharp fa-solid fa-trash-xmark" style="color:#bf1313; cursor:pointer;"></i>\
+                                        </div>';
                         }
                     },
                 ]

@@ -4,9 +4,12 @@
 <link rel="stylesheet" href="{{ asset('css/proreviews.css') }}">
 @section('content')
 
-    <head>
-        <title>Criticas</title>
-    </head>
+    {{-- Breadcrumbs --}}
+    @component('components.breadcrumbs', [
+        'title' => 'Reviews',
+        'separator' => true,
+    ])
+    @endcomponent
 
     @component('components.modal_builder', [
         'modal_id' => 'reportModal',

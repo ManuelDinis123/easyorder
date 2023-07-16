@@ -94,11 +94,19 @@
 @endphp
 
 @section('content')
+    {{-- Breadcrumbs --}}
+    @component('components.breadcrumbs', [
+        'title' => $name,
+        'crumbs' => [
+            ['link' => '/professional/ementa', 'label' => 'Menu'],
+            ['link' => '/professional/ementa/' . $id, 'label' => $name],
+        ],
+    ])
+    @endcomponent
+
     <div class="row">
         <div class="col-3">
-            <span><a href="/professional/ementa"><i style="position:absolute; top:22px"
-                        class="fa-solid fa-angle-left theBACKBUTTON"></i></a></span>
-            <span style="margin-left:27px" class="btn is-selected" id="geral">Geral</span>
+            <span class="btn is-selected" id="geral">Geral</span>
             <span class="btn not-selected" id="ing">Acompanhamentos</span>
         </div>
         @if ($canWrite)
@@ -117,11 +125,11 @@
 
                 <label class="mt-3">Preço:</label>
                 <input type="number" id="price" {{ $disable }} class="form-control" placeholder="Preço €"
-                    value="{{ $price+0 }}" autocomplete="off">
+                    value="{{ $price + 0 }}" autocomplete="off">
 
                 <label class="mt-3">Custo:</label>
                 <input type="number" id="cost" {{ $disable }} class="form-control"
-                    placeholder="Custo de produção €" value="{{ $cost+0 }}" autocomplete="off">
+                    placeholder="Custo de produção €" value="{{ $cost + 0 }}" autocomplete="off">
 
                 <label class="mt-3">Imagem:</label>
                 <input type="file" id="imageurl" {{ $disable }} class="form-control"
@@ -359,7 +367,7 @@
 
         imgFile = null;
         $('#imageurl').on('change', function() {
-            var file = this.files[0]; 
+            var file = this.files[0];
             var reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function() {
@@ -416,6 +424,7 @@
                     }
                 }).done((res) => {
                     if (res.title == "Sucesso") {
+                        $("#breadcrumb_title").text($("#item_title").val());
                         successToast(res.title, res.message);
                     }
                 }).fail((err) => {

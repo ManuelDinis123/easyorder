@@ -5,6 +5,18 @@
 
 @section('content')
 
+    {{-- Breadcrumbs --}}
+    @component('components.breadcrumbs', [
+        'title' => $label,
+        'crumbs' => [
+            ['link' => null, 'label' => 'Admin'],
+            ['link' => '/professional/admin/permissions', 'label' => 'Roles'],
+            ['link' => '/professional/admin/permissions/'.$id, 'label' => $label],
+        ],
+        'separator' => true,
+    ])
+    @endcomponent
+
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-sm-12 g-0 mb-5">
@@ -20,7 +32,7 @@
                     <h4 style="font-weight: 600">Permissões:</h4>
                     <hr class="mt-2">
                     @php
-                        $map = [['label' => 'Ver Pedidos', 'id' => 'view_orders', 'active' => $view_orders], ['label' => 'Editar Pedidos', 'id' => 'write_orders', 'active' => $write_orders], ['label' => 'Ver Menu', 'id' => 'view_menu', 'active' => $view_menu], ['label' => 'Editar Menu', 'id' => 'write_menu', 'active' => $write_menu], ['label' => 'Ver Estatisticas', 'id' => 'view_stats', 'active' => $view_stats], ['label' => 'Editar Pagina', 'id' => 'edit_page', 'active' => $edit_page], ['label' => 'Convidar Utilizadores', 'id' => 'invite_users', 'active' => $invite_users], ['label' => 'Banir Utilizadores', 'id' => 'ban_users', 'active' => $ban_users], ['label' => 'Admin', 'id' => 'admin', 'active' => $admin]] 
+                        $map = [['label' => 'Ver Pedidos', 'id' => 'view_orders', 'active' => $view_orders], ['label' => 'Editar Pedidos', 'id' => 'write_orders', 'active' => $write_orders], ['label' => 'Ver Menu', 'id' => 'view_menu', 'active' => $view_menu], ['label' => 'Editar Menu', 'id' => 'write_menu', 'active' => $write_menu], ['label' => 'Ver Estatisticas', 'id' => 'view_stats', 'active' => $view_stats], ['label' => 'Editar Pagina', 'id' => 'edit_page', 'active' => $edit_page], ['label' => 'Convidar Utilizadores', 'id' => 'invite_users', 'active' => $invite_users], ['label' => 'Banir Utilizadores', 'id' => 'ban_users', 'active' => $ban_users], ['label' => 'Admin', 'id' => 'admin', 'active' => $admin]];
                     @endphp
                     <div class="row">
                         @foreach ($map as $permission)
@@ -114,7 +126,7 @@
                 }
             }).done((res) => {
                 successToast(res.title, res.message);
-            }).fail((err)=>{
+            }).fail((err) => {
                 errorToast(err.responseJSON.title, err.responseJSON.message);
             })
         })

@@ -5,6 +5,18 @@
 
 @section('content')
 
+    {{-- Breadcrumbs --}}
+    @component('components.breadcrumbs', [
+        'title' => 'Criar Role',
+        'crumbs' => [
+            ['link' => null, 'label' => 'Admin'],
+            ['link' => '/professional/admin/permissions', 'label' => 'Roles'],
+            ['link' => '/professional/admin/permissions/criar', 'label' => 'Criar Role'],
+        ],
+        'separator' => true,
+    ])
+    @endcomponent
+
     <div class="container">
         <div class="row">
             <div class="col-3 g-0">

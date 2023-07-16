@@ -177,15 +177,21 @@ class MenuController extends Controller
 
         $restaurant_id = session()->get("restaurant")["id"];
 
-        $update =  MenuItems::whereId($newdata->id)->update([
+        $update_cols = [
             "name" => $newdata->name,
             "price" => $newdata->price,
             "cost" => $newdata->cost,
-            "description" => $newdata->description,
-            "imageUrl" => $newdata->imageurl,
+            "description" => $newdata->description,            
             "edited_by" => session()->get("user")["id"],
             "edited_at" => date("Y-m-d H:i:s")
-        ]);
+        ];
+
+        // If there is an imageUrl add it to the cols to be updated
+        if($newdata->imageurl){
+            $update_cols['imageUrl'] = $newdata->imageurl;
+        }
+
+        $update =  MenuItems::whereId($newdata->id)->update($update_cols);
 
         if (!$update && !$newdata->tags) return response()->json(["title" => "Erro", "message" => "Erro ao editar o item"], 200);
 
