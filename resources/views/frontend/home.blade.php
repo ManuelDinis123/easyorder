@@ -1,6 +1,6 @@
 @include('layouts.includes')
 @extends('layouts.clients.nav')
-
+<title>EasyOrder</title>
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 

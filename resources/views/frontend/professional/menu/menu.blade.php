@@ -60,7 +60,7 @@
 @php
     $canWrite = session()->get('type.write_menu') || session()->get('type.owner') || session()->get('type.admin');
 @endphp
-
+<title>Ementa</title>
 @section('content')
     <div class="center">
         <div class="centered">
@@ -148,7 +148,7 @@
             url: "createmenuitem",
             data: Object.assign(form_data, {
                 tags: $("#tags").val(),
-                imageurl: imgFile!=null?imgFile.dataURL:"",
+                imageurl: imgFile != null ? imgFile.dataURL : "",
                 "_token": $('#token').val()
             })
         }).done((res) => {

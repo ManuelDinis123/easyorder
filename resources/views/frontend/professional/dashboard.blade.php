@@ -2,6 +2,7 @@
 @extends('layouts.professional.sidebar', ['file' => 'dashboard'])
 
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+<title>Dashboard</title>
 @section('content')
     @if (session()->get('restaurant.isPublic'))
 

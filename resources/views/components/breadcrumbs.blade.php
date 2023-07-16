@@ -1,4 +1,5 @@
 {{-- Create breadcrumbs --}}
+<title>{{$title}}</title>
 <div class="breadcrumbs pb-4">
     <div class="d-flex flex-row bread-container">
         <div class="d-flex justify-content-start align-items-center">

@@ -14,7 +14,7 @@
         background: linear-gradient(180deg, rgba(0, 0, 0, 0) 48.44%, #000000ce 100%), {{isset($info['banner']) ? "url(".$info['banner'].")" : "#6e6e6e"}};
     }
 </style>
-
+<title>{{$info['name']}}</title>
 <div class="banner">
     <img src="{{ $info['logo_name'] ? asset('img/logos/' . $info['logo_name']) : $info['logo_url'] }}"
         class="restaurant-logo">

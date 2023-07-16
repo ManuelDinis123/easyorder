@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="{{ asset('css/search.css') }}">
-
+<title>Procura</title>
 @if (!$hasSearch)
     <div class="loaderFADE">
         <div class="loader-container" id="lc">

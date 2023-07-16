@@ -1,6 +1,6 @@
 @include('layouts.includes')
 @extends('layouts.clients.nav')
-
+<title>Pedido Concluido!</title>
 @section('content')
 
     <style>

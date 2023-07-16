@@ -28,7 +28,7 @@
     'buttons' => [['label' => 'Fechar', 'id' => 'closeMdl2', 'class' => 'btn btn-dark', 'dismiss' => true]],
 ])
 @endcomponent
-
+<title>Carrinho de Compras</title>
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/cart.css') }}">
     <div class="loaderFADE visually-hidden">

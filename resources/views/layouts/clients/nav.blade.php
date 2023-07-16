@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>EasyOrder</title>
 </head>
 
 <header class="header nav-extra" id="header">

@@ -40,7 +40,7 @@
         }
     }
 </style>
-
+<title>Configurações</title>
 <div class="small-screen-tabs">
     @if (session()->get('type.edit_page') || session()->get('type.owner') || session()->get('type.admin'))
         <button class="btn {{ $tab == 'general' ? 'btn-activation' : '' }}"
